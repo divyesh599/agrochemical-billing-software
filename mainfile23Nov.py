@@ -103,8 +103,10 @@ imgGod=PhotoImage(file="img/ganesha.png")
 
 Fheading=Frame(root, bg=colbg)
 Fheading.place(x=0, y=0, relwidth=1)
-Label(Fheading, text="|| શ્રી ગણેશાય નમઃ ||", bg=colbg).pack()
-Label(Fheading, text="શ્રી હરી એગ્રો સેન્ટર", font=("times new roman", 30, "bold"), bg=colbg, fg=colhead, pady=15).pack()
+Label(Fheading, text="|| શ્રી શ્રીનાથજી ||", bg=colbg).place(x=0, y=0)
+Label(Fheading, text="|| શ્રી ગણેશાય નમઃ ||", bg=colbg).place(x=600, y=0)
+Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg).place(x=1240, y=0)
+Label(Fheading, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=15).place(x=0, y=40)
 Label(Fheading, image=imgGod, bd=0).place(x=1280, y=20)
 
 
