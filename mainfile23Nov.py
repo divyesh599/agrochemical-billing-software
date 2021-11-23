@@ -14,7 +14,7 @@ conn=pymysql.connect(host="localhost",
                     password="")
 curr=conn.cursor()
 curr.execute("CREATE DATABASE IF NOT EXISTS Database23Nov")
-curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.customerData\
+curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.customerdata\
     (MobileNo BIGINT,\
     FName VARCHAR(20),\
     MName VARCHAR(40),\
@@ -22,7 +22,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.customerData\
     City VARCHAR(20),\
     Balance INT,\
     PRIMARY KEY (MobileNo))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.productData\
+curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.productdata\
     (PID INT,\
     PName VARCHAR(20),\
     TechName VARCHAR(40),\
@@ -33,7 +33,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.productData\
     SellPrice INT,\
     BuyPrice INT,\
     PRIMARY KEY (PID))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.AllBills\
+curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.allbills\
     (BillDate VARCHAR(20),\
     BillNo BIGINT,\
     MobileNo BIGINT,\
@@ -42,7 +42,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.AllBills\
     CashDebit VARCHAR(10),\
     BillAmount INT,\
     PRIMARY KEY (BillNo))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.SubBillDetails\
+curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.subbilldetails\
     (BillDate VARCHAR(20),\
     MobileNo BIGINT,\
     BillNo BIGINT,\
@@ -51,8 +51,8 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.SubBillDetails\
     Company VARCHAR(40),\
     BatchNo VARCHAR(20),\
     SellPrice INT,\
-    CashDebit VARCHAR(10),\
-    BillAmount INT,\
-    PRIMARY KEY (BillNo))")
+    Qty INT,\
+    Amount INT,\
+    PRIMARY KEY (BillNo, PID))")
 conn.commit()
 conn.close()

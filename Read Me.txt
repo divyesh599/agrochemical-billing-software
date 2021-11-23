@@ -54,6 +54,7 @@ Technical Name
 
 
 -----------------------------------------------
-Questions:
+Learned Questions:
 -----------------------------------------------
 Difference between Primary key and Unique key?
+SQL Composite Key?
