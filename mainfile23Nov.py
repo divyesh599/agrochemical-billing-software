@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import pymysql
 import datetime
+import webbrowser
 
 
 
@@ -76,7 +77,7 @@ conn.close()
 colbg="#B8D4BD"
 colbtn="#3C4ACA"
 colhead="#0F9D58"
-
+col1="#DE3163"
 
 
 
@@ -96,6 +97,16 @@ style.configure("Treeview", background=colbg,
             fieldbackground=colbg, foreground="black")
 
 imgGod=PhotoImage(file="img/ganesha.png")
+imgheart=PhotoImage(file="img/heart.png")
+
+
+
+# Method -------------------------------------------------------
+def callfooter(url):
+    webbrowser.open_new(url)
+
+
+
 
 
 
@@ -103,13 +114,19 @@ imgGod=PhotoImage(file="img/ganesha.png")
 
 Fheading=Frame(root, bg=colbg)
 Fheading.place(x=0, y=0, relwidth=1)
-Label(Fheading, text="|| શ્રી શ્રીનાથજી ||", bg=colbg).place(x=0, y=0)
-Label(Fheading, text="|| શ્રી ગણેશાય નમઃ ||", bg=colbg).place(x=600, y=0)
-Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg).place(x=1240, y=0)
-Label(Fheading, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=15).place(x=0, y=40)
-Label(Fheading, image=imgGod, bd=0).place(x=1280, y=20)
+Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1).grid(row=0, column=0, padx=10)
+Label(Fheading, text="|| શ્રી ગણેશાય નમઃ ||", bg=colbg, fg=col1, width=160).grid(row=0, column=1)
+Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg, fg=col1).grid(row=0, column=2)
+Label(Fheading, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=15).grid(row=1, column=1)
+Label(Fheading, image=imgGod, bd=0).place(x=1280, y=25)
 
-
+FFoot=Frame(root, bg=colbg)
+FFoot.place(x=0, y=705, relwidth=1)
+Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg)
+link1=Label(FFoot, text="Build with       Divyesh Ranpariya", font=("arial 10 bold"), bg=colbg, fg=colbtn, bd=0, padx=10)
+link1.pack(side=LEFT)
+link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
+Label(FFoot, image=imgheart, bd=0).place(x=78, y=0)
 
 
 
