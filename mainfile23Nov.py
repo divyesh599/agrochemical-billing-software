@@ -54,5 +54,88 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.subbilldetails\
     Qty INT,\
     Amount INT,\
     PRIMARY KEY (BillNo, PID))")
+curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.tempsubbill\
+    (BillDate VARCHAR(20),\
+    MobileNo BIGINT,\
+    BillNo BIGINT,\
+    PID INT,\
+    Description VARCHAR(100),\
+    Company VARCHAR(40),\
+    BatchNo VARCHAR(20),\
+    SellPrice INT,\
+    Qty INT,\
+    Amount INT,\
+    PRIMARY KEY (BillNo, PID))")
 conn.commit()
 conn.close()
+
+
+
+
+# Color Variables --------------------------
+colbg="#B8D4BD"
+colbtn="#3C4ACA"
+colhead="#0F9D58"
+
+
+
+
+
+root=Tk()
+root.title("શ્રી હરી એગ્રો સેન્ટર - Billing Software")
+root.geometry("1360x730+0+0")
+root.configure(background=colbg)
+
+
+
+
+# Treeview colors & Some Extra Variables-------------------------
+style=ttk.Style(root)
+style.theme_use("clam")
+style.configure("Treeview", background=colbg, 
+            fieldbackground=colbg, foreground="black")
+
+imgGod=PhotoImage(file="img/ganesha.png")
+
+
+
+
+
+Fheading=Frame(root, bg=colbg)
+Fheading.place(x=0, y=0, relwidth=1)
+Label(Fheading, text="|| શ્રી ગણેશાય નમઃ ||", bg=colbg).pack()
+Label(Fheading, text="શ્રી હરી એગ્રો સેન્ટર", font=("times new roman", 30, "bold"), bg=colbg, fg=colhead, pady=15).pack()
+Label(Fheading, image=imgGod, bd=0).place(x=1280, y=20)
+
+
+
+
+
+
+Fbtn=Frame(root, bg=colbg)
+Fbtn.place(x=0, y=100, relheight=1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#root.attributes('-fullscreen', True)
+root.mainloop()
