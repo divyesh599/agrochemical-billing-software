@@ -623,7 +623,7 @@ style=ttk.Style(root)
 style.theme_use("clam")
 style.configure("Treeview", background=bgcol, 
             fieldbackground=bgcol, foreground="black")
-
+#style.configure("Treeview.Heading", font=("", 10, "bold"))
 f1=LabelFrame(root, text="બિલની માહિતી", font=("times new roman", 11, "bold"), bg=bgcol, fg="#DE3163")
 f2=LabelFrame(root, text="ગ્રાહકની માહિતી", font=("times new roman", 11, "bold"), bg=bgcol, fg="#DE3163")
 f3=LabelFrame(root, text="દવાની માહિતી", font=("times new roman", 11, "bold"), bg=bgcol, fg="#DE3163")

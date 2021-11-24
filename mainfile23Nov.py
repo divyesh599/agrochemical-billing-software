@@ -8,17 +8,162 @@ import webbrowser
 
 
 class generateBill:
-    def __init__(self, F) -> None:
-        pass
+    def __init__(self, F):
+        self.Fnewbill=Frame(F)
+
+
+
+
+
+
+
+
+
+
+
+
 class allBills:
-    def __init__(self, F) -> None:
-        pass
+    def __init__(self, F):
+        self.Fbills=Frame(F)
+
+
+
+
+
+
+
+
+
+
+
+
 class customerClass:
-    def __init__(self, F) -> None:
+    def __init__(self, F):
+        self.Fcust=F
+        
+        # All Variables -------------------------------------------------------------------------------------
+        self.Etextvar=StringVar()
+
+
+
+        # Frame 1 Searching----------------------------------------------------------------------------------
+        self.frame1=Frame(self.Fcust, bg=colbg)
+        self.frame1.place(x=0, y=20)
+
+        Label(self.frame1, text="Search Customer :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
+        #self.Etextvar.trace("w", self.callback)
+        self.Etext=Entry(self.frame1, font="arial 11", textvariable=self.Etextvar, fg="red", width=40, bd=2)
+        self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
+        #self.Etext.bind('<KeyRelease>', self.searchCallCust)
+
+
+        # Frame 2 Table---------------------------------------------------------------------------------------
+        self.frame2=Frame(self.Fcust, bg=colbg)
+        self.frame2.place(x=10, y=50, width=1170, height=470)
+        
+        #Treeview----------------start        
+        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "5"), show="headings", height=22)
+        self.tree.place(x=0, y=0, width=1150)
+        
+        self.tree.column("#1", anchor=CENTER, width=80)
+        self.tree.column("#2", anchor=CENTER, width=250)
+        self.tree.column("#3", anchor=CENTER, width=80)
+        self.tree.column("#4", anchor=CENTER, width=80)
+        self.tree.column("#5", anchor=CENTER)
+        self.tree.heading("#1", text="મોબાઈલ નંબર")
+        self.tree.heading("#2", text="નામ")
+        self.tree.heading("#3", text="ગામ")
+        self.tree.heading("#4", text="Balance")
+        self.tree.heading("#5", text="")
+
+        self.v=Scrollbar(self.frame2, orient="vertical")
+        self.v.place(x=1149, y=0, height=470)
+        self.v.config(command=self.tree.yview)
+
+        '''self.h=Scrollbar(self.frame2, orient="horizontal")
+        self.h.place(x=0, y=465, width=763)
+        self.h.config(command=self.tree.xview)'''
+        self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
+
+        #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        #self.show_all_customer()
+        #Treeview----------------END
+
+        # Frame 3 Buttons------------------------------------------------------------------------------------
+        self.frame3=Frame(self.Fcust, bg=colbg)
+        self.frame3.place(x=0, y=500, width=400)
+        self.padd_btn=Button(self.frame3, text="New", command=self.newCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.padd_btn.grid(row=0, column=0, pady=10)
+        self.pupdate_btn=Button(self.frame3, text="Edit", command=self.editCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.pupdate_btn.grid(row=0, column=1, pady=10)
+        self.pdelete_btn=Button(self.frame3, text="Delete", command=self.deleteCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.pdelete_btn.grid(row=0, column=2, pady=10)
+        self.pclear_btn=Button(self.frame3, text="Info", command=self.custInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.pclear_btn.grid(row=0, column=4, pady=10)
+
+
+
+    def newCust(self):
         pass
+    def editCust(self):
+        pass
+    def deleteCust(self):
+        pass
+    def custInfo(self):
+        pass
+
+
+    '''def callback(self, var, indx, mode):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="DBHariAgro")
+        curr=conn.cursor()
+        tempv=self.Etext.get()
+        curr.execute("select * from customerlist where\
+            CMobileNo LIKE '%"+ tempv
+            +"%' OR CFirstName LIKE '%"+ tempv
+            +"%' OR CMiddleName LIKE '%"+ tempv
+            +"%' OR CLastName LIKE '%"+ tempv
+            +"%' OR CVillage LIKE '%"+ tempv
+            +"%'")
+        temparr=curr.fetchall()
+        self.clistbox.delete(0, END)
+        if len(clist)!=0:
+            for row in clist:
+                s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]
+                self.clistbox.insert("end", s)
+
+    def clistbox_visibility(self, e):
+        if self.c_entry.get() != "":
+            self.sFrame1.lift()
+            self.sFrame1.place(x=122, y=93)
+        else:
+            self.sFrame1.place_forget()'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class productClass:
-    def __init__(self, F) -> None:
-        pass
+    def __init__(self, F):
+        self.Fprod=Frame(F)
+
+
+
+
 
 
 
@@ -128,8 +273,7 @@ root.configure(background=colbg)
 # Treeview colors & Some Extra Variables-------------------------
 style=ttk.Style(root)
 style.theme_use("clam")
-style.configure("Treeview", background=colbg, 
-            fieldbackground=colbg, foreground="black")
+style.configure("Treeview", background=colbg, fieldbackground=colbg, foreground="black")
 
 imgGod=PhotoImage(file="img/ganesha.png")
 imgheart=PhotoImage(file="img/heart.png")
@@ -158,7 +302,6 @@ Label(FFoot, image=imgheart, bd=0).place(x=78, y=0)
 
 
 
-
 f1=LabelFrame(root, text="બિલ જનરેટ કરો", font=("", 10, "bold"), bg=colbg, fg=col1)
 f2=LabelFrame(root, text="બિલની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
 f3=LabelFrame(root, text="ગ્રાહકની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
@@ -173,7 +316,7 @@ objf3=customerClass(f3)
 objf4=productClass(f4)
 
 Fbtn=Frame(root, bg=colbg)
-Fbtn.place(x=5, y=90)
+Fbtn.place(x=20, y=90)
 Button(Fbtn, text="બિલ જનરેટ કરો", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
 Button(Fbtn, text="બિલની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f2.tkraise()).pack(fill=X)
 Button(Fbtn, text="ગ્રાહકની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f3.tkraise()).pack(fill=X)
@@ -183,6 +326,6 @@ Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), b
 
 
 
-f1.tkraise()
+f3.tkraise()
 #root.attributes('-fullscreen', True)
 root.mainloop()
