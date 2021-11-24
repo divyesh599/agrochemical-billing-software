@@ -9,7 +9,7 @@ import webbrowser
 
 class generateBill:
     def __init__(self, F):
-        self.Fnewbill=Frame(F)
+        self.Fnewbill=F
 
 
 
@@ -24,7 +24,7 @@ class generateBill:
 
 class allBills:
     def __init__(self, F):
-        self.Fbills=Frame(F)
+        self.Fbills=F
 
 
 
@@ -159,7 +159,84 @@ class customerClass:
 
 class productClass:
     def __init__(self, F):
-        self.Fprod=Frame(F)
+        self.Fprod=F
+        
+        # All Variables -------------------------------------------------------------------------------------
+        self.Etextvar=StringVar()
+
+
+
+        # Frame 1 Searching----------------------------------------------------------------------------------
+        self.frame1=Frame(self.Fprod, bg=colbg)
+        self.frame1.place(x=0, y=20)
+
+        Label(self.frame1, text="Search Product :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
+        #self.Etextvar.trace("w", self.callBack)
+        self.Etext=Entry(self.frame1, font="arial 11", textvariable=self.Etextvar, fg="red", width=40, bd=2)
+        self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
+        #self.Etext.bind('<KeyRelease>', self.searchCallProd)
+
+
+        # Frame 2 Table---------------------------------------------------------------------------------------
+        self.frame2=Frame(self.Fprod, bg=colbg)
+        self.frame2.place(x=10, y=50, relwidth=1, height=470)
+        
+        #Treeview----------------start        
+        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "5"), show="headings", height=22)
+        self.tree.place(x=0, y=0, width=1150)
+        
+        self.tree.column("#1", anchor=CENTER, width=80)
+        self.tree.column("#2", anchor=CENTER, width=250)
+        self.tree.column("#3", anchor=CENTER, width=80)
+        self.tree.column("#4", anchor=CENTER, width=80)
+        self.tree.column("#5", anchor=CENTER)
+        self.tree.heading("#1", text="મોબાઈલ નંબર")
+        self.tree.heading("#2", text="નામ")
+        self.tree.heading("#3", text="ગામ")
+        self.tree.heading("#4", text="Balance")
+        self.tree.heading("#5", text="")
+
+        self.v=Scrollbar(self.frame2, orient="vertical")
+        self.v.place(x=1149, y=0, height=470)
+        self.v.config(command=self.tree.yview)
+
+        '''self.h=Scrollbar(self.frame2, orient="horizontal")
+        self.h.place(x=0, y=465, width=763)
+        self.h.config(command=self.tree.xview)'''
+        self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
+
+        #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        #self.show_all_product()
+        #Treeview----------------END
+
+        # Frame 3 Buttons------------------------------------------------------------------------------------
+        self.frame3=Frame(self.Fprod, bg=colbg)
+        self.frame3.place(x=10, y=520, relwidth=1)
+        self.Bnew=Button(self.frame3, text="New", command=self.newProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.Bnew.grid(row=0, column=0)
+        self.Bedit=Button(self.frame3, text="Edit", command=self.editProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.Bedit.grid(row=0, column=1)
+        self.Bdelete=Button(self.frame3, text="Delete", command=self.deleteProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.Bdelete.grid(row=0, column=2)
+        self.Binfo=Button(self.frame3, text="Info", command=self.prodInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.Binfo.grid(row=0, column=4)
+
+
+
+    def newProd(self):
+        pass
+    def editProd(self):
+        pass
+    def deleteProd(self):
+        pass
+    def prodInfo(self):
+        pass
+
+
+
+
+
+
 
 
 
