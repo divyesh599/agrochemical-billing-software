@@ -180,21 +180,29 @@ class productClass:
         # Frame 2 Table---------------------------------------------------------------------------------------
         self.frame2=Frame(self.Fprod, bg=colbg)
         self.frame2.place(x=10, y=50, relwidth=1, height=470)
-        
-        #Treeview----------------start        
-        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "5"), show="headings", height=22)
+
+        #Treeview----------------start
+        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8", "#9"), show="headings", height=22)
         self.tree.place(x=0, y=0, width=1150)
-        
-        self.tree.column("#1", anchor=CENTER, width=80)
-        self.tree.column("#2", anchor=CENTER, width=250)
-        self.tree.column("#3", anchor=CENTER, width=80)
-        self.tree.column("#4", anchor=CENTER, width=80)
-        self.tree.column("#5", anchor=CENTER)
-        self.tree.heading("#1", text="મોબાઈલ નંબર")
-        self.tree.heading("#2", text="નામ")
-        self.tree.heading("#3", text="ગામ")
-        self.tree.heading("#4", text="Balance")
-        self.tree.heading("#5", text="")
+
+        self.tree.column("#1", anchor=CENTER, width=30)
+        self.tree.column("#2", anchor=CENTER, width=80)
+        self.tree.column("#3", anchor=CENTER, width=200)
+        self.tree.column("#4", anchor=CENTER, width=200)
+        self.tree.column("#5", anchor=CENTER, width=80)
+        self.tree.column("#6", anchor=CENTER, width=80)
+        self.tree.column("#7", anchor=CENTER, width=80)
+        self.tree.column("#8", anchor=CENTER, width=80)
+        self.tree.column("#9", anchor=CENTER, width=80)
+        self.tree.heading("#1", text="PID")
+        self.tree.heading("#2", text="Product name")
+        self.tree.heading("#3", text="Technical name")
+        self.tree.heading("#4", text="Company name")
+        self.tree.heading("#5", text="Batch no.")
+        self.tree.heading("#6", text="Net Content")
+        self.tree.heading("#7", text="Printed price")
+        self.tree.heading("#8", text="Selling price")
+        self.tree.heading("#9", text="Buying price")
 
         self.v=Scrollbar(self.frame2, orient="vertical")
         self.v.place(x=1149, y=0, height=470)
@@ -405,6 +413,6 @@ Label(FFoot, image=imgheart, bd=0).place(x=97, y=2)
 
 
 
-f3.tkraise()
+f4.tkraise()
 #root.attributes('-fullscreen', True)
 root.mainloop()
