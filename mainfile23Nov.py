@@ -25,7 +25,81 @@ class generateBill:
 class allBills:
     def __init__(self, F):
         self.Fbills=F
+        
+        # All Variables -------------------------------------------------------------------------------------
+        self.Etextvar=StringVar()
 
+
+
+        # Frame 1 Searching----------------------------------------------------------------------------------
+        self.frame1=Frame(self.Fbills, bg=colbg)
+        self.frame1.place(x=0, y=20)
+
+        Label(self.frame1, text="Search Bill :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
+        #self.Etextvar.trace("w", self.callBack)
+        self.Etext=Entry(self.frame1, font="arial 11", textvariable=self.Etextvar, fg="red", width=40, bd=2)
+        self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
+        #self.Etext.bind('<KeyRelease>', self.searchCallbill)
+
+
+        # Frame 2 Table---------------------------------------------------------------------------------------
+        self.frame2=Frame(self.Fbills, bg=colbg)
+        self.frame2.place(x=10, y=50, relwidth=1, height=470)
+
+        #Treeview----------------start
+        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7"), show="headings", height=22)
+        self.tree.place(x=0, y=0, width=1150)
+
+        self.tree.column("#1", anchor=CENTER, width=80)
+        self.tree.column("#2", anchor=CENTER, width=80)
+        self.tree.column("#3", anchor=CENTER, width=80)
+        self.tree.column("#4", anchor=CENTER, width=250)
+        self.tree.column("#5", anchor=CENTER, width=80)
+        self.tree.column("#6", anchor=CENTER, width=80)
+        self.tree.column("#7", anchor=CENTER, width=80)
+        self.tree.heading("#1", text="બિલ તારીખ")
+        self.tree.heading("#2", text="બિલ નંબર")
+        self.tree.heading("#3", text="મોબાઈલ નંબર")
+        self.tree.heading("#4", text="ગ્રાહકનું નામ")
+        self.tree.heading("#5", text="ગામ")
+        self.tree.heading("#6", text="Cash / Debit")
+        self.tree.heading("#7", text="Bill Amount")
+
+        self.v=Scrollbar(self.frame2, orient="vertical")
+        self.v.place(x=1149, y=0, height=470)
+        self.v.config(command=self.tree.yview)
+
+        '''self.h=Scrollbar(self.frame2, orient="horizontal")
+        self.h.place(x=0, y=465, width=763)
+        self.h.config(command=self.tree.xview)'''
+        self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
+
+        #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        #self.show_all_bills()
+        #Treeview----------------END
+
+        # Frame 3 Buttons------------------------------------------------------------------------------------
+        self.frame3=Frame(self.Fbills, bg=colbg)
+        self.frame3.place(x=10, y=520, relwidth=1)
+        self.Bnew=Button(self.frame3, text="New", command=self.newBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.Bnew.grid(row=0, column=0)
+        self.Bedit=Button(self.frame3, text="Edit", command=self.editBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.Bedit.grid(row=0, column=1)
+        self.Bdelete=Button(self.frame3, text="Delete", command=self.deleteBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.Bdelete.grid(row=0, column=2)
+        self.Binfo=Button(self.frame3, text="Info", command=self.billInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.Binfo.grid(row=0, column=4)
+
+
+
+    def newBill(self):
+        pass
+    def editBill(self):
+        pass
+    def deleteBill(self):
+        pass
+    def billInfo(self):
+        pass
 
 
 
