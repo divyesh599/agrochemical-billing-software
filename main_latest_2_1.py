@@ -8,10 +8,123 @@ import webbrowser
 
 
 class generateBill:
-    def __init__(self, F):
-        self.Fnewbill=F
+    def __init__(self):
+        self.Fnewbill=Tk()
+        self.Fnewbill.title("Add New Bill")
+        self.Fnewbill.geometry("1150x650+100+60")
+        self.Fnewbill.configure(background=colbg)
+        
+
+        #---variables------
+        self.cdate=datetime.datetime.now()
+        self.c_id=StringVar()
+        self.p_id=StringVar()
+        self.quantity=StringVar()
+        self.selectedC=""
+        self.csearch=PhotoImage(file="img/csearch.png")
+        self.psearch=PhotoImage(file="img/psearch1.png")
+
+        #--------------Frame1--------------
+        self.frame1=Frame(self.Fnewbill, bg=colbg)
+        self.frame1.place(x=0, y=0)
+
+        Label(self.frame1, text="બિલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT, pady=15)
+        self.billno=Label(self.frame1, text=self.cdate.strftime("%y%m%d%H%M"), font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=20).pack(side=LEFT)
+        Label(self.frame1, text="બિલની તારીખ :", bg=colbg, anchor=E, width=20).pack(side=LEFT)
+        self.billdate=Label(self.frame1, text=self.cdate.strftime("%d %b %Y"), font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=20).pack(side=LEFT)
+        Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
+
+        #--------------Frame2--------------
+        self.frame2=Frame(self.Fnewbill, bg=colbg)
+        self.frame2.place(x=0, y=70)
+        
+        Label(self.frame2, text="Search Customer :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
+        
+        self.c_id.trace("w", self.callback)
+        self.c_entry=Entry(self.frame2, font="arial 10", textvariable=self.c_id, fg="red", width=30, bd=2)
+        self.c_entry.grid(row=0, column=1, columnspan=2, sticky=W)
+        self.c_entry.bind('<KeyRelease>', self.clistbox_visibility)
+        
+
+        #--------------SearchFrame1--------------
+        self.sFrame1=Frame(self.Fnewbill)
+        self.clistbox=Listbox(self.sFrame1, width=70)
+        self.clistbox.pack()
+        self.clistbox.bind("<Double-1>", self.cListboxOnSelect)
+        self.clistbox.bind("<<ListboxSelect>>", self.cListboxSelectedItem)
+
+        self.cAddBtn=Button(self.sFrame1, text="Add", command=self.addCDetails)
+        self.cAddBtn.pack(fill=X)
 
 
+        #--------------Frame3--------------
+        self.frame3=Frame(self.Fnewbill, bg=colbg)
+        self.frame3.place(x=400, y=70)
+        Label(self.frame3, text="નામ :", anchor=E, width=15, bg=colbg).grid(row=0, column=0)
+        self.cLabelname=Label(self.frame3, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red")
+        self.cLabelname.grid(row=0, column=1)
+        Label(self.frame3, text="મોબાઈલ નંબર :", anchor=E, width=15, bg=colbg).grid(row=0, column=2)
+        self.cLabelMobile=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
+        self.cLabelMobile.grid(row=0, column=3)
+        Label(self.frame3, text="ગામ :", anchor=E, width=5, bg=colbg).grid(row=0, column=4)
+        self.cLabelVillage=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
+        self.cLabelVillage.grid(row=0, column=5)
+        
+        
+        self.Fnewbill.mainloop()
+
+    def cListboxSelectedItem(self, evt):
+        selection=self.clistbox.curselection()
+        if selection:
+            self.selectedC=self.clistbox.get(selection)[:10]
+    
+        
+    def addCDetails(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="DBHariAgro")
+        curr=conn.cursor()
+        if self.selectedC!="":
+            curr.execute("select * from customerlist where CMobileNo="+self.selectedC)
+            clist=curr.fetchall()
+            if len(clist)!=0:
+                self.cLabelname.config(text=clist[0][1]+" "+clist[0][2]+" "+clist[0][3])
+                self.cLabelMobile.config(text=clist[0][0])
+                self.cLabelVillage.config(text=clist[0][4])
+        conn.commit()
+        conn.close()
+        self.c_entry.delete(0, END)
+        self.sFrame1.place_forget()
+    
+    def cListboxOnSelect(self, evt):
+        cs=self.clistbox.curselection()
+        if cs:
+            self.selectedC=self.clistbox.get(cs)[:10]
+        self.addCDetails()
+
+    def callback(self, var, indx, mode):
+        
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="DBHariAgro")
+        curr=conn.cursor()
+        x=self.c_entry.get()
+        curr.execute("select * from customerlist where CMobileNo LIKE '%"+ x +"%' OR CFirstName LIKE '%"+ x +"%' OR CMiddleName LIKE '%"+ x +"%' OR CLastName LIKE '%"+ x +"%' OR CVillage LIKE '%"+ x +"%'")
+        clist=curr.fetchall()
+        self.clistbox.delete(0, END)
+        if len(clist)!=0:
+            for row in clist:
+                s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]
+                self.clistbox.insert("end", s)
+
+    def clistbox_visibility(self, e):
+        if self.c_entry.get() != "":
+            self.sFrame1.lift()
+            self.sFrame1.place(x=122, y=93)
+        else:
+            self.sFrame1.place_forget()        
 
 
 
@@ -93,7 +206,8 @@ class allBills:
 
 
     def newBill(self):
-        pass
+        obj=generateBill()
+
     def editBill(self):
         pass
     def deleteBill(self):
@@ -423,7 +537,11 @@ col1="#DE3163"
 ################################################################################################################
 root=Tk()
 root.title("શ્રી હરી એગ્રો સેન્ટર - Billing Software")
-root.geometry("1360x730+0+0")
+w=root.winfo_screenwidth() 
+h=root.winfo_screenheight()
+root.geometry("%dx%d" % (w, h))
+#root.geometry("1360x730+0+0")
+#root.attributes('-fullscreen',True)
 root.configure(background=colbg)
 
 
@@ -450,25 +568,22 @@ Label(Fheading, image=imgGod, bd=0).place(x=1280, y=25)
 
 
 # Label Frames & Buttons ----------------------------------------------------------------------------------------
-f1=LabelFrame(root, text="બિલ જનરેટ કરો", font=("", 10, "bold"), bg=colbg, fg=col1)
-f2=LabelFrame(root, text="બિલની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
-f3=LabelFrame(root, text="ગ્રાહકની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
-f4=LabelFrame(root, text="દવાની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
+f1=LabelFrame(root, text="બિલની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
+f2=LabelFrame(root, text="ગ્રાહકની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
+f3=LabelFrame(root, text="દવાની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
 
-for frame in (f1, f2, f3, f4):
+for frame in (f1, f2, f3):
     frame.place(x=140, y=90, relwidth=1, height=600)
 
-objf1=generateBill(f1)
-objf2=allBills(f2)
-objf3=customerClass(f3)
-objf4=productClass(f4)
+objf1=allBills(f1)
+objf2=customerClass(f2)
+objf3=productClass(f3)
 
 Fbtn=Frame(root, bg=colbg)
 Fbtn.place(x=20, y=90)
-Button(Fbtn, text="બિલ જનરેટ કરો", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
-Button(Fbtn, text="બિલની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f2.tkraise()).pack(fill=X)
-Button(Fbtn, text="ગ્રાહકની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f3.tkraise()).pack(fill=X)
-Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f4.tkraise()).pack(fill=X)
+Button(Fbtn, text="બિલની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
+Button(Fbtn, text="ગ્રાહકની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f2.tkraise()).pack(fill=X)
+Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f3.tkraise()).pack(fill=X)
 
 
 
@@ -487,6 +602,5 @@ Label(FFoot, image=imgheart, bd=0).place(x=97, y=2)
 
 
 
-f4.tkraise()
-#root.attributes('-fullscreen', True)
+f1.tkraise()
 root.mainloop()
