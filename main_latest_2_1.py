@@ -9,20 +9,17 @@ import webbrowser
 
 class generateBill:
     def __init__(self):
+        #---variables------
+        self.cdate=datetime.datetime.now()
+        self.cID=StringVar()
+        self.selectedC=""
+
+
         self.Fnewbill=Tk()
         self.Fnewbill.title("Add New Bill")
         self.Fnewbill.geometry("1150x650+100+60")
         self.Fnewbill.configure(background=colbg)
         
-
-        #---variables------
-        self.cdate=datetime.datetime.now()
-        self.c_id=StringVar()
-        self.p_id=StringVar()
-        self.quantity=StringVar()
-        self.selectedC=""
-        self.csearch=PhotoImage(file="img/csearch.png")
-        self.psearch=PhotoImage(file="img/psearch1.png")
 
         #--------------Frame1--------------
         self.frame1=Frame(self.Fnewbill, bg=colbg)
@@ -32,19 +29,17 @@ class generateBill:
         self.billno=Label(self.frame1, text=self.cdate.strftime("%y%m%d%H%M"), font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=20).pack(side=LEFT)
         Label(self.frame1, text="બિલની તારીખ :", bg=colbg, anchor=E, width=20).pack(side=LEFT)
         self.billdate=Label(self.frame1, text=self.cdate.strftime("%d %b %Y"), font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=20).pack(side=LEFT)
-        Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
+        #Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
 
         #--------------Frame2--------------
         self.frame2=Frame(self.Fnewbill, bg=colbg)
         self.frame2.place(x=0, y=70)
-        
+
         Label(self.frame2, text="Search Customer :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
-        
-        self.c_id.trace("w", self.callback)
-        self.c_entry=Entry(self.frame2, font="arial 10", textvariable=self.c_id, fg="red", width=30, bd=2)
-        self.c_entry.grid(row=0, column=1, columnspan=2, sticky=W)
-        self.c_entry.bind('<KeyRelease>', self.clistbox_visibility)
-        
+        self.ECust=Entry(self.frame2, font="arial 10", fg="red", width=30, bd=2)
+        self.ECust.grid(row=0, column=1, columnspan=2, sticky=W)
+        self.ECust.bind('<KeyRelease>', self.callback)
+
 
         #--------------SearchFrame1--------------
         self.sFrame1=Frame(self.Fnewbill)
@@ -59,7 +54,7 @@ class generateBill:
 
         #--------------Frame3--------------
         self.frame3=Frame(self.Fnewbill, bg=colbg)
-        self.frame3.place(x=400, y=70)
+        self.frame3.place(x=300, y=70)
         Label(self.frame3, text="નામ :", anchor=E, width=15, bg=colbg).grid(row=0, column=0)
         self.cLabelname=Label(self.frame3, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red")
         self.cLabelname.grid(row=0, column=1)
@@ -83,10 +78,10 @@ class generateBill:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="DBHariAgro")
+                            database="Database23Nov")
         curr=conn.cursor()
         if self.selectedC!="":
-            curr.execute("select * from customerlist where CMobileNo="+self.selectedC)
+            curr.execute("select * from customerdata where MobileNo="+self.selectedC)
             clist=curr.fetchall()
             if len(clist)!=0:
                 self.cLabelname.config(text=clist[0][1]+" "+clist[0][2]+" "+clist[0][3])
@@ -94,7 +89,7 @@ class generateBill:
                 self.cLabelVillage.config(text=clist[0][4])
         conn.commit()
         conn.close()
-        self.c_entry.delete(0, END)
+        self.ECust.delete(0, END)
         self.sFrame1.place_forget()
     
     def cListboxOnSelect(self, evt):
@@ -103,26 +98,23 @@ class generateBill:
             self.selectedC=self.clistbox.get(cs)[:10]
         self.addCDetails()
 
-    def callback(self, var, indx, mode):
-        
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="DBHariAgro")
-        curr=conn.cursor()
-        x=self.c_entry.get()
-        curr.execute("select * from customerlist where CMobileNo LIKE '%"+ x +"%' OR CFirstName LIKE '%"+ x +"%' OR CMiddleName LIKE '%"+ x +"%' OR CLastName LIKE '%"+ x +"%' OR CVillage LIKE '%"+ x +"%'")
-        clist=curr.fetchall()
-        self.clistbox.delete(0, END)
-        if len(clist)!=0:
-            for row in clist:
-                s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]
-                self.clistbox.insert("end", s)
-
-    def clistbox_visibility(self, e):
-        if self.c_entry.get() != "":
+    def callback(self, e):
+        if self.ECust.get() != "":
             self.sFrame1.lift()
             self.sFrame1.place(x=122, y=93)
+            conn=pymysql.connect(host="localhost",
+                                user="root",
+                                password="",
+                                database="Database23Nov")
+            curr=conn.cursor()
+            x=self.ECust.get()
+            curr.execute("select * from customerdata where MobileNo LIKE '%"+ x +"%' OR FName LIKE '%"+ x +"%' OR MName LIKE '%"+ x +"%' OR LName LIKE '%"+ x +"%' OR City LIKE '%"+ x +"%'")
+            clist=curr.fetchall()
+            self.clistbox.delete(0, END)
+            if len(clist)!=0:
+                for row in clist:
+                    s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]+"    "+str(row[5])+" Rs."
+                    self.clistbox.insert("end", s)
         else:
             self.sFrame1.place_forget()        
 
@@ -322,8 +314,8 @@ class customerClass:
                 s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]
                 self.clistbox.insert("end", s)
 
-    def clistbox_visibility(self, e):
-        if self.c_entry.get() != "":
+    def callback(self, e):
+        if self.ECust.get() != "":
             self.sFrame1.lift()
             self.sFrame1.place(x=122, y=93)
         else:

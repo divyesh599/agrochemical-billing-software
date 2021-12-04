@@ -100,6 +100,7 @@ class generateBill:
                             database="DBHariAgro")
         curr=conn.cursor()
         x=self.c_entry.get()
+        print(x)
         curr.execute("select * from customerlist where CMobileNo LIKE '%"+ x +"%' OR CFirstName LIKE '%"+ x +"%' OR CMiddleName LIKE '%"+ x +"%' OR CLastName LIKE '%"+ x +"%' OR CVillage LIKE '%"+ x +"%'")
         clist=curr.fetchall()
         self.clistbox.delete(0, END)
