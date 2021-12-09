@@ -68,12 +68,17 @@ class generateBill:
         
         self.Fnewbill.mainloop()
 
+    def onSelectL1(self, evt):
+        varx=self.clistbox.curselection()
+        if varx:
+            self.selectedC=self.clistbox.get(varx)[:10]
+        self.addCDetails()
+
     def onSelectL2(self, evt):
         varx=self.clistbox.curselection()
         if varx:
             self.selectedC=self.clistbox.get(varx)[:10]
-    
-        
+
     def addCDetails(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
@@ -91,12 +96,6 @@ class generateBill:
         conn.close()
         self.ECust.delete(0, END)
         self.sFrame1.place_forget()
-    
-    def onSelectL1(self, evt):
-        varx=self.clistbox.curselection()
-        if varx:
-            self.selectedC=self.clistbox.get(varx)[:10]
-        self.addCDetails()
 
     def callback(self, e):
         if self.ECust.get() != "":
