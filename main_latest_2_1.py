@@ -45,10 +45,10 @@ class generateBill:
         self.sFrame1=Frame(self.Fnewbill)
         self.clistbox=Listbox(self.sFrame1, width=70)
         self.clistbox.pack()
-        self.clistbox.bind("<Double-1>", self.onSelectL1)
-        self.clistbox.bind("<<ListboxSelect>>", self.onSelectL2)
+        self.clistbox.bind("<Double-1>", self.on2clickL1)
+        self.clistbox.bind("<<ListboxSelect>>", self.onSelectL1)
 
-        self.cAddBtn=Button(self.sFrame1, text="Add", command=self.addCDetails)
+        self.cAddBtn=Button(self.sFrame1, text="Add", command=self.addCustInfo)
         self.cAddBtn.pack(fill=X)
 
 
@@ -68,18 +68,18 @@ class generateBill:
         
         self.Fnewbill.mainloop()
 
+    def on2clickL1(self, evt):
+        varx=self.clistbox.curselection()
+        if varx:
+            self.selectedC=self.clistbox.get(varx)[:10]
+        self.addCustInfo()
+
     def onSelectL1(self, evt):
         varx=self.clistbox.curselection()
         if varx:
             self.selectedC=self.clistbox.get(varx)[:10]
-        self.addCDetails()
 
-    def onSelectL2(self, evt):
-        varx=self.clistbox.curselection()
-        if varx:
-            self.selectedC=self.clistbox.get(varx)[:10]
-
-    def addCDetails(self):
+    def addCustInfo(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
