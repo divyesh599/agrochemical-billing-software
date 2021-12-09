@@ -45,8 +45,8 @@ class generateBill:
         self.sFrame1=Frame(self.Fnewbill)
         self.clistbox=Listbox(self.sFrame1, width=70)
         self.clistbox.pack()
-        self.clistbox.bind("<Double-1>", self.cListboxOnSelect)
-        self.clistbox.bind("<<ListboxSelect>>", self.cListboxSelectedItem)
+        self.clistbox.bind("<Double-1>", self.onSelectL1)
+        self.clistbox.bind("<<ListboxSelect>>", self.onSelectL2)
 
         self.cAddBtn=Button(self.sFrame1, text="Add", command=self.addCDetails)
         self.cAddBtn.pack(fill=X)
@@ -68,10 +68,10 @@ class generateBill:
         
         self.Fnewbill.mainloop()
 
-    def cListboxSelectedItem(self, evt):
-        selection=self.clistbox.curselection()
-        if selection:
-            self.selectedC=self.clistbox.get(selection)[:10]
+    def onSelectL2(self, evt):
+        varx=self.clistbox.curselection()
+        if varx:
+            self.selectedC=self.clistbox.get(varx)[:10]
     
         
     def addCDetails(self):
@@ -92,10 +92,10 @@ class generateBill:
         self.ECust.delete(0, END)
         self.sFrame1.place_forget()
     
-    def cListboxOnSelect(self, evt):
-        cs=self.clistbox.curselection()
-        if cs:
-            self.selectedC=self.clistbox.get(cs)[:10]
+    def onSelectL1(self, evt):
+        varx=self.clistbox.curselection()
+        if varx:
+            self.selectedC=self.clistbox.get(varx)[:10]
         self.addCDetails()
 
     def callback(self, e):
@@ -107,8 +107,8 @@ class generateBill:
                                 password="",
                                 database="Database23Nov")
             curr=conn.cursor()
-            x=self.ECust.get()
-            curr.execute("select * from customerdata where MobileNo LIKE '%"+ x +"%' OR FName LIKE '%"+ x +"%' OR MName LIKE '%"+ x +"%' OR LName LIKE '%"+ x +"%' OR City LIKE '%"+ x +"%'")
+            varx=self.ECust.get()
+            curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
             clist=curr.fetchall()
             self.clistbox.delete(0, END)
             if len(clist)!=0:
