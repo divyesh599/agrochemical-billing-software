@@ -90,7 +90,7 @@ class generateBill:
 
         # Frame 5 Table---------------------------------------------------------------------------------------
         self.frame5=Frame(self.Fnewbill, bg=colbg)
-        self.frame5.place(x=10, y=190, relwidth=1, height=470)
+        self.frame5.place(x=10, y=150, relwidth=1, height=470)
 
         #Treeview----------------start
         self.tree=ttk.Treeview(self.frame5, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8"), show="headings", height=7)
