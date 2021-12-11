@@ -11,11 +11,13 @@ class generateBill:
     def __init__(self):
         #---variables------
         self.cdate=datetime.datetime.now()
-        self.cID=StringVar()
         self.selectedC=""
+        self.selectedP=""
 
 
-        self.Fnewbill=Tk()
+        #self.Fnewbill=Tk()
+        #self.Fnewbill.mainloop()
+        self.Fnewbill=Toplevel(root)
         self.Fnewbill.title("Add New Bill")
         self.Fnewbill.geometry("1150x650+100+60")
         self.Fnewbill.configure(background=colbg)
@@ -38,23 +40,23 @@ class generateBill:
         Label(self.frame2, text="Search Customer :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
         self.ECust=Entry(self.frame2, font="arial 10", fg="red", width=30, bd=2)
         self.ECust.grid(row=0, column=1, columnspan=2, sticky=W)
-        self.ECust.bind('<KeyRelease>', self.callback)
+        self.ECust.bind('<KeyRelease>', self.callbackCust)
 
 
-        #--------------SearchFrame1--------------
+        #--------------Customer SearchFrame1--------------
         self.sFrame1=Frame(self.Fnewbill)
+
         self.clistbox=Listbox(self.sFrame1, width=70)
         self.clistbox.pack()
         self.clistbox.bind("<Double-1>", self.on2clickL1)
         self.clistbox.bind("<<ListboxSelect>>", self.onSelectL1)
-
         self.cAddBtn=Button(self.sFrame1, text="Add", command=self.addCustInfo)
         self.cAddBtn.pack(fill=X)
-
 
         #--------------Frame3--------------
         self.frame3=Frame(self.Fnewbill, bg=colbg)
         self.frame3.place(x=300, y=70)
+
         Label(self.frame3, text="નામ :", anchor=E, width=15, bg=colbg).grid(row=0, column=0)
         self.cLabelname=Label(self.frame3, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red")
         self.cLabelname.grid(row=0, column=1)
@@ -64,9 +66,29 @@ class generateBill:
         Label(self.frame3, text="ગામ :", anchor=E, width=5, bg=colbg).grid(row=0, column=4)
         self.cLabelVillage=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
         self.cLabelVillage.grid(row=0, column=5)
-        
-        
-        self.Fnewbill.mainloop()
+
+
+        #--------------Frame4--------------
+        self.frame4=Frame(self.Fnewbill, bg=colbg)
+        self.frame4.place(x=0, y=90)
+
+        Label(self.frame4, text="Search Product :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
+        self.EProd=Entry(self.frame4, font="arial 10", fg="red", width=30, bd=2)
+        self.EProd.grid(row=0, column=1, columnspan=2, sticky=W)
+        self.EProd.bind('<KeyRelease>', self.callbackProd)
+
+        #--------------Product SearchFrame2--------------
+        self.sFrame2=Frame(self.Fnewbill)
+
+        self.plistbox=Listbox(self.sFrame2, width=70)
+        self.plistbox.pack()
+        self.plistbox.bind("<Double-1>", self.on2clickL2)
+        self.plistbox.bind("<<ListboxSelect>>", self.onSelectL2)
+        self.pAddBtn=Button(self.sFrame1, text="Add", command=self.addProdInfo)
+        self.pAddBtn.pack(fill=X)
+
+
+
 
     def on2clickL1(self, evt):
         varx=self.clistbox.curselection()
@@ -97,7 +119,7 @@ class generateBill:
         self.ECust.delete(0, END)
         self.sFrame1.place_forget()
 
-    def callback(self, e):
+    def callbackCust(self, e):
         if self.ECust.get() != "":
             self.sFrame1.lift()
             self.sFrame1.place(x=122, y=93)
@@ -115,9 +137,56 @@ class generateBill:
                     s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]+"    "+str(row[5])+" Rs."
                     self.clistbox.insert("end", s)
         else:
-            self.sFrame1.place_forget()        
+            self.sFrame1.place_forget()
 
+    def on2clickL2(self, evt):
+        varx=self.plistbox.curselection()
+        if varx:
+            self.selectedP=self.plistbox.get(varx)[:10]
+        self.addCustInfo()
 
+    def onSelectL2(self, evt):
+        varx=self.plistbox.curselection()
+        if varx:
+            self.selectedP=self.plistbox.get(varx)[:10]
+
+    def addProdInfo(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        if self.selectedP!="":
+            curr.execute("select * from productdata where PID="+self.selectedP)
+            plist=curr.fetchall()
+            if len(plist)!=0:
+                '''self.cLabelname.config(text=clist[0][1]+" "+clist[0][2]+" "+clist[0][3])
+                self.cLabelMobile.config(text=clist[0][0])
+                self.cLabelVillage.config(text=clist[0][4])'''
+        conn.commit()
+        conn.close()
+        self.EProd.delete(0, END)
+        self.sFrame2.place_forget()
+
+    def callbackProd(self, e):
+        if self.ECust.get() != "":
+            self.sFrame2.lift()
+            self.sFrame2.place(x=122, y=93)
+            conn=pymysql.connect(host="localhost",
+                                user="root",
+                                password="",
+                                database="Database23Nov")
+            curr=conn.cursor()
+            varx=self.EProd.get()
+            curr.execute("select * from productdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
+            clist=curr.fetchall()
+            self.clistbox.delete(0, END)
+            if len(clist)!=0:
+                for row in clist:
+                    s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]+"    "+str(row[5])+" Rs."
+                    self.clistbox.insert("end", s)
+        else:
+            self.sFrame1.place_forget()
 
 
 
@@ -291,34 +360,6 @@ class customerClass:
     def custInfo(self):
         pass
 
-
-    '''def callback(self, var, indx, mode):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="DBHariAgro")
-        curr=conn.cursor()
-        tempv=self.Etext.get()
-        curr.execute("select * from customerlist where\
-            CMobileNo LIKE '%"+ tempv
-            +"%' OR CFirstName LIKE '%"+ tempv
-            +"%' OR CMiddleName LIKE '%"+ tempv
-            +"%' OR CLastName LIKE '%"+ tempv
-            +"%' OR CVillage LIKE '%"+ tempv
-            +"%'")
-        temparr=curr.fetchall()
-        self.clistbox.delete(0, END)
-        if len(clist)!=0:
-            for row in clist:
-                s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]
-                self.clistbox.insert("end", s)
-
-    def callback(self, e):
-        if self.ECust.get() != "":
-            self.sFrame1.lift()
-            self.sFrame1.place(x=122, y=93)
-        else:
-            self.sFrame1.place_forget()'''
 
 
 
