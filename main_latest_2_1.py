@@ -55,7 +55,7 @@ class generateBill:
 
         #--------------Frame3--------------
         self.frame3=Frame(self.Fnewbill, bg=colbg)
-        self.frame3.place(x=300, y=70)
+        self.frame3.place(x=340, y=70)
 
         Label(self.frame3, text="નામ :", anchor=E, width=15, bg=colbg).grid(row=0, column=0)
         self.cLabelname=Label(self.frame3, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red")
@@ -70,9 +70,9 @@ class generateBill:
 
         #--------------Frame4--------------
         self.frame4=Frame(self.Fnewbill, bg=colbg)
-        self.frame4.place(x=0, y=90)
+        self.frame4.place(x=0, y=110)
 
-        Label(self.frame4, text="Search Product :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
+        Label(self.frame4, text="Search Product    :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
         self.EProd=Entry(self.frame4, font="arial 10", fg="red", width=30, bd=2)
         self.EProd.grid(row=0, column=1, columnspan=2, sticky=W)
         self.EProd.bind('<KeyRelease>', self.callbackProd)
@@ -84,8 +84,48 @@ class generateBill:
         self.plistbox.pack()
         self.plistbox.bind("<Double-1>", self.on2clickL2)
         self.plistbox.bind("<<ListboxSelect>>", self.onSelectL2)
-        self.pAddBtn=Button(self.sFrame1, text="Add", command=self.addProdInfo)
+        self.pAddBtn=Button(self.sFrame2, text="Add", command=self.addProdInfo)
         self.pAddBtn.pack(fill=X)
+
+
+        # Frame 5 Table---------------------------------------------------------------------------------------
+        self.frame5=Frame(self.Fnewbill, bg=colbg)
+        self.frame5.place(x=10, y=190, relwidth=1, height=470)
+
+        #Treeview----------------start
+        self.tree=ttk.Treeview(self.frame5, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8"), show="headings", height=7)
+        self.tree.place(x=0, y=0, width=1110)
+
+        self.tree.column("#1", anchor=CENTER, width=30)
+        self.tree.column("#2", anchor=CENTER, width=250)
+        self.tree.column("#3", anchor=CENTER, width=180)
+        self.tree.column("#4", anchor=CENTER, width=80)
+        self.tree.column("#5", anchor=CENTER, width=80)
+        self.tree.column("#6", anchor=CENTER, width=80)
+        self.tree.column("#7", anchor=CENTER, width=80)
+        self.tree.column("#8", anchor=CENTER, width=80)
+        self.tree.heading("#1", text="PID")
+        self.tree.heading("#2", text="Product name")
+        self.tree.heading("#3", text="Company name")
+        self.tree.heading("#4", text="Batch no.")
+        self.tree.heading("#5", text="Net Content")
+        self.tree.heading("#6", text="Selling price")
+        self.tree.heading("#7", text="Quantity")
+        self.tree.heading("#8", text="Amount")
+
+        self.v=Scrollbar(self.frame5, orient="vertical")
+        self.v.place(x=1110, y=0, height=170)
+        self.v.config(command=self.tree.yview)
+
+        '''self.h=Scrollbar(self.frame2, orient="horizontal")
+        self.h.place(x=0, y=465, width=763)
+        self.h.config(command=self.tree.xview)'''
+        self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
+
+        #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        #self.show_all_product()
+        #Treeview----------------END
+
 
 
 
@@ -169,24 +209,24 @@ class generateBill:
         self.sFrame2.place_forget()
 
     def callbackProd(self, e):
-        if self.ECust.get() != "":
+        if self.EProd.get() != "":
             self.sFrame2.lift()
-            self.sFrame2.place(x=122, y=93)
+            self.sFrame2.place(x=122, y=133)
             conn=pymysql.connect(host="localhost",
                                 user="root",
                                 password="",
                                 database="Database23Nov")
             curr=conn.cursor()
             varx=self.EProd.get()
-            curr.execute("select * from productdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
-            clist=curr.fetchall()
-            self.clistbox.delete(0, END)
-            if len(clist)!=0:
-                for row in clist:
+            curr.execute("select * from productdata where PName LIKE '%"+ varx +"%' OR TechName LIKE '%"+ varx +"%' OR Company LIKE '%"+ varx +"%' OR BatchNo LIKE '%"+ varx +"%'")
+            plist=curr.fetchall()
+            self.plistbox.delete(0, END)
+            if len(plist)!=0:
+                for row in plist:
                     s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]+"    "+str(row[5])+" Rs."
-                    self.clistbox.insert("end", s)
+                    self.plistbox.insert("end", s)
         else:
-            self.sFrame1.place_forget()
+            self.sFrame2.place_forget()
 
 
 
