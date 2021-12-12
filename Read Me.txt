@@ -59,3 +59,4 @@ Learned Questions:
 Difference between Primary key and Unique key?
 SQL Composite Key?
 Tracing Tkinter textvariable in Python?
+TRUNCATE TABLE tempsubbill sql query..

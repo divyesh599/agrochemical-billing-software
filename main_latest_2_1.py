@@ -9,6 +9,8 @@ import webbrowser
 
 class generateBill:
     def __init__(self):
+        self.delete_table()
+
         #---variables------
         self.cdate=datetime.datetime.now()
         self.selectedC=""
@@ -16,8 +18,6 @@ class generateBill:
         self.billno=self.cdate.strftime("%y%m%d%H%M")
         self.billdate=self.cdate.strftime("%d %b %Y")
         self.mobileno=0
-
-
 
 
 
@@ -31,12 +31,12 @@ class generateBill:
 
         #--------------Frame1--------------
         self.frame1=Frame(self.Fnewbill, bg=colbg)
-        self.frame1.place(x=0, y=0)
+        self.frame1.place(x=698, y=10)
 
-        Label(self.frame1, text="બિલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT, pady=15)
-        Label(self.frame1, text=self.billno, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=20).pack(side=LEFT)
-        Label(self.frame1, text="બિલની તારીખ :", bg=colbg, anchor=E, width=20).pack(side=LEFT)
-        Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=20).pack(side=LEFT)
+        Label(self.frame1, text="બિલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT, pady=10)
+        Label(self.frame1, text=self.billno, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=12).pack(side=LEFT)
+        Label(self.frame1, text="બિલની તારીખ :", bg=colbg, anchor=E, width=12).pack(side=LEFT)
+        Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
         #Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
 
         #--------------Frame2--------------
@@ -67,9 +67,9 @@ class generateBill:
         self.cnamelbl=Label(self.frame3, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red")
         self.cnamelbl.grid(row=0, column=1)
         Label(self.frame3, text="મોબાઈલ નંબર :", anchor=E, width=15, bg=colbg).grid(row=0, column=2)
-        self.mobilelbl=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
+        self.mobilelbl=Label(self.frame3, anchor=W, width=12, font="arial 10 bold", bg=colbg, fg="red")
         self.mobilelbl.grid(row=0, column=3)
-        Label(self.frame3, text="ગામ :", anchor=E, width=5, bg=colbg).grid(row=0, column=4)
+        Label(self.frame3, text="ગામ :", anchor=E, width=12, bg=colbg).grid(row=0, column=4)
         self.villagelbl=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
         self.villagelbl.grid(row=0, column=5)
 
@@ -103,10 +103,10 @@ class generateBill:
         self.tree.place(x=0, y=0, width=1110)
 
         self.tree.column("#1", anchor=CENTER, width=30)
-        self.tree.column("#2", anchor=CENTER, width=250)
-        self.tree.column("#3", anchor=CENTER, width=180)
+        self.tree.column("#2", anchor=CENTER, width=200)
+        self.tree.column("#3", anchor=CENTER, width=150)
         self.tree.column("#4", anchor=CENTER, width=80)
-        self.tree.column("#5", anchor=CENTER, width=80)
+        self.tree.column("#5", anchor=CENTER, width=90)
         self.tree.column("#6", anchor=CENTER, width=80)
         self.tree.column("#7", anchor=CENTER, width=80)
         self.tree.column("#8", anchor=CENTER, width=80)
@@ -114,10 +114,10 @@ class generateBill:
         self.tree.heading("#2", text="Product name")
         self.tree.heading("#3", text="Company name")
         self.tree.heading("#4", text="Batch no.")
-        self.tree.heading("#5", text="Net Content")
-        self.tree.heading("#6", text="Selling price")
+        self.tree.heading("#5", text="Net Content (ml/gm)")
+        self.tree.heading("#6", text="Selling price (Rs.)")
         self.tree.heading("#7", text="Quantity")
-        self.tree.heading("#8", text="Amount")
+        self.tree.heading("#8", text="Amount (Rs.)")
 
         self.v=Scrollbar(self.frame5, orient="vertical")
         self.v.place(x=1110, y=0, height=170)
@@ -134,7 +134,15 @@ class generateBill:
 
 
 
-
+    def delete_table():
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        curr.execute("TRUNCATE TABLE tempsubbill")
+        conn.commit()
+        conn.close()
 
     def on2clickL1(self, evt):
         varx=self.clistbox.curselection()
@@ -385,10 +393,9 @@ class customerClass:
         self.frame1.place(x=0, y=20)
 
         Label(self.frame1, text="Search Customer :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
-        #self.Etextvar.trace("w", self.callback)
         self.Etext=Entry(self.frame1, font="arial 11", textvariable=self.Etextvar, fg="red", width=40, bd=2)
         self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
-        #self.Etext.bind('<KeyRelease>', self.searchCallCust)
+        self.Etext.bind('<KeyRelease>', self.callbackCust)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
@@ -420,7 +427,7 @@ class customerClass:
         self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
 
         #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
-        #self.show_all_customer()
+        self.show_all_cust()
         #Treeview----------------END
 
         # Frame 3 Buttons------------------------------------------------------------------------------------
@@ -436,6 +443,38 @@ class customerClass:
         self.Binfo.grid(row=0, column=4)
 
 
+
+    def show_all_cust(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        curr.execute("select * from customerdata")
+        clist=curr.fetchall()
+        self.tree.delete(*self.tree.get_children())
+        for row in clist:
+            self.tree.insert("", END, values=(row[0], row[1]+" "+row[2]+" "+row[3], row[4], row[5]))
+        conn.commit()
+        conn.close()
+
+    def callbackCust(self, e):
+        if self.Etext.get() != "":
+            conn=pymysql.connect(host="localhost",
+                                user="root",
+                                password="",
+                                database="Database23Nov")
+            curr=conn.cursor()
+            varx=self.Etext.get()
+            curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
+            clist=curr.fetchall()
+            self.tree.delete(*self.tree.get_children())
+            for row in clist:
+                self.tree.insert("", END, values=(row[0], row[1]+" "+row[2]+" "+row[3], row[4], row[5]))
+            conn.commit()
+            conn.close()
+        else:
+            self.show_all_cust()
 
     def newCust(self):
         pass
@@ -477,10 +516,9 @@ class productClass:
         self.frame1.place(x=0, y=20)
 
         Label(self.frame1, text="Search Product :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
-        #self.Etextvar.trace("w", self.callBack)
         self.Etext=Entry(self.frame1, font="arial 11", textvariable=self.Etextvar, fg="red", width=40, bd=2)
         self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
-        #self.Etext.bind('<KeyRelease>', self.searchCallProd)
+        self.Etext.bind('<KeyRelease>', self.callbackProd)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
@@ -520,7 +558,7 @@ class productClass:
         self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
 
         #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
-        #self.show_all_product()
+        self.show_all_prod()
         #Treeview----------------END
 
         # Frame 3 Buttons------------------------------------------------------------------------------------
@@ -535,7 +573,37 @@ class productClass:
         self.Binfo=Button(self.frame3, text="Info", command=self.prodInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
         self.Binfo.grid(row=0, column=4)
 
+    def show_all_prod(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        curr.execute("select * from productdata")
+        plist=curr.fetchall()
+        self.tree.delete(*self.tree.get_children())
+        for row in plist:
+            self.tree.insert("", END, values=row)
+        conn.commit()
+        conn.close()
 
+    def callbackProd(self, e):
+        if self.Etext.get() != "":
+            conn=pymysql.connect(host="localhost",
+                                user="root",
+                                password="",
+                                database="Database23Nov")
+            curr=conn.cursor()
+            varx=self.Etext.get()
+            curr.execute("select * from productdata where PName LIKE '%"+ varx +"%' OR TechName LIKE '%"+ varx +"%' OR Company LIKE '%"+ varx +"%' OR BatchNo LIKE '%"+ varx +"%'")
+            plist=curr.fetchall()
+            self.tree.delete(*self.tree.get_children())
+            for row in plist:
+                self.tree.insert("", END, values=row)
+            conn.commit()
+            conn.close()
+        else:
+            self.show_all_prod()
 
     def newProd(self):
         pass
@@ -701,9 +769,9 @@ objf3=productClass(f3)
 
 Fbtn=Frame(root, bg=colbg)
 Fbtn.place(x=20, y=90)
-Button(Fbtn, text="બિલની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
-Button(Fbtn, text="ગ્રાહકની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f2.tkraise()).pack(fill=X)
-Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f3.tkraise()).pack(fill=X)
+Button(Fbtn, text="બિલની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
+Button(Fbtn, text="ગ્રાહકની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f2.tkraise()).pack(fill=X)
+Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f3.tkraise()).pack(fill=X)
 
 
 

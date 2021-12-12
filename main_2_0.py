@@ -61,7 +61,9 @@ class generateBill:
         Label(self.frame3, text="ગામ :", anchor=E, width=5, bg=bgcol).grid(row=0, column=4)
         self.cLabelVillage=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=bgcol, fg="red")
         self.cLabelVillage.grid(row=0, column=5)
-        
+
+
+
 
     def cListboxSelectedItem(self, evt):
         selection=self.clistbox.curselection()
