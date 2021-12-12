@@ -471,7 +471,7 @@ class productClass:
         except IndexError as e:
             pass
 
-        
+
     def add_product(self):
         conn=pymysql.connect(host="localhost",
                             user="root",

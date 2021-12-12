@@ -13,6 +13,12 @@ class generateBill:
         self.cdate=datetime.datetime.now()
         self.selectedC=""
         self.selectedP=""
+        self.billno=self.cdate.strftime("%y%m%d%H%M")
+        self.billdate=self.cdate.strftime("%d %b %Y")
+        self.mobileno=0
+
+
+
 
 
         #self.Fnewbill=Tk()
@@ -28,9 +34,9 @@ class generateBill:
         self.frame1.place(x=0, y=0)
 
         Label(self.frame1, text="બિલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT, pady=15)
-        self.billno=Label(self.frame1, text=self.cdate.strftime("%y%m%d%H%M"), font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=20).pack(side=LEFT)
+        Label(self.frame1, text=self.billno, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=20).pack(side=LEFT)
         Label(self.frame1, text="બિલની તારીખ :", bg=colbg, anchor=E, width=20).pack(side=LEFT)
-        self.billdate=Label(self.frame1, text=self.cdate.strftime("%d %b %Y"), font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=20).pack(side=LEFT)
+        Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=20).pack(side=LEFT)
         #Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
 
         #--------------Frame2--------------
@@ -58,14 +64,14 @@ class generateBill:
         self.frame3.place(x=340, y=70)
 
         Label(self.frame3, text="નામ :", anchor=E, width=15, bg=colbg).grid(row=0, column=0)
-        self.cLabelname=Label(self.frame3, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red")
-        self.cLabelname.grid(row=0, column=1)
+        self.cnamelbl=Label(self.frame3, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red")
+        self.cnamelbl.grid(row=0, column=1)
         Label(self.frame3, text="મોબાઈલ નંબર :", anchor=E, width=15, bg=colbg).grid(row=0, column=2)
-        self.cLabelMobile=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
-        self.cLabelMobile.grid(row=0, column=3)
+        self.mobilelbl=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
+        self.mobilelbl.grid(row=0, column=3)
         Label(self.frame3, text="ગામ :", anchor=E, width=5, bg=colbg).grid(row=0, column=4)
-        self.cLabelVillage=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
-        self.cLabelVillage.grid(row=0, column=5)
+        self.villagelbl=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
+        self.villagelbl.grid(row=0, column=5)
 
 
         #--------------Frame4--------------
@@ -80,7 +86,7 @@ class generateBill:
         #--------------Product SearchFrame2--------------
         self.sFrame2=Frame(self.Fnewbill)
 
-        self.plistbox=Listbox(self.sFrame2, width=70)
+        self.plistbox=Listbox(self.sFrame2, width=90)
         self.plistbox.pack()
         self.plistbox.bind("<Double-1>", self.on2clickL2)
         self.plistbox.bind("<<ListboxSelect>>", self.onSelectL2)
@@ -151,9 +157,10 @@ class generateBill:
             curr.execute("select * from customerdata where MobileNo="+self.selectedC)
             clist=curr.fetchall()
             if len(clist)!=0:
-                self.cLabelname.config(text=clist[0][1]+" "+clist[0][2]+" "+clist[0][3])
-                self.cLabelMobile.config(text=clist[0][0])
-                self.cLabelVillage.config(text=clist[0][4])
+                self.cnamelbl.config(text=clist[0][1]+" "+clist[0][2]+" "+clist[0][3])
+                self.mobilelbl.config(text=clist[0][0])
+                self.mobileno=clist[0][0]
+                self.villagelbl.config(text=clist[0][4])
         conn.commit()
         conn.close()
         self.ECust.delete(0, END)
@@ -182,13 +189,15 @@ class generateBill:
     def on2clickL2(self, evt):
         varx=self.plistbox.curselection()
         if varx:
-            self.selectedP=self.plistbox.get(varx)[:10]
-        self.addCustInfo()
+            i=self.plistbox.get(varx).index(" ")
+            self.selectedP=self.plistbox.get(varx)[:i]
+        self.addProdInfo()
 
     def onSelectL2(self, evt):
         varx=self.plistbox.curselection()
         if varx:
-            self.selectedP=self.plistbox.get(varx)[:10]
+            i=self.plistbox.get(varx).index(" ")
+            self.selectedP=self.plistbox.get(varx)[:i]
 
     def addProdInfo(self):
         conn=pymysql.connect(host="localhost",
@@ -200,11 +209,26 @@ class generateBill:
             curr.execute("select * from productdata where PID="+self.selectedP)
             plist=curr.fetchall()
             if len(plist)!=0:
-                '''self.cLabelname.config(text=clist[0][1]+" "+clist[0][2]+" "+clist[0][3])
-                self.cLabelMobile.config(text=clist[0][0])
-                self.cLabelVillage.config(text=clist[0][4])'''
-        conn.commit()
-        conn.close()
+                try:
+                    curr.execute("insert into tempsubbill values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                                    (self.billdate,
+                                    self.mobileno,
+                                    self.billno,
+                                    plist[0][0],
+                                    plist[0][1]+ "  " +plist[0][2],
+                                    plist[0][3],
+                                    plist[0][4],
+                                    plist[0][5],
+                                    plist[0][7],
+                                    1,
+                                    plist[0][7])
+                                )
+                except pymysql.err.Error as e:
+                    pass
+                finally:
+                    conn.commit()
+                    conn.close()
+        self.show_tempbill()
         self.EProd.delete(0, END)
         self.sFrame2.place_forget()
 
@@ -223,10 +247,32 @@ class generateBill:
             self.plistbox.delete(0, END)
             if len(plist)!=0:
                 for row in plist:
-                    s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]+"    "+str(row[5])+" Rs."
+                    s=str(row[0])+"    "+row[1]+" "+row[2]+"    "+row[3]+"    "+row[4]+"    "+str(row[5])+" ml/gm"+"    "+str(row[6])+" Rs."
                     self.plistbox.insert("end", s)
         else:
             self.sFrame2.place_forget()
+
+    def show_tempbill(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        curr.execute("select * from tempsubbill")
+        plist=curr.fetchall()
+        self.tree.delete(*self.tree.get_children())
+        for row in plist:
+            self.tree.insert("", END, values=row[3:])
+        conn.commit()
+        conn.close()
+
+
+
+
+
+
+
+
 
 
 
@@ -576,6 +622,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.subbilldetails\
     Description VARCHAR(100),\
     Company VARCHAR(40),\
     BatchNo VARCHAR(20),\
+    NetContent INT,\
     SellPrice INT,\
     Qty INT,\
     Amount INT,\
@@ -588,6 +635,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.tempsubbill\
     Description VARCHAR(100),\
     Company VARCHAR(40),\
     BatchNo VARCHAR(20),\
+    NetContent INT,\
     SellPrice INT,\
     Qty INT,\
     Amount INT,\
