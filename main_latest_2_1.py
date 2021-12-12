@@ -134,7 +134,7 @@ class generateBill:
 
 
 
-    def delete_table():
+    def delete_table(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
@@ -606,7 +606,7 @@ class productClass:
             self.show_all_prod()
 
     def newProd(self):
-        pass
+        ogj=newProduct()
     def editProd(self):
         pass
     def deleteProd(self):
@@ -617,6 +617,61 @@ class productClass:
 
 
 
+class newProduct():
+    def __init__(self):
+        self.Fnewprod=Toplevel(root)
+        self.Fnewprod.title("Add New Product")
+        self.Fnewprod.geometry("600x400+300+220")
+        self.Fnewprod.configure(background=colbg)
+
+        self.pid=5
+
+        #--------------Frame1--------------
+        self.frame1=Frame(self.Fnewprod, bg=colbg)
+        self.frame1.place(x=40, y=40)
+
+        Label(self.frame1, text="Product name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=0, column=0, pady=5)
+        Label(self.frame1, text="Technical name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=1, column=0, pady=5)
+        Label(self.frame1, text="Company name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=2, column=0, pady=5)
+        Label(self.frame1, text="Batch no. :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=3, column=0, pady=5)
+        Label(self.frame1, text="Net Content (ml/gm) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=4, column=0, pady=5)
+        Label(self.frame1, text="Printed price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=5, column=0, pady=5)
+        Label(self.frame1, text="Selling price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=6, column=0, pady=5)
+        Label(self.frame1, text="Buying price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=7, column=0, pady=5)
+        
+        self.list1=[]
+
+        for i in range(8):
+            self.list1.append(Entry(self.frame1, width=40))
+            self.list1[i].grid(row=i, column=1, padx=10)
+        
+        self.add=Button(self.frame1, text="Add into Product", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", width=25, bd=5)
+        self.add.grid(row=8, column=1, pady=10)
+    
+    def addProd(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        try:
+            curr.execute("insert into productdata values(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                            (self.pid,
+                            self.list1[0].get(),
+                            self.list1[1].get(),
+                            self.list1[2].get(),
+                            self.list1[3].get(),
+                            self.list1[4].get(),
+                            self.list1[5].get(),
+                            self.list1[6].get(),
+                            self.list1[7].get())
+                        )
+        except pymysql.err.Error as e:
+            pass
+        finally:
+            conn.commit()
+            conn.close()
+        self.Fnewprod.destroy()
 
 
 
