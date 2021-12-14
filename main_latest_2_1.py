@@ -9,9 +9,6 @@ import webbrowser
 
 class generateBill:
     def __init__(self):
-        self.clear_tempbill_table()
-
-
         #---variables------
         self.cdate=datetime.datetime.now()
         self.selectedC=""
@@ -56,8 +53,7 @@ class generateBill:
         self.clistbox.pack()
         self.clistbox.bind("<Double-1>", self.on2clickL1)
         self.clistbox.bind("<<ListboxSelect>>", self.onSelectL1)
-        self.cAddBtn=Button(self.sFrame1, text="Add", command=self.addCustInfo)
-        self.cAddBtn.pack(fill=X)
+        Button(self.sFrame1, text="Add", command=self.addCustInfo).pack(fill=X)
 
         #--------------Frame3--------------------------------------------------------------------------------
         self.frame3=Frame(self.Fnewbill, bg=colbg)
@@ -90,8 +86,7 @@ class generateBill:
         self.plistbox.pack()
         self.plistbox.bind("<Double-1>", self.on2clickL2)
         self.plistbox.bind("<<ListboxSelect>>", self.onSelectL2)
-        self.pAddBtn=Button(self.sFrame2, text="Add", command=self.addProdInfo)
-        self.pAddBtn.pack(fill=X)
+        Button(self.sFrame2, text="Add", command=self.addProdInfo).pack(fill=X)
 
 
         # Frame 5 Table---------------------------------------------------------------------------------------
@@ -153,11 +148,17 @@ class generateBill:
         Label(self.frame7, text="Quantity :", anchor=E, width=10, bg=colbg).grid(row=0, column=4)
         self.Etree2=Entry(self.frame7, font="arial 10", fg="red", width=10, bd=2)
         self.Etree2.grid(row=0, column=5, padx=10)
+        Button(self.frame7, text="Edit", command=self.edit_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=1).grid(row=0, column=6)
+        Button(self.frame7, text="Delete", command=self.delete_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=1).grid(row=0, column=7)
+
+        # Frame 7 Buttons------------------------------------------------------------------------------------
+        self.frame7=Frame(self.Fnewbill, bg=colbg)
+        self.frame7.place(x=10, y=320)
         self.Bnew=Button(self.frame7, text="Edit", command=self.edit_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=1)
         self.Bnew.grid(row=0, column=6)
-        self.Bdelete=Button(self.frame7, text="Delete", command=self.delete_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=1)
-        self.Bdelete.grid(row=0, column=7)
-
+        
+        
+        self.clear_tempbill_table()
 
     def selectItem(self, a):
         treeItem = self.tree.focus()
@@ -438,14 +439,10 @@ class allBills:
         # Frame 3 Buttons------------------------------------------------------------------------------------
         self.frame3=Frame(self.Fbills, bg=colbg)
         self.frame3.place(x=10, y=520, relwidth=1)
-        self.Bnew=Button(self.frame3, text="New", command=self.newBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bnew.grid(row=0, column=0)
-        self.Bedit=Button(self.frame3, text="Edit", command=self.editBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bedit.grid(row=0, column=1)
-        self.Bdelete=Button(self.frame3, text="Delete", command=self.deleteBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bdelete.grid(row=0, column=2)
-        self.Binfo=Button(self.frame3, text="Info", command=self.billInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Binfo.grid(row=0, column=4)
+        Button(self.frame3, text="New", command=self.newBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=0)
+        Button(self.frame3, text="Edit", command=self.editBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
+        Button(self.frame3, text="Delete", command=self.deleteBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
+        Button(self.frame3, text="Info", command=self.billInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
 
 
 
@@ -523,14 +520,10 @@ class customerClass:
         # Frame 3 Buttons------------------------------------------------------------------------------------
         self.frame3=Frame(self.Fcust, bg=colbg)
         self.frame3.place(x=10, y=520, relwidth=1)
-        self.Bnew=Button(self.frame3, text="New", command=self.newCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bnew.grid(row=0, column=0)
-        self.Bedit=Button(self.frame3, text="Edit", command=self.editCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bedit.grid(row=0, column=1)
-        self.Bdelete=Button(self.frame3, text="Delete", command=self.deleteCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bdelete.grid(row=0, column=2)
-        self.Binfo=Button(self.frame3, text="Info", command=self.custInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Binfo.grid(row=0, column=4)
+        Button(self.frame3, text="New", command=self.newCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=0)
+        Button(self.frame3, text="Edit", command=self.editCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
+        Button(self.frame3, text="Delete", command=self.deleteCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
+        Button(self.frame3, text="Info", command=self.custInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
 
 
 
@@ -654,14 +647,10 @@ class productClass:
         # Frame 3 Buttons------------------------------------------------------------------------------------
         self.frame3=Frame(self.Fprod, bg=colbg)
         self.frame3.place(x=10, y=520, relwidth=1)
-        self.Bnew=Button(self.frame3, text="New", command=self.newProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bnew.grid(row=0, column=0)
-        self.Bedit=Button(self.frame3, text="Edit", command=self.editProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bedit.grid(row=0, column=1)
-        self.Bdelete=Button(self.frame3, text="Delete", command=self.deleteProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bdelete.grid(row=0, column=2)
-        self.Binfo=Button(self.frame3, text="Info", command=self.prodInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Binfo.grid(row=0, column=4)
+        Button(self.frame3, text="New", command=self.newProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=0)
+        Button(self.frame3, text="Edit", command=self.editProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
+        Button(self.frame3, text="Delete", command=self.deleteProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
+        Button(self.frame3, text="Info", command=self.prodInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
 
     def show_all_prod(self):
         conn=pymysql.connect(host="localhost",
@@ -733,8 +722,7 @@ class newProduct:
             self.list1.append(Entry(self.frame1, width=40))
             self.list1[i].grid(row=i, column=1, padx=10)
         
-        self.add=Button(self.frame1, text="Add into Product", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", width=25, bd=5)
-        self.add.grid(row=8, column=1, pady=10)
+        Button(self.frame1, text="Add into Product", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", width=25, bd=5).grid(row=8, column=1, pady=10)
     
     def addProd(self):
         conn=pymysql.connect(host="localhost",
@@ -894,7 +882,7 @@ imgheart=PhotoImage(file="img/heart.png")
 Fheading=Frame(root, bg=colbg)
 Fheading.place(x=0, y=0, relwidth=1)
 Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1).grid(row=0, column=0, padx=10, pady=3)
-Label(Fheading, text="|| શ્રી ગણેશાય નમઃ ||", bg=colbg, fg=col1, width=160).grid(row=0, column=1)
+Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1, width=160).grid(row=0, column=1)
 Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg, fg=col1).grid(row=0, column=2)
 Label(Fheading, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=12).grid(row=1, column=1)
 Label(Fheading, image=imgGod, bd=0).place(x=1280, y=25)
