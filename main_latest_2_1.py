@@ -9,8 +9,6 @@ import webbrowser
 
 class generateBill:
     def __init__(self):
-        self.delete_table()
-
         #---variables------
         self.cdate=datetime.datetime.now()
         self.selectedC=""
@@ -21,15 +19,14 @@ class generateBill:
 
 
 
-        #self.Fnewbill=Tk()
-        #self.Fnewbill.mainloop()
         self.Fnewbill=Toplevel(root)
+        self.Fnewbill.protocol("WM_DELETE_WINDOW", self.close_window)
         self.Fnewbill.title("Add New Bill")
         self.Fnewbill.geometry("1150x650+100+60")
         self.Fnewbill.configure(background=colbg)
         
 
-        #--------------Frame1--------------
+        #--------------Frame1-------------------------------------------------------------------------------
         self.frame1=Frame(self.Fnewbill, bg=colbg)
         self.frame1.place(x=698, y=10)
 
@@ -39,7 +36,7 @@ class generateBill:
         Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
         #Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
 
-        #--------------Frame2--------------
+        #--------------Frame2-------------------------------------------------------------------------------
         self.frame2=Frame(self.Fnewbill, bg=colbg)
         self.frame2.place(x=0, y=70)
 
@@ -59,7 +56,7 @@ class generateBill:
         self.cAddBtn=Button(self.sFrame1, text="Add", command=self.addCustInfo)
         self.cAddBtn.pack(fill=X)
 
-        #--------------Frame3--------------
+        #--------------Frame3--------------------------------------------------------------------------------
         self.frame3=Frame(self.Fnewbill, bg=colbg)
         self.frame3.place(x=340, y=70)
 
@@ -74,7 +71,7 @@ class generateBill:
         self.villagelbl.grid(row=0, column=5)
 
 
-        #--------------Frame4--------------
+        #--------------Frame4----------------------------------------------------------------------------------
         self.frame4=Frame(self.Fnewbill, bg=colbg)
         self.frame4.place(x=0, y=110)
 
@@ -128,13 +125,60 @@ class generateBill:
         self.h.config(command=self.tree.xview)'''
         self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
 
-        #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        self.tree.bind('<<TreeviewSelect>>', self.selectItem)
         #self.show_all_product()
         #Treeview----------------END
 
+        #--------------Frame6----------------------------------------------------------------------------------
+        self.frame6=Frame(self.Fnewbill, bg=colbg)
+        self.frame6.place(x=820, y=330)
+
+        Label(self.frame6, text="Total Amount :", anchor=E, width=15, bg=colbg).grid(row=0, column=0)
+        self.totalamonut=Label(self.frame6, text=0, font="arial 20 bold", bg=colbg, fg="red", anchor=W)
+        self.totalamonut.grid(row=0, column=1)
+        Label(self.frame6, text="Rs.", anchor=E, bg=colbg).grid(row=0, column=2)
+        
+        # Frame 7 Buttons------------------------------------------------------------------------------------
+        self.frame7=Frame(self.Fnewbill, bg=colbg)
+        self.frame7.place(x=10, y=320)
+        Label(self.frame7, text="PID :", anchor=E, width=5, bg=colbg).grid(row=0, column=0)
+        self.pidlbl=Label(self.frame7, text="", anchor=W, width=5, bg=colbg)
+        self.pidlbl.grid(row=0, column=1)
+        Label(self.frame7, text="Quantity :", anchor=E, width=10, bg=colbg).grid(row=0, column=2)
+        self.Etree=Entry(self.frame7, font="arial 10", fg="red", width=5, bd=2)
+        self.Etree.grid(row=0, column=3, padx=10)
+        self.Bnew=Button(self.frame7, text="Edit", command=self.edittemp, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.Bnew.grid(row=0, column=4)
+        self.Bdelete=Button(self.frame7, text="Delete", command=self.deletetemp, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
+        self.Bdelete.grid(row=0, column=5)
 
 
-    def delete_table(self):
+    def selectItem(self, a):
+        treeItem = self.tree.focus()
+        self.pidlbl.config(text=self.tree.item(treeItem)['values'][0])
+        self.Etree.delete(0,END)
+        self.Etree.insert(0, self.tree.item(treeItem)['values'][6])
+
+    def edittemp(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        if self.pidlbl["text"] !="":
+            print(type(self.Etree.get()), type(self.pidlbl["text"]))
+            curr.execute("UPDATE tempsubbill SET Qty='"+int(self.Etree.get())
+                        +"', Amount='"+str(self.Etree.get())
+                        +"' WHERE PID="+self.pidlbl["text"])
+        conn.commit()
+        conn.close()
+
+    def deletetemp(self):
+        pass
+
+
+
+    def close_window(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
@@ -143,6 +187,7 @@ class generateBill:
         curr.execute("TRUNCATE TABLE tempsubbill")
         conn.commit()
         conn.close()
+        self.Fnewbill.destroy()
 
     def on2clickL1(self, evt):
         varx=self.clistbox.curselection()
@@ -233,9 +278,14 @@ class generateBill:
                                 )
                 except pymysql.err.Error as e:
                     pass
-                finally:
-                    conn.commit()
-                    conn.close()
+        try:
+            curr.execute("select sum(Amount) from tempsubbill")
+            total=curr.fetchall()
+            self.totalamonut.config(text=total[0][0])
+        except pymysql.err.Error as e:
+            pass
+        conn.commit()
+        conn.close()
         self.show_tempbill()
         self.EProd.delete(0, END)
         self.sFrame2.place_forget()
@@ -255,7 +305,7 @@ class generateBill:
             self.plistbox.delete(0, END)
             if len(plist)!=0:
                 for row in plist:
-                    s=str(row[0])+"    "+row[1]+" "+row[2]+"    "+row[3]+"    "+row[4]+"    "+str(row[5])+" ml/gm"+"    "+str(row[6])+" Rs."
+                    s=str(row[0])+"    "+row[1]+" "+row[2]+"    "+row[3]+"    "+row[4]+"    "+str(row[5])+" ml/gm"+"    "+str(row[7])+" Rs."
                     self.plistbox.insert("end", s)
         else:
             self.sFrame2.place_forget()
@@ -617,14 +667,12 @@ class productClass:
 
 
 
-class newProduct():
+class newProduct:
     def __init__(self):
         self.Fnewprod=Toplevel(root)
         self.Fnewprod.title("Add New Product")
         self.Fnewprod.geometry("600x400+300+220")
         self.Fnewprod.configure(background=colbg)
-
-        self.pid=5
 
         #--------------Frame1--------------
         self.frame1=Frame(self.Fnewprod, bg=colbg)
@@ -655,8 +703,10 @@ class newProduct():
                             database="Database23Nov")
         curr=conn.cursor()
         try:
+            curr.execute("select count(PID) from productdata")
+            pid=curr.fetchall()
             curr.execute("insert into productdata values(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                            (self.pid,
+                            (pid[0][0]+1,
                             self.list1[0].get(),
                             self.list1[1].get(),
                             self.list1[2].get(),
