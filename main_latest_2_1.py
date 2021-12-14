@@ -1,3 +1,4 @@
+from os import stat
 from tkinter import *
 from tkinter import ttk
 import pymysql
@@ -22,7 +23,7 @@ class generateBill:
         self.Fnewbill=Toplevel(root)
         self.Fnewbill.protocol("WM_DELETE_WINDOW", self.close_window)
         self.Fnewbill.title("Add New Bill")
-        self.Fnewbill.geometry("1150x650+100+60")
+        self.Fnewbill.geometry("1150x500+150+150")
         self.Fnewbill.configure(background=colbg)
         
 
@@ -40,7 +41,7 @@ class generateBill:
         self.frame2=Frame(self.Fnewbill, bg=colbg)
         self.frame2.place(x=0, y=70)
 
-        Label(self.frame2, text="Search Customer :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
+        Label(self.frame2, text="Search Customer * :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
         self.ECust=Entry(self.frame2, font="arial 10", fg="red", width=30, bd=2)
         self.ECust.grid(row=0, column=1, columnspan=2, sticky=W)
         self.ECust.bind('<KeyRelease>', self.callbackCust)
@@ -75,7 +76,7 @@ class generateBill:
         self.frame4.place(x=0, y=110)
 
         Label(self.frame4, text="Search Product    :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
-        self.EProd=Entry(self.frame4, font="arial 10", fg="red", width=30, bd=2)
+        self.EProd=Entry(self.frame4, font="arial 10", fg="red", width=30, bd=2, state="disabled")
         self.EProd.grid(row=0, column=1, columnspan=2, sticky=W)
         self.EProd.bind('<KeyRelease>', self.callbackProd)
 
@@ -135,7 +136,13 @@ class generateBill:
         self.totalamonut=Label(self.frame6, text=0, font="arial 20 bold", bg=colbg, fg="red", anchor=W)
         self.totalamonut.grid(row=0, column=1)
         Label(self.frame6, text="Rs.", anchor=E, bg=colbg).grid(row=0, column=2)
+        Label(self.frame6, text="Cash / Debit :", anchor=E, width=15, bg=colbg).grid(row=1, column=0)
+        self.cd=ttk.Combobox(self.frame6, state="readonly")
+        self.cd.grid(row=1, column=1)
+        self.cd["values"]=("Cash", "Debit")
+        self.cd.current(1)
         
+
         # Frame 7 Buttons------------------------------------------------------------------------------------
         self.frame7=Frame(self.Fnewbill, bg=colbg)
         self.frame7.place(x=10, y=320)
@@ -148,17 +155,37 @@ class generateBill:
         Label(self.frame7, text="Quantity :", anchor=E, width=10, bg=colbg).grid(row=0, column=4)
         self.Etree2=Entry(self.frame7, font="arial 10", fg="red", width=10, bd=2)
         self.Etree2.grid(row=0, column=5, padx=10)
-        Button(self.frame7, text="Edit", command=self.edit_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=1).grid(row=0, column=6)
-        Button(self.frame7, text="Delete", command=self.delete_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=1).grid(row=0, column=7)
+        Button(self.frame7, text="Edit", command=self.edit_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=2).grid(row=0, column=6)
+        Button(self.frame7, text="Delete", command=self.delete_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=2).grid(row=0, column=7)
 
-        # Frame 7 Buttons------------------------------------------------------------------------------------
-        self.frame7=Frame(self.Fnewbill, bg=colbg)
-        self.frame7.place(x=10, y=320)
-        self.Bnew=Button(self.frame7, text="Edit", command=self.edit_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=1)
-        self.Bnew.grid(row=0, column=6)
-        
+        # Frame 8 Buttons------------------------------------------------------------------------------------
+        self.frame8=Frame(self.Fnewbill, bg=colbg)
+        self.frame8.place(x=900, y=450)
+        Button(self.frame8, text="OK", command=self.create_bill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        Button(self.frame8, text="Print", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
         
         self.clear_tempbill_table()
+    
+    def create_bill(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        curr.execute("insert into subbilldetails select * from tempsubbill")
+        curr.execute("insert into allbills values(%s, %s, %s, %s, %s, %s, %s)",
+                        (self.billdate,
+                        self.billno,
+                        self.mobileno,
+                        self.cnamelbl["text"],
+                        self.villagelbl["text"],
+                        self.cd.get(),
+                        self.totalamonut["text"])
+                    )
+        conn.commit()
+        conn.close()
+        self.close_window()
+        
 
     def selectItem(self, a):
         treeItem = self.tree.focus()
@@ -231,6 +258,7 @@ class generateBill:
         conn.close()
         self.ECust.delete(0, END)
         self.sFrame1.place_forget()
+        self.EProd.config(state="normal")
 
     def callbackCust(self, e):
         if self.ECust.get() != "":
