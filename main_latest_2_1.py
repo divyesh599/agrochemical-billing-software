@@ -9,6 +9,9 @@ import webbrowser
 
 class generateBill:
     def __init__(self):
+        self.clear_tempbill_table()
+
+
         #---variables------
         self.cdate=datetime.datetime.now()
         self.selectedC=""
@@ -144,50 +147,59 @@ class generateBill:
         Label(self.frame7, text="PID :", anchor=E, width=5, bg=colbg).grid(row=0, column=0)
         self.pidlbl=Label(self.frame7, text="", anchor=W, width=5, bg=colbg)
         self.pidlbl.grid(row=0, column=1)
-        Label(self.frame7, text="Quantity :", anchor=E, width=10, bg=colbg).grid(row=0, column=2)
-        self.Etree=Entry(self.frame7, font="arial 10", fg="red", width=5, bd=2)
-        self.Etree.grid(row=0, column=3, padx=10)
-        self.Bnew=Button(self.frame7, text="Edit", command=self.edittemp, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bnew.grid(row=0, column=4)
-        self.Bdelete=Button(self.frame7, text="Delete", command=self.deletetemp, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5)
-        self.Bdelete.grid(row=0, column=5)
+        Label(self.frame7, text="Selling Price :", anchor=E, width=10, bg=colbg).grid(row=0, column=2)
+        self.Etree1=Entry(self.frame7, font="arial 10", fg="red", width=10, bd=2)
+        self.Etree1.grid(row=0, column=3, padx=10)
+        Label(self.frame7, text="Quantity :", anchor=E, width=10, bg=colbg).grid(row=0, column=4)
+        self.Etree2=Entry(self.frame7, font="arial 10", fg="red", width=10, bd=2)
+        self.Etree2.grid(row=0, column=5, padx=10)
+        self.Bnew=Button(self.frame7, text="Edit", command=self.edit_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=1)
+        self.Bnew.grid(row=0, column=6)
+        self.Bdelete=Button(self.frame7, text="Delete", command=self.delete_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=1)
+        self.Bdelete.grid(row=0, column=7)
 
 
     def selectItem(self, a):
         treeItem = self.tree.focus()
-        self.pidlbl.config(text=self.tree.item(treeItem)['values'][0])
-        self.Etree.delete(0,END)
-        self.Etree.insert(0, self.tree.item(treeItem)['values'][6])
+        try:
+            self.pidlbl.config(text=self.tree.item(treeItem)['values'][0])
+            self.Etree1.delete(0,END)
+            self.Etree1.insert(0, self.tree.item(treeItem)['values'][5])
+            self.Etree2.delete(0,END)
+            self.Etree2.insert(0, self.tree.item(treeItem)['values'][6])
+        except:
+            self.pidlbl.config(text="")
+            self.Etree1.delete(0,END)
+            self.Etree2.delete(0,END)
 
-    def edittemp(self):
+    def edit_into_tableI(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
                             database="Database23Nov")
         curr=conn.cursor()
         if self.pidlbl["text"] !="":
-            print(type(self.Etree.get()), type(self.pidlbl["text"]))
-            curr.execute("UPDATE tempsubbill SET Qty='"+int(self.Etree.get())
-                        +"', Amount='"+str(self.Etree.get())
-                        +"' WHERE PID="+self.pidlbl["text"])
+            curr.execute("UPDATE tempsubbill SET Qty="+self.Etree2.get()
+                        +", SellPrice="+self.Etree1.get()
+                        +", Amount="+str(int(self.Etree1.get())*int(self.Etree2.get()))
+                        +" WHERE PID="+str(self.pidlbl["text"]))
         conn.commit()
         conn.close()
+        self.total_sum_amount()
+        self.show_tempbill()
 
-    def deletetemp(self):
-        pass
-
-
-
-    def close_window(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database23Nov")
-        curr=conn.cursor()
-        curr.execute("TRUNCATE TABLE tempsubbill")
-        conn.commit()
-        conn.close()
-        self.Fnewbill.destroy()
+    def delete_into_tableI(self):
+        if self.pidlbl["text"] !="":
+            conn=pymysql.connect(host="localhost",
+                                user="root",
+                                password="",
+                                database="Database23Nov")
+            curr=conn.cursor()
+            curr.execute("DELETE FROM tempsubbill WHERE PID="+str(self.pidlbl["text"]))
+            conn.commit()
+            conn.close()
+        self.total_sum_amount()
+        self.show_tempbill()
 
     def on2clickL1(self, evt):
         varx=self.clistbox.curselection()
@@ -278,14 +290,9 @@ class generateBill:
                                 )
                 except pymysql.err.Error as e:
                     pass
-        try:
-            curr.execute("select sum(Amount) from tempsubbill")
-            total=curr.fetchall()
-            self.totalamonut.config(text=total[0][0])
-        except pymysql.err.Error as e:
-            pass
         conn.commit()
         conn.close()
+        self.total_sum_amount()
         self.show_tempbill()
         self.EProd.delete(0, END)
         self.sFrame2.place_forget()
@@ -323,6 +330,39 @@ class generateBill:
             self.tree.insert("", END, values=row[3:])
         conn.commit()
         conn.close()
+
+    def total_sum_amount(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        try:
+            curr.execute("select sum(Amount) from tempsubbill")
+            total=curr.fetchall()
+            if total[0][0] != None:
+                self.totalamonut.config(text=total[0][0])
+            else:
+                self.totalamonut.config(text=0)
+        except pymysql.err.Error as e:
+            pass
+        conn.commit()
+        conn.close()
+
+    def clear_tempbill_table(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        curr.execute("TRUNCATE TABLE tempsubbill")
+        conn.commit()
+        conn.close()
+
+    def close_window(self):
+        self.clear_tempbill_table()
+        self.Fnewbill.destroy()
+
 
 
 
