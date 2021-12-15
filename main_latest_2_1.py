@@ -18,7 +18,6 @@ class generateBill:
         self.billdate=self.cdate.strftime("%d %b %Y")
 
 
-
         self.Fnewbill=Toplevel(root)
         self.Fnewbill.protocol("WM_DELETE_WINDOW", self.close_window)
         self.Fnewbill.title("Add New Bill")
@@ -35,6 +34,7 @@ class generateBill:
         Label(self.frame1, text="બિલની તારીખ :", bg=colbg, anchor=E, width=12).pack(side=LEFT)
         Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
         #Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
+
 
         #--------------Frame2-------------------------------------------------------------------------------
         self.frame2=Frame(self.Fnewbill, bg=colbg)
@@ -54,6 +54,7 @@ class generateBill:
         self.clistbox.bind("<Double-1>", self.on2clickL1)
         self.clistbox.bind("<<ListboxSelect>>", self.onSelectL1)
         Button(self.sFrame1, text="Add", command=self.addCustInfo).pack(fill=X)
+
 
         #--------------Frame3--------------------------------------------------------------------------------
         self.frame3=Frame(self.Fnewbill, bg=colbg)
@@ -127,6 +128,7 @@ class generateBill:
         #self.show_all_product()
         #Treeview----------------END
 
+
         #--------------Frame6----------------------------------------------------------------------------------
         self.frame6=Frame(self.Fnewbill, bg=colbg)
         self.frame6.place(x=820, y=330)
@@ -157,6 +159,7 @@ class generateBill:
         Button(self.frame7, text="Edit", command=self.edit_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=2).grid(row=0, column=6)
         Button(self.frame7, text="Delete", command=self.delete_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=2).grid(row=0, column=7)
 
+
         # Frame 8 Buttons------------------------------------------------------------------------------------
         self.frame8=Frame(self.Fnewbill, bg=colbg)
         self.frame8.place(x=900, y=450)
@@ -164,7 +167,8 @@ class generateBill:
         Button(self.frame8, text="Print", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
         
         self.clear_tempbill_table()
-    
+
+
     def create_bill(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
