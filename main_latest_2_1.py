@@ -16,7 +16,6 @@ class generateBill:
         self.selectedP=""
         self.billno=self.cdate.strftime("%y%m%d%H%M")
         self.billdate=self.cdate.strftime("%d %b %Y")
-        self.mobileno=0
 
 
 
@@ -44,7 +43,7 @@ class generateBill:
         Label(self.frame2, text="Search Customer * :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
         self.ECust=Entry(self.frame2, font="arial 10", fg="red", width=30, bd=2)
         self.ECust.grid(row=0, column=1, columnspan=2, sticky=W)
-        self.ECust.bind('<KeyRelease>', self.callbackCust)
+        self.ECust.bind('<KeyRelease>', self.search_call_Cust)
 
 
         #--------------Customer SearchFrame1--------------
@@ -78,7 +77,7 @@ class generateBill:
         Label(self.frame4, text="Search Product    :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
         self.EProd=Entry(self.frame4, font="arial 10", fg="red", width=30, bd=2, state="disabled")
         self.EProd.grid(row=0, column=1, columnspan=2, sticky=W)
-        self.EProd.bind('<KeyRelease>', self.callbackProd)
+        self.EProd.bind('<KeyRelease>', self.search_call_Prod)
 
         #--------------Product SearchFrame2--------------
         self.sFrame2=Frame(self.Fnewbill)
@@ -172,19 +171,20 @@ class generateBill:
                             password="",
                             database="Database23Nov")
         curr=conn.cursor()
-        curr.execute("insert into subbilldetails select * from tempsubbill")
-        curr.execute("insert into allbills values(%s, %s, %s, %s, %s, %s, %s)",
-                        (self.billdate,
-                        self.billno,
-                        self.mobileno,
-                        self.cnamelbl["text"],
-                        self.villagelbl["text"],
-                        self.cd.get(),
-                        self.totalamonut["text"])
-                    )
-        conn.commit()
-        conn.close()
-        self.close_window()
+        if self.mobilelbl["text"] != "":
+            curr.execute("insert into subbilldetails select * from tempsubbill")
+            curr.execute("insert into allbills values(%s, %s, %s, %s, %s, %s, %s)",
+                            (self.billdate,
+                            self.billno,
+                            self.mobilelbl["text"],
+                            self.cnamelbl["text"],
+                            self.villagelbl["text"],
+                            self.cd.get(),
+                            self.totalamonut["text"])
+                        )
+            conn.commit()
+            conn.close()
+            self.close_window()
         
 
     def selectItem(self, a):
@@ -199,6 +199,7 @@ class generateBill:
             self.pidlbl.config(text="")
             self.Etree1.delete(0,END)
             self.Etree2.delete(0,END)
+
 
     def edit_into_tableI(self):
         conn=pymysql.connect(host="localhost",
@@ -216,6 +217,7 @@ class generateBill:
         self.total_sum_amount()
         self.show_tempbill()
 
+
     def delete_into_tableI(self):
         if self.pidlbl["text"] !="":
             conn=pymysql.connect(host="localhost",
@@ -229,16 +231,19 @@ class generateBill:
         self.total_sum_amount()
         self.show_tempbill()
 
+
     def on2clickL1(self, evt):
         varx=self.clistbox.curselection()
         if varx:
             self.selectedC=self.clistbox.get(varx)[:10]
         self.addCustInfo()
 
+
     def onSelectL1(self, evt):
         varx=self.clistbox.curselection()
         if varx:
             self.selectedC=self.clistbox.get(varx)[:10]
+
 
     def addCustInfo(self):
         conn=pymysql.connect(host="localhost",
@@ -252,7 +257,6 @@ class generateBill:
             if len(clist)!=0:
                 self.cnamelbl.config(text=clist[0][1]+" "+clist[0][2]+" "+clist[0][3])
                 self.mobilelbl.config(text=clist[0][0])
-                self.mobileno=clist[0][0]
                 self.villagelbl.config(text=clist[0][4])
         conn.commit()
         conn.close()
@@ -260,7 +264,8 @@ class generateBill:
         self.sFrame1.place_forget()
         self.EProd.config(state="normal")
 
-    def callbackCust(self, e):
+
+    def search_call_Cust(self, e):
         if self.ECust.get() != "":
             self.sFrame1.lift()
             self.sFrame1.place(x=122, y=93)
@@ -280,6 +285,7 @@ class generateBill:
         else:
             self.sFrame1.place_forget()
 
+
     def on2clickL2(self, evt):
         varx=self.plistbox.curselection()
         if varx:
@@ -287,11 +293,13 @@ class generateBill:
             self.selectedP=self.plistbox.get(varx)[:i]
         self.addProdInfo()
 
+
     def onSelectL2(self, evt):
         varx=self.plistbox.curselection()
         if varx:
             i=self.plistbox.get(varx).index(" ")
             self.selectedP=self.plistbox.get(varx)[:i]
+
 
     def addProdInfo(self):
         conn=pymysql.connect(host="localhost",
@@ -306,7 +314,7 @@ class generateBill:
                 try:
                     curr.execute("insert into tempsubbill values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                                     (self.billdate,
-                                    self.mobileno,
+                                    self.mobilelbl["text"],
                                     self.billno,
                                     plist[0][0],
                                     plist[0][1]+ "  " +plist[0][2],
@@ -326,7 +334,8 @@ class generateBill:
         self.EProd.delete(0, END)
         self.sFrame2.place_forget()
 
-    def callbackProd(self, e):
+
+    def search_call_Prod(self, e):
         if self.EProd.get() != "":
             self.sFrame2.lift()
             self.sFrame2.place(x=122, y=133)
@@ -346,6 +355,7 @@ class generateBill:
         else:
             self.sFrame2.place_forget()
 
+
     def show_tempbill(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
@@ -359,6 +369,7 @@ class generateBill:
             self.tree.insert("", END, values=row[3:])
         conn.commit()
         conn.close()
+
 
     def total_sum_amount(self):
         conn=pymysql.connect(host="localhost",
@@ -378,6 +389,7 @@ class generateBill:
         conn.commit()
         conn.close()
 
+
     def clear_tempbill_table(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
@@ -387,6 +399,7 @@ class generateBill:
         curr.execute("TRUNCATE TABLE tempsubbill")
         conn.commit()
         conn.close()
+
 
     def close_window(self):
         self.clear_tempbill_table()
@@ -413,7 +426,6 @@ class allBills:
         self.Fbills=F
         
         # All Variables -------------------------------------------------------------------------------------
-        self.Etextvar=StringVar()
 
 
 
@@ -422,10 +434,9 @@ class allBills:
         self.frame1.place(x=0, y=20)
 
         Label(self.frame1, text="Search Bill :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
-        #self.Etextvar.trace("w", self.callBack)
-        self.Etext=Entry(self.frame1, font="arial 11", textvariable=self.Etextvar, fg="red", width=40, bd=2)
+        self.Etext=Entry(self.frame1, font="arial 11", fg="red", width=40, bd=2)
         self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
-        #self.Etext.bind('<KeyRelease>', self.searchCallbill)
+        self.Etext.bind('<KeyRelease>', self.searchCallbill)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
@@ -472,6 +483,7 @@ class allBills:
         Button(self.frame3, text="Delete", command=self.deleteBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
         Button(self.frame3, text="Info", command=self.billInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
 
+        self.show_allbill()
 
 
     def newBill(self):
@@ -483,6 +495,41 @@ class allBills:
         pass
     def billInfo(self):
         pass
+
+    def searchCallbill(self):
+        if self.Etext.get() != "":
+            conn=pymysql.connect(host="localhost",
+                                user="root",
+                                password="",
+                                database="Database23Nov")
+            curr=conn.cursor()
+            varx=self.Etext.get()
+            curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
+            clist=curr.fetchall()
+            self.tree.delete(*self.tree.get_children())
+            for row in clist:
+                self.tree.insert("", END, values=(row[0], row[1]+" "+row[2]+" "+row[3], row[4], row[5]))
+            conn.commit()
+            conn.close()
+        else:
+            self.show_all_cust()
+
+    def show_allbill(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        curr.execute("select * from allbills")
+        blist=curr.fetchall()
+        self.tree.delete(*self.tree.get_children())
+        for row in blist:
+            self.tree.insert("", END, values=row)
+        conn.commit()
+        conn.close()
+
+
+
 
 
 
@@ -499,8 +546,6 @@ class customerClass:
         self.Fcust=F
         
         # All Variables -------------------------------------------------------------------------------------
-        self.Etextvar=StringVar()
-
 
 
         # Frame 1 Searching----------------------------------------------------------------------------------
@@ -508,7 +553,7 @@ class customerClass:
         self.frame1.place(x=0, y=20)
 
         Label(self.frame1, text="Search Customer :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
-        self.Etext=Entry(self.frame1, font="arial 11", textvariable=self.Etextvar, fg="red", width=40, bd=2)
+        self.Etext=Entry(self.frame1, font="arial 11", fg="red", width=40, bd=2)
         self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
         self.Etext.bind('<KeyRelease>', self.callbackCust)
 
@@ -842,7 +887,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.allbills\
     City VARCHAR(20),\
     CashDebit VARCHAR(10),\
     BillAmount INT,\
-    PRIMARY KEY (BillNo))")
+    PRIMARY KEY (BillNo, MobileNo))")
 curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.subbilldetails\
     (BillDate VARCHAR(20),\
     MobileNo BIGINT,\
