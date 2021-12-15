@@ -43,7 +43,7 @@ class generateBill:
         Label(self.frame2, text="Search Customer * :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
         self.ECust=Entry(self.frame2, font="arial 10", fg="red", width=30, bd=2)
         self.ECust.grid(row=0, column=1, columnspan=2, sticky=W)
-        self.ECust.bind('<KeyRelease>', self.search_call_Cust)
+        self.ECust.bind('<KeyRelease>', self.search_call_cust)
 
 
         #--------------Customer SearchFrame1--------------
@@ -78,7 +78,7 @@ class generateBill:
         Label(self.frame4, text="Search Product    :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
         self.EProd=Entry(self.frame4, font="arial 10", fg="red", width=30, bd=2, state="disabled")
         self.EProd.grid(row=0, column=1, columnspan=2, sticky=W)
-        self.EProd.bind('<KeyRelease>', self.search_call_Prod)
+        self.EProd.bind('<KeyRelease>', self.search_call_prod)
 
         #--------------Product SearchFrame2--------------
         self.sFrame2=Frame(self.Fnewbill)
@@ -269,7 +269,7 @@ class generateBill:
         self.EProd.config(state="normal")
 
 
-    def search_call_Cust(self, e):
+    def search_call_cust(self, e):
         if self.ECust.get() != "":
             self.sFrame1.lift()
             self.sFrame1.place(x=122, y=93)
@@ -339,7 +339,7 @@ class generateBill:
         self.sFrame2.place_forget()
 
 
-    def search_call_Prod(self, e):
+    def search_call_prod(self, e):
         if self.EProd.get() != "":
             self.sFrame2.lift()
             self.sFrame2.place(x=122, y=133)
@@ -440,7 +440,7 @@ class allBills:
         Label(self.frame1, text="Search Bill :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
         self.Etext=Entry(self.frame1, font="arial 11", fg="red", width=40, bd=2)
         self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
-        self.Etext.bind('<KeyRelease>', self.searchCallbill)
+        self.Etext.bind('<KeyRelease>', self.search_call_bill)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
@@ -476,7 +476,6 @@ class allBills:
         self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
 
         #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
-        #self.show_all_bills()
         #Treeview----------------END
 
         # Frame 3 Buttons------------------------------------------------------------------------------------
@@ -487,7 +486,7 @@ class allBills:
         Button(self.frame3, text="Delete", command=self.deleteBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
         Button(self.frame3, text="Info", command=self.billInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
 
-        self.show_allbill()
+        self.show_all_bill()
 
 
     def newBill(self):
@@ -500,7 +499,7 @@ class allBills:
     def billInfo(self):
         pass
 
-    def searchCallbill(self):
+    def search_call_bill(self, e):
         if self.Etext.get() != "":
             conn=pymysql.connect(host="localhost",
                                 user="root",
@@ -508,17 +507,18 @@ class allBills:
                                 database="Database23Nov")
             curr=conn.cursor()
             varx=self.Etext.get()
-            curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
-            clist=curr.fetchall()
+            curr.execute("select * from allbills where BillDate LIKE '%"+ varx +"%' OR BillNo LIKE '%"+ varx +"%' OR MobileNo LIKE '%"+ varx +"%' OR Name LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
+            blist=curr.fetchall()
+            blist=blist[::-1]
             self.tree.delete(*self.tree.get_children())
-            for row in clist:
-                self.tree.insert("", END, values=(row[0], row[1]+" "+row[2]+" "+row[3], row[4], row[5]))
+            for row in blist:
+                self.tree.insert("", END, values=row)
             conn.commit()
             conn.close()
         else:
-            self.show_all_cust()
+            self.show_all_bill()
 
-    def show_allbill(self):
+    def show_all_bill(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
@@ -526,6 +526,7 @@ class allBills:
         curr=conn.cursor()
         curr.execute("select * from allbills")
         blist=curr.fetchall()
+        blist=blist[::-1]
         self.tree.delete(*self.tree.get_children())
         for row in blist:
             self.tree.insert("", END, values=row)
@@ -559,7 +560,7 @@ class customerClass:
         Label(self.frame1, text="Search Customer :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
         self.Etext=Entry(self.frame1, font="arial 11", fg="red", width=40, bd=2)
         self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
-        self.Etext.bind('<KeyRelease>', self.callbackCust)
+        self.Etext.bind('<KeyRelease>', self.search_call_cust)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
@@ -618,7 +619,7 @@ class customerClass:
         conn.commit()
         conn.close()
 
-    def callbackCust(self, e):
+    def search_call_cust(self, e):
         if self.Etext.get() != "":
             conn=pymysql.connect(host="localhost",
                                 user="root",
@@ -678,7 +679,7 @@ class productClass:
         Label(self.frame1, text="Search Product :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
         self.Etext=Entry(self.frame1, font="arial 11", textvariable=self.Etextvar, fg="red", width=40, bd=2)
         self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
-        self.Etext.bind('<KeyRelease>', self.callbackProd)
+        self.Etext.bind('<KeyRelease>', self.search_call_prod)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
@@ -743,7 +744,7 @@ class productClass:
         conn.commit()
         conn.close()
 
-    def callbackProd(self, e):
+    def search_call_prod(self, e):
         if self.Etext.get() != "":
             conn=pymysql.connect(host="localhost",
                                 user="root",
