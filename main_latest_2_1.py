@@ -1,4 +1,3 @@
-from os import stat
 from tkinter import *
 from tkinter import ttk
 import pymysql
@@ -191,7 +190,7 @@ class generateBill:
             self.close_window()
         
 
-    def selectItem(self, a):
+    def selectItem(self, e):
         treeItem = self.tree.focus()
         try:
             self.pidlbl.config(text=self.tree.item(treeItem)['values'][0])
@@ -499,6 +498,7 @@ class allBills:
     def billInfo(self):
         pass
 
+
     def search_call_bill(self, e):
         if self.Etext.get() != "":
             conn=pymysql.connect(host="localhost",
@@ -517,6 +517,7 @@ class allBills:
             conn.close()
         else:
             self.show_all_bill()
+
 
     def show_all_bill(self):
         conn=pymysql.connect(host="localhost",
@@ -668,16 +669,14 @@ class productClass:
         self.Fprod=F
         
         # All Variables -------------------------------------------------------------------------------------
-        self.Etextvar=StringVar()
-
-
+        self.var1=""
 
         # Frame 1 Searching----------------------------------------------------------------------------------
         self.frame1=Frame(self.Fprod, bg=colbg)
         self.frame1.place(x=0, y=20)
 
         Label(self.frame1, text="Search Product :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
-        self.Etext=Entry(self.frame1, font="arial 11", textvariable=self.Etextvar, fg="red", width=40, bd=2)
+        self.Etext=Entry(self.frame1, font="arial 11", fg="red", width=40, bd=2)
         self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
         self.Etext.bind('<KeyRelease>', self.search_call_prod)
 
@@ -718,7 +717,7 @@ class productClass:
         self.h.config(command=self.tree.xview)'''
         self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
 
-        #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        self.tree.bind('<<TreeviewSelect>>', self.selectItem)
         self.show_all_prod()
         #Treeview----------------END
 
@@ -729,6 +728,15 @@ class productClass:
         Button(self.frame3, text="Edit", command=self.editProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
         Button(self.frame3, text="Delete", command=self.deleteProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
         Button(self.frame3, text="Info", command=self.prodInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
+
+
+    def selectItem(self, a):
+        treeItem = self.tree.focus()
+        try:
+            self.var1=self.tree.item(treeItem)['values']
+        except:
+            self.var1=""
+
 
     def show_all_prod(self):
         conn=pymysql.connect(host="localhost",
@@ -743,6 +751,7 @@ class productClass:
             self.tree.insert("", END, values=row)
         conn.commit()
         conn.close()
+
 
     def search_call_prod(self, e):
         if self.Etext.get() != "":
@@ -763,11 +772,11 @@ class productClass:
             self.show_all_prod()
 
     def newProd(self):
-        ogj=newProduct()
+        ogj=newProduct("")
     def editProd(self):
-        pass
+        ogj=newProduct(self.var1)
     def deleteProd(self):
-        pass
+        obj=deleteProduct(self.var1)
     def prodInfo(self):
         pass
 
@@ -775,33 +784,59 @@ class productClass:
 
 
 class newProduct:
-    def __init__(self):
+    def __init__(self, var1):
+        # All Variables -------------------------------------------------------------------------------------
+        self.selectedP=var1
+        self.pid=""
+
+        
         self.Fnewprod=Toplevel(root)
         self.Fnewprod.title("Add New Product")
         self.Fnewprod.geometry("600x400+300+220")
         self.Fnewprod.configure(background=colbg)
 
-        #--------------Frame1--------------
+        #--------------Frame1--------------------------------------------------------------------------------
         self.frame1=Frame(self.Fnewprod, bg=colbg)
         self.frame1.place(x=40, y=40)
 
-        Label(self.frame1, text="Product name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=0, column=0, pady=5)
-        Label(self.frame1, text="Technical name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=1, column=0, pady=5)
-        Label(self.frame1, text="Company name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=2, column=0, pady=5)
-        Label(self.frame1, text="Batch no. :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=3, column=0, pady=5)
-        Label(self.frame1, text="Net Content (ml/gm) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=4, column=0, pady=5)
-        Label(self.frame1, text="Printed price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=5, column=0, pady=5)
-        Label(self.frame1, text="Selling price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=6, column=0, pady=5)
-        Label(self.frame1, text="Buying price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=7, column=0, pady=5)
+        Label(self.frame1, text="PID :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=0, column=0, pady=5)
+        self.pidlbl=Label(self.frame1, font="arial 10", anchor=W, bg=colbg)
+        self.pidlbl.grid(row=0, column=1, pady=5)
+        Label(self.frame1, text="Product name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=1, column=0, pady=5)
+        Label(self.frame1, text="Technical name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=2, column=0, pady=5)
+        Label(self.frame1, text="Company name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=3, column=0, pady=5)
+        Label(self.frame1, text="Batch no. :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=4, column=0, pady=5)
+        Label(self.frame1, text="Net Content (ml/gm) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=5, column=0, pady=5)
+        Label(self.frame1, text="Printed price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=6, column=0, pady=5)
+        Label(self.frame1, text="Selling price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=7, column=0, pady=5)
+        Label(self.frame1, text="Buying price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=8, column=0, pady=5)
         
         self.list1=[]
 
         for i in range(8):
             self.list1.append(Entry(self.frame1, width=40))
-            self.list1[i].grid(row=i, column=1, padx=10)
+            self.list1[i].grid(row=i+1, column=1, padx=10)
         
-        Button(self.frame1, text="Add into Product", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", width=25, bd=5).grid(row=8, column=1, pady=10)
-    
+        Button(self.frame1, text="Update Into ProductList", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", bd=5).grid(row=9, column=1, pady=10)
+
+        self.modify_Entry()
+
+    def modify_Entry(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        if self.selectedP == "":
+            curr.execute("select count(PID) from productdata")
+            self.pid=curr.fetchall()[0][0] + 1
+        else:
+            self.pid=self.selectedP[0]
+            for i in range(8):
+                self.list1[i].insert(0, self.selectedP[i+1])
+        self.pidlbl.config(text=self.pid)
+
+
     def addProd(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
@@ -809,19 +844,29 @@ class newProduct:
                             database="Database23Nov")
         curr=conn.cursor()
         try:
-            curr.execute("select count(PID) from productdata")
-            pid=curr.fetchall()
-            curr.execute("insert into productdata values(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                            (pid[0][0]+1,
-                            self.list1[0].get(),
-                            self.list1[1].get(),
-                            self.list1[2].get(),
-                            self.list1[3].get(),
-                            self.list1[4].get(),
-                            self.list1[5].get(),
-                            self.list1[6].get(),
-                            self.list1[7].get())
-                        )
+            if self.selectedP == "":
+                curr.execute("insert into productdata values(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                                (str(self.pidlbl["text"]),
+                                self.list1[0].get(),
+                                self.list1[1].get(),
+                                self.list1[2].get(),
+                                self.list1[3].get(),
+                                self.list1[4].get(),
+                                self.list1[5].get(),
+                                self.list1[6].get(),
+                                self.list1[7].get())
+                            )
+            else:
+                curr.execute("UPDATE productdata SET PName='"+self.list1[0].get()
+                            +"', TechName='"+self.list1[1].get()
+                            +"', Company='"+self.list1[2].get()
+                            +"', BatchNo='"+self.list1[3].get()
+                            +"', NetContent="+self.list1[4].get()
+                            +", PrintPrice="+self.list1[5].get()
+                            +", SellPrice="+self.list1[6].get()
+                            +", BuyPrice="+self.list1[7].get()
+                            +" WHERE PID="+str(self.pidlbl["text"])
+                            )
         except pymysql.err.Error as e:
             pass
         finally:
@@ -829,6 +874,33 @@ class newProduct:
             conn.close()
         self.Fnewprod.destroy()
 
+
+
+
+
+
+
+
+
+
+class deleteProduct:
+    def __init__(self, var1):
+
+        # All Variables -------------------------------------------------------------------------------------
+        self.var1=var1
+
+
+        self.FdelProd=Toplevel(root)
+        self.FdelProd.title("Delete Product")
+        self.FdelProd.geometry("500x180+450+300")
+        self.FdelProd.configure(background=colbg)    
+
+        #--------------Frame1--------------
+        self.frame1=Frame(self.FdelProd, bg=colbg)
+        self.frame1.place(x=40, y=40)
+        print(var1)
+        Label(self.frame1, text="Are you realy want to delete product?", font="arial 10", bg=colbg).grid(row=0, column=0, pady=5)
+        Button(self.frame1, text="Delete Product", font="arial 10 bold", bg=colbtn, fg="white", bd=5).grid(row=1, column=0, pady=10)
 
 
 
@@ -994,12 +1066,13 @@ Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), a
 FFoot=Frame(root, bg=colbg)
 FFoot.place(x=140, y=700, relwidth=1)
 Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg)
-link1=Label(FFoot, text="Build with       by Divyesh Ranpariya", font=("Mistral", 14, "bold"), bg=colbg, fg=colbtn, bd=0, padx=10)
+link1=Label(FFoot, text="Build with       by Divyesh Ranpariya", font=("Mistral", 16, "bold"), bg=colbg, fg=colbtn, bd=0, padx=10)
 link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
-Label(FFoot, image=imgheart, bd=0).place(x=97, y=2)
+Label(FFoot, image=imgheart, bd=0).place(x=105, y=4)
 
 
 
-f1.tkraise()
+f3.tkraise()
+root.state('zoomed')
 root.mainloop()
