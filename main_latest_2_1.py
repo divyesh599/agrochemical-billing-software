@@ -727,7 +727,7 @@ class productClass:
         Button(self.frame3, text="New", command=self.newProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=0)
         Button(self.frame3, text="Edit", command=self.editProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
         Button(self.frame3, text="Delete", command=self.deleteProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
-        Button(self.frame3, text="Info", command=self.prodInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
+        #Button(self.frame3, text="Info", command=self.prodInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
 
 
     def selectItem(self, a):
