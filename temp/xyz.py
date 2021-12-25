@@ -1,17 +1,12 @@
 for _ in range(int(input())):
-    n, k = map(int, input().split(" "))
-    s = str(input())
+    n=int(input())
+    arr=list(map(int, input().split(" ")))
 
-    ans=""
-    i=0
-    j=k-1
-    while(i<j):
-        ans+=(s[i]+s[j])
-        i+=1
-        j-=1
-    if i==j:
-        ans+=s[i]
+    brr = sorted(arr)
+    tarr=[0]*n
+    for i in range(n):
+        if arr[i]==brr[i]:
+            tarr[i]=1
     
-    ans = ans[::-1]
-    ans += s[k:]
-    print(ans)
+    for i in range(n):
+        
