@@ -8,5 +8,3 @@ for _ in range(int(input())):
         if arr[i]==brr[i]:
             tarr[i]=1
     
-    for i in range(n):
-        
