@@ -1066,10 +1066,10 @@ Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), a
 FFoot=Frame(root, bg=colbg)
 FFoot.place(x=140, y=700, relwidth=1)
 Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg)
-link1=Label(FFoot, text="Build with       by Maganbhai (Divyesh Ranpariya)", font=("Mistral", 16, "bold"), bg=colbg, fg=colbtn, bd=0, padx=10)
+link1=Label(FFoot, text="Build with       by Maganbhai (Divyesh Ranpariya)", font=("Lucida Handwriting", 9, "bold"), bg=colbg, fg=colbtn, bd=0, padx=10)
 link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
-Label(FFoot, image=imgheart, bd=0).place(x=105, y=4)
+Label(FFoot, image=imgheart, bd=0).place(x=99, y=0)
 
 
 
