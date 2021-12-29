@@ -772,9 +772,9 @@ class productClass:
             self.show_all_prod()
 
     def newProd(self):
-        ogj=newProduct("")
+        ogj=modifyProd("")
     def editProd(self):
-        ogj=newProduct(self.var1)
+        ogj=modifyProd(self.var1)
     def deleteProd(self):
         obj=deleteProduct(self.var1)
     def prodInfo(self):
@@ -783,7 +783,7 @@ class productClass:
 
 
 
-class newProduct:
+class modifyProd:
     def __init__(self, var1):
         # All Variables -------------------------------------------------------------------------------------
         self.selectedP=var1
@@ -873,6 +873,7 @@ class newProduct:
             conn.commit()
             conn.close()
         self.Fnewprod.destroy()
+        objf3.show_all_prod()
 
 
 
@@ -1065,7 +1066,7 @@ Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), a
 # Footer Frame ------------------------------------------------------------------------------------------------
 FFoot=Frame(root, bg=colbg)
 FFoot.place(x=140, y=700, relwidth=1)
-link1=Label(FFoot, text="Build with         by Maganbhai (Divyesh Ranpariya)", font=("Source Sans Pro", 9, "bold"), bg=colbg, fg=colbtn, bd=0, padx=10)
+link1=Label(FFoot, text="Build with         by Maganbhai (Divyesh Ranpariya)", font=("Source Sans Pro", 9, "bold"), bg=colbg, fg="#DB4437", bd=0, padx=10)
 link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
 Label(FFoot, image=imgheart, bd=0).place(x=71, y=1)
