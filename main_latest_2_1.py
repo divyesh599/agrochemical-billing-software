@@ -481,9 +481,9 @@ class allBills:
         self.frame3=Frame(self.Fbills, bg=colbg)
         self.frame3.place(x=10, y=520, relwidth=1)
         Button(self.frame3, text="New", command=self.newBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=0)
-        #Button(self.frame3, text="Edit", command=self.editBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
-        #Button(self.frame3, text="Delete", command=self.deleteBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
-        #Button(self.frame3, text="Info", command=self.billInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
+        Button(self.frame3, text="Edit", command=self.editBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
+        Button(self.frame3, text="Delete", command=self.deleteBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
+        Button(self.frame3, text="Info", command=self.billInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
 
         self.show_all_bill()
 
