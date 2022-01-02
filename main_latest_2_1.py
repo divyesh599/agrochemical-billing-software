@@ -141,7 +141,7 @@ class generateBill:
         self.cd.grid(row=1, column=1)
         self.cd["values"]=("Cash", "Debit")
         self.cd.current(1)
-        
+
 
         # Frame 7 Buttons------------------------------------------------------------------------------------
         self.frame7=Frame(self.Fnewbill, bg=colbg)
@@ -164,7 +164,7 @@ class generateBill:
         self.frame8.place(x=900, y=450)
         Button(self.frame8, text="OK", command=self.create_bill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
         Button(self.frame8, text="Print", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
-        
+
         self.clear_tempbill_table()
 
 
