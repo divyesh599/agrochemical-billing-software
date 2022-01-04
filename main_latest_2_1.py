@@ -1065,11 +1065,11 @@ Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), a
 
 # Footer Frame ------------------------------------------------------------------------------------------------
 FFoot=Frame(root, bg=colbg)
-FFoot.place(x=140, y=700, relwidth=1)
-link1=Label(FFoot, text="Build with         by Maganbhai (Divyesh Ranpariya)", font=("Source Sans Pro", 9, "bold"), bg=colbg, fg="#DB4437", bd=0, padx=10)
+FFoot.place(x=510, y=700, relwidth=1) # x=140
+link1=Label(FFoot, text="Build with     by Maganbhai (Divyesh Ranpariya)", font=("MV Boli", 10, "bold"), bg=colbg, fg="#264653", bd=0, padx=10)
 link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
-Label(FFoot, image=imgheart, bd=0).place(x=71, y=1)
+Label(FFoot, image=imgheart, bd=0).place(x=92, y=3)
 
 
 
