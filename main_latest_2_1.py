@@ -727,7 +727,6 @@ class productClass:
         Button(self.frame3, text="New", command=self.newProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=0)
         Button(self.frame3, text="Edit", command=self.editProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
         Button(self.frame3, text="Delete", command=self.deleteProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
-        #Button(self.frame3, text="Info", command=self.prodInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
 
 
     def selectItem(self, a):
@@ -777,8 +776,6 @@ class productClass:
         ogj=modifyProd(self.var1)
     def deleteProd(self):
         obj=deleteProduct(self.var1)
-    def prodInfo(self):
-        pass
 
 
 
@@ -790,13 +787,14 @@ class modifyProd:
         self.pid=""
 
         
-        self.Fnewprod=Toplevel(root)
-        self.Fnewprod.title("Add New Product")
-        self.Fnewprod.geometry("600x400+300+220")
-        self.Fnewprod.configure(background=colbg)
+        self.Fmodifyprod=Toplevel(root)
+        self.Fmodifyprod.title("Add New Product")
+        self.Fmodifyprod.geometry("600x400+300+220")
+        self.Fmodifyprod.grab_set()
+        self.Fmodifyprod.configure(background=colbg)
 
         #--------------Frame1--------------------------------------------------------------------------------
-        self.frame1=Frame(self.Fnewprod, bg=colbg)
+        self.frame1=Frame(self.Fmodifyprod, bg=colbg)
         self.frame1.place(x=40, y=40)
 
         Label(self.frame1, text="PID :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=0, column=0, pady=5)
@@ -872,7 +870,7 @@ class modifyProd:
         finally:
             conn.commit()
             conn.close()
-        self.Fnewprod.destroy()
+        self.Fmodifyprod.destroy()
         objf3.show_all_prod()
 
 
@@ -888,12 +886,13 @@ class deleteProduct:
     def __init__(self, var1):
 
         # All Variables -------------------------------------------------------------------------------------
-        self.var1=var1
+        self.selectedP=var1
 
 
         self.FdelProd=Toplevel(root)
         self.FdelProd.title("Delete Product")
         self.FdelProd.geometry("500x180+450+300")
+        self.FdelProd.grab_set()
         self.FdelProd.configure(background=colbg)    
 
         #--------------Frame1--------------
