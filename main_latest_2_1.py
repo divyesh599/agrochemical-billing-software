@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import *
 from tkinter import ttk
 import pymysql
@@ -718,6 +719,7 @@ class productClass:
         self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
 
         self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        self.tree.bind("<Double-1>", self.double_click_event)
         self.show_all_prod()
         #Treeview----------------END
 
@@ -735,6 +737,11 @@ class productClass:
             self.var1=self.tree.item(treeItem)['values']
         except:
             self.var1=""
+    
+    def double_click_event(self, a):
+        treeItem = self.tree.focus()
+        self.var1=self.tree.item(treeItem)['values']
+        self.editProd()
 
 
     def show_all_prod(self):
@@ -789,7 +796,8 @@ class modifyProd:
         
         self.Fmodifyprod=Toplevel(root)
         self.Fmodifyprod.title("Add New Product")
-        self.Fmodifyprod.geometry("600x400+300+220")
+        self.Fmodifyprod.geometry("600x400")        #+300+220
+        center(self.Fmodifyprod)
         self.Fmodifyprod.grab_set()
         self.Fmodifyprod.configure(background=colbg)
 
@@ -877,11 +885,6 @@ class modifyProd:
 
 
 
-
-
-
-
-
 class deleteProduct:
     def __init__(self, var1):
 
@@ -891,7 +894,8 @@ class deleteProduct:
 
         self.FdelProd=Toplevel(root)
         self.FdelProd.title("Delete Product")
-        self.FdelProd.geometry("500x180+450+300")
+        self.FdelProd.geometry("500x180")
+        center(self.FdelProd)
         self.FdelProd.grab_set()
         self.FdelProd.configure(background=colbg)    
 
@@ -914,6 +918,26 @@ class deleteProduct:
 
 
 
+
+
+
+
+def center(win):
+    """
+    centers a tkinter window
+    :param win: the main window or Toplevel window to center
+    """
+    win.update_idletasks()
+    width = win.winfo_width()
+    frm_width = win.winfo_rootx() - win.winfo_x()
+    win_width = width + 2 * frm_width
+    height = win.winfo_height()
+    titlebar_height = win.winfo_rooty() - win.winfo_y()
+    win_height = height + titlebar_height + frm_width
+    x = win.winfo_screenwidth() // 2 - win_width // 2
+    y = win.winfo_screenheight() // 2 - win_height // 2
+    win.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    win.deiconify()
 
 
 def callfooter(url):
