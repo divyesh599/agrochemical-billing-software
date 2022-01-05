@@ -890,6 +890,7 @@ class deleteProduct:
 
         # All Variables -------------------------------------------------------------------------------------
         self.selectedP=var1
+        self.statement="PID :"+ str(self.selectedP[0]) +"    "
 
 
         self.FdelProd=Toplevel(root)
