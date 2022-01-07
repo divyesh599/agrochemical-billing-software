@@ -1092,12 +1092,12 @@ imgheart=PhotoImage(file="img/heart.png")
 # Heading Frame -------------------------------------------------------------------------------------------------
 Fheading=Frame(root, bg=colbg)
 Fheading.place(x=0, y=0, relwidth=1)
-Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1).grid(row=0, column=0, padx=10, pady=3)
-Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1, width=160).grid(row=0, column=1)
-Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg, fg=col1).grid(row=0, column=2)
-Label(Fheading, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=12).grid(row=1, column=1)
+Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1, anchor=W, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
+Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1).pack(side=LEFT, expand=TRUE, fill=X)
+Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg, fg=col1, anchor=E, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
+'''Label(Fheading, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=12).grid(row=1, column=1)
 Label(Fheading, image=imgGod, bd=0).place(x=1280, y=25)
-
+'''
 
 # Label Frames & Buttons ----------------------------------------------------------------------------------------
 f1=LabelFrame(root, text="બિલની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
@@ -1124,13 +1124,13 @@ Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), a
 
 
 # Footer Frame ------------------------------------------------------------------------------------------------
-FFoot=Frame(root, bg=colbg)
-FFoot.place(x=420, y=700, relwidth=1) # x=140
-link1=Label(FFoot, text="Build with     by Maganbhai (Divyesh Ranpariya) . JUST REMEMBER THE NAME .", font=("MV Boli", 10, "bold"), bg=colbg, fg="#264653", bd=0, padx=10)
+FFoot=Frame(root, bg=colbg, pady=10)
+FFoot.pack(side=BOTTOM)
+Label(FFoot, text="Build with", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg).pack(side=LEFT)
+Label(FFoot, text="\U0001f394", font=("MV Boli", 10, "bold"), fg="red", bg=colbg).pack(side=LEFT)
+link1=Label(FFoot, text="by Maganbhai (Divyesh Ranpariya) . JUST REMEMBER THE NAME .", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg)
 link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
-Label(FFoot, image=imgheart, bd=0).place(x=92, y=3)
-
 
 
 f3.tkraise()
