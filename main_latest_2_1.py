@@ -1,4 +1,3 @@
-import tkinter
 from tkinter import *
 from tkinter import ttk
 import pymysql
@@ -1066,18 +1065,16 @@ col1="#DE3163"
 ################################################################################################################
 root=Tk()
 root.title("શ્રી હરી એગ્રો સેન્ટર - Billing Software")
-w=root.winfo_screenwidth()
-h=root.winfo_screenheight()
-root.geometry("%dx%d" % (w, h))
-#root.geometry("1360x730+0+0")
+root.state('zoomed')
+root.geometry("1350x710+0+0")
 root.configure(background=colbg)
 
 
 
 # Treeview colors & Some Extra Variables------------------------------------------------------------------------
-style=ttk.Style(root)
-style.theme_use("clam")
-style.configure("Treeview", background=colbg, fieldbackground=colbg, foreground="black")
+xstyle=ttk.Style()
+xstyle.theme_use("clam")
+xstyle.configure("Treeview", background=colbg, fieldbackground=colbg, foreground="black")
 
 imgGod=PhotoImage(file="img/ganesha.png")
 imgheart=PhotoImage(file="img/heart.png")
@@ -1099,20 +1096,23 @@ Label(root, text="શ્રી હરી એગ્રો સેન્ટર", fo
 Label(root, image=imgGod, bd=0).place(x=1280, y=25)
 
 
-# Label Frames & Buttons ----------------------------------------------------------------------------------------
-f1=LabelFrame(root, text="બિલની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
-f2=LabelFrame(root, text="ગ્રાહકની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
-f3=LabelFrame(root, text="દવાની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
+# Body Frame --------- Labels & Buttons -------------------------------------------------------------------------
+Fbody=Frame(root, bg=colbg)
+Fbody.place(x=0, y=90, relwidth=1, height=600)
 
-for frame in (f1, f2, f3):
-    frame.place(x=140, y=90, relwidth=1, height=600)
+f1=LabelFrame(Fbody, text="બિલની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
+f2=LabelFrame(Fbody, text="ગ્રાહકની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
+f3=LabelFrame(Fbody, text="દવાની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
+f1.place(x=140, y=0, relwidth=1, height=600)
+f2.place(x=140, y=0, relwidth=1, height=600)
+f3.place(x=140, y=0, relwidth=1, height=600)
 
 objf1=allBills(f1)
 objf2=customerClass(f2)
 objf3=productClass(f3)
 
-Fbtn=Frame(root, bg=colbg)
-Fbtn.place(x=20, y=90)
+Fbtn=Frame(Fbody, bg=colbg, padx=10)
+Fbtn.pack(side=LEFT, fill=Y)
 Button(Fbtn, text="બિલની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
 Button(Fbtn, text="ગ્રાહકની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f2.tkraise()).pack(fill=X)
 Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f3.tkraise()).pack(fill=X)
@@ -1123,7 +1123,7 @@ Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), a
 
 
 # Footer Frame ------------------------------------------------------------------------------------------------
-FFoot=Frame(root, bg=colbg, pady=10)
+FFoot=Frame(root, bg=colbg, pady=5)
 FFoot.pack(side=BOTTOM)
 Label(FFoot, text="Build with", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg).pack(side=LEFT)
 Label(FFoot, text="\U0001f394", font=("MV Boli", 10, "bold"), fg="red", bg=colbg).pack(side=LEFT)
@@ -1132,6 +1132,9 @@ link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
 
 
+
+
+
+
 f3.tkraise()
-root.state('zoomed')
 root.mainloop()
