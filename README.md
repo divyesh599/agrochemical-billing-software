@@ -47,7 +47,7 @@ Product-Details-table
 - product_buy_price**
 - product_sell_price
 
--------
+......................................................................................
 Customer-Details-table
 
 - customerID (PK)
@@ -55,7 +55,7 @@ Customer-Details-table
 - customer_mob_no
 - customer_village
 
--------
+......................................................................................
 Bill-Details-table
 
 - bill_number
@@ -65,7 +65,7 @@ Bill-Details-table
 - bill_date
 - bill_status
 
-------
+......................................................................................
 C -----(M)----B-----(N)----- P (we can no reduce table.)
 
 update color = 49A0AE
