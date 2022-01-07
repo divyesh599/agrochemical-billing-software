@@ -1097,6 +1097,25 @@ Label(root, image=imgGod, bd=0).place(x=1280, y=25)
 
 
 # Body Frame --------- Labels & Buttons -------------------------------------------------------------------------
+notebook = ttk.Notebook(root)
+notebook.place(x=0, y=90, width=1370, height=600)
+
+f1=Frame(notebook, width=1370, height=600)
+f2=Frame(notebook, width=1370, height=600)
+f3=Frame(notebook, width=1370, height=600)
+
+f1.pack(fill='both', expand=True)
+f2.pack(fill='both', expand=True)
+f3.pack(fill='both', expand=True)
+
+objf1=allBills(f1)
+objf2=customerClass(f2)
+objf3=productClass(f3)
+
+notebook.add(f1, text="બિલની માહિતી")
+notebook.add(f2, text="ગ્રાહકની માહિતી")
+notebook.add(f3, text="દવાની માહિતી")
+"""
 Fbody=Frame(root, bg=colbg)
 Fbody.place(x=0, y=90, relwidth=1, height=600)
 
@@ -1111,12 +1130,14 @@ objf1=allBills(f1)
 objf2=customerClass(f2)
 objf3=productClass(f3)
 
-Fbtn=Frame(Fbody, bg=colbg, padx=10)
-Fbtn.pack(side=LEFT, fill=Y)
-Button(Fbtn, text="બિલની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
+
+# option={"font": ("", 11, "bold")}
+Fbtn=Frame(Fbody)
+Fbtn.pack(side=LEFT, padx=10, fill=Y)
+Button(Fbtn, text="બિલની માહિતી" , font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
 Button(Fbtn, text="ગ્રાહકની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f2.tkraise()).pack(fill=X)
 Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f3.tkraise()).pack(fill=X)
-
+"""
 
 
 

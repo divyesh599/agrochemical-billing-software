@@ -1,7 +1,7 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
+
 
 master = tk.Tk()
 master.geometry('500x200')
