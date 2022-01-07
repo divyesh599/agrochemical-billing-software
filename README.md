@@ -12,6 +12,8 @@ Revised or Learned Questions:
 
 Date: 1 Jan 2022
 * Working on product class, delete features.
+* Modifying UI of main app view.
+
 
 ---------------------------------------------------------------------------------------------
 
