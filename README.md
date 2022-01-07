@@ -9,6 +9,10 @@ Revised or Learned Questions:
 * Tracing Tkinter textvariable in Python?
 * TRUNCATE TABLE tempsubbill sql query..
 
+
+Date: 1 Jan 2022
+* Working on product class, delete features.
+
 ............................................................................................
 
 # For my rough use
