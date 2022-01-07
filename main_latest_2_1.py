@@ -798,14 +798,17 @@ class modifyProd:
         
         self.Fmodifyprod=Toplevel(root)
         self.Fmodifyprod.title("Add New Product")
-        self.Fmodifyprod.geometry("600x400")        #+300+220
+        self.Fmodifyprod.geometry("600x400")
         center(self.Fmodifyprod)
         self.Fmodifyprod.grab_set()
         self.Fmodifyprod.configure(background=colbg)
 
+        self.headlbl=Label(self.Fmodifyprod, text=" ", font="arial 12 bold", bg=colbg, fg=col1)
+        self.headlbl.pack(pady=5)
+        
         #--------------Frame1--------------------------------------------------------------------------------
         self.frame1=Frame(self.Fmodifyprod, bg=colbg)
-        self.frame1.place(x=40, y=40)
+        self.frame1.pack()
 
         Label(self.frame1, text="PID :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=0, column=0, pady=5)
         self.pidlbl=Label(self.frame1, font="arial 10", anchor=W, bg=colbg)
@@ -824,8 +827,9 @@ class modifyProd:
         for i in range(8):
             self.list1.append(Entry(self.frame1, width=40))
             self.list1[i].grid(row=i+1, column=1, padx=10)
-        
-        Button(self.frame1, text="Update Into ProductList", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", bd=5).grid(row=9, column=1, pady=10)
+
+        self.btn=Button(self.Fmodifyprod, text=" ", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5)
+        self.btn.pack()
 
         self.modify_Entry()
 
@@ -838,10 +842,14 @@ class modifyProd:
         if self.selectedP == "":
             curr.execute("select count(PID) from productdata")
             self.pid=curr.fetchall()[0][0] + 1
+            self.headlbl.config(text="Adding new product into product list.")
+            self.btn.config(text="Add")
         else:
             self.pid=self.selectedP[0]
             for i in range(8):
                 self.list1[i].insert(0, self.selectedP[i+1])
+            self.headlbl.config(text="Are you sure to edit into this product?")
+            self.btn.config(text="Update")
         self.pidlbl.config(text=self.pid)
 
 
@@ -901,7 +909,7 @@ class deleteProduct:
         self.FdelProd.grab_set()
         self.FdelProd.configure(background=colbg)    
 
-        Label(self.FdelProd, text="Are you realy want to delete product?", font="arial 12 bold", bg=colbg, fg=col1).pack(pady=5)
+        Label(self.FdelProd, text="Are you sure to delete this product data?", font="arial 12 bold", bg=colbg, fg=col1).pack(pady=5)
 
 
         #--------------Frame1--------------
@@ -919,10 +927,11 @@ class deleteProduct:
         Label(self.frame1, text="Buying price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=8, column=0, pady=5)
 
 
+        x=max(20, len(self.selectedP[1]), len(self.selectedP[2]), len(self.selectedP[3]))
         for i in range(9):
-            Label(self.frame1, text=self.selectedP[i], font="arial 10", bg=colbg).grid(row=i, column=1, pady=5)
+            Label(self.frame1, text=self.selectedP[i], font="arial 10", width=x, bg=colbg).grid(row=i, column=1, pady=5)
 
-        Button(self.FdelProd, text="Delete Product", font="arial 10 bold", bg=colbtn, fg="white", width=20, bd=5).pack()
+        Button(self.FdelProd, text="Delete", font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5).pack()
 
 
 
@@ -1039,6 +1048,9 @@ conn.close()
 
 
 
+
+
+
 # Color Variables ----------------------------------------------------------------------------------------------
 colbg="#B8D4BD"
 colbtn="#3C4ACA"
@@ -1047,16 +1059,18 @@ col1="#DE3163"
 
 
 
+
+
+
+
 ################################################################################################################
 root=Tk()
 root.title("શ્રી હરી એગ્રો સેન્ટર - Billing Software")
-w=root.winfo_screenwidth() 
+w=root.winfo_screenwidth()
 h=root.winfo_screenheight()
 root.geometry("%dx%d" % (w, h))
 #root.geometry("1360x730+0+0")
-#root.attributes('-fullscreen',True)
 root.configure(background=colbg)
-
 
 
 
@@ -1067,6 +1081,11 @@ style.configure("Treeview", background=colbg, fieldbackground=colbg, foreground=
 
 imgGod=PhotoImage(file="img/ganesha.png")
 imgheart=PhotoImage(file="img/heart.png")
+
+
+
+
+
 
 
 
@@ -1107,7 +1126,7 @@ Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), a
 # Footer Frame ------------------------------------------------------------------------------------------------
 FFoot=Frame(root, bg=colbg)
 FFoot.place(x=420, y=700, relwidth=1) # x=140
-link1=Label(FFoot, text="Build with     by Maganbhai (Divyesh Ranpariya). Just Remember the Name .", font=("MV Boli", 10, "bold"), bg=colbg, fg="#264653", bd=0, padx=10)
+link1=Label(FFoot, text="Build with     by Maganbhai (Divyesh Ranpariya) . JUST REMEMBER THE NAME .", font=("MV Boli", 10, "bold"), bg=colbg, fg="#264653", bd=0, padx=10)
 link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
 Label(FFoot, image=imgheart, bd=0).place(x=92, y=3)
