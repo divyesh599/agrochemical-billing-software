@@ -782,8 +782,10 @@ class productClass:
     def editProd(self):
         ogj=modifyProd(self.var1)
     def deleteProd(self):
-        obj=deleteProduct(self.var1)
-
+        if self.var1!="":
+            obj=deleteProduct(self.var1)
+        else:
+            self.newProd()
 
 
 
@@ -890,22 +892,37 @@ class deleteProduct:
 
         # All Variables -------------------------------------------------------------------------------------
         self.selectedP=var1
-        self.statement="PID :"+ str(self.selectedP[0]) +"    "
 
 
         self.FdelProd=Toplevel(root)
         self.FdelProd.title("Delete Product")
-        self.FdelProd.geometry("500x180")
+        self.FdelProd.geometry("600x400")
         center(self.FdelProd)
         self.FdelProd.grab_set()
         self.FdelProd.configure(background=colbg)    
 
+        Label(self.FdelProd, text="Are you realy want to delete product?", font="arial 12 bold", bg=colbg, fg=col1).pack(pady=5)
+
+
         #--------------Frame1--------------
         self.frame1=Frame(self.FdelProd, bg=colbg)
-        self.frame1.place(x=40, y=40)
-        print(var1)
-        Label(self.frame1, text="Are you realy want to delete product?", font="arial 10", bg=colbg).grid(row=0, column=0, pady=5)
-        Button(self.frame1, text="Delete Product", font="arial 10 bold", bg=colbtn, fg="white", bd=5).grid(row=1, column=0, pady=10)
+        self.frame1.pack()
+
+        Label(self.frame1, text="PID :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=0, column=0, pady=5)
+        Label(self.frame1, text="Product name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=1, column=0, pady=5)
+        Label(self.frame1, text="Technical name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=2, column=0, pady=5)
+        Label(self.frame1, text="Company name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=3, column=0, pady=5)
+        Label(self.frame1, text="Batch no. :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=4, column=0, pady=5)
+        Label(self.frame1, text="Net Content (ml/gm) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=5, column=0, pady=5)
+        Label(self.frame1, text="Printed price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=6, column=0, pady=5)
+        Label(self.frame1, text="Selling price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=7, column=0, pady=5)
+        Label(self.frame1, text="Buying price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=8, column=0, pady=5)
+
+
+        for i in range(9):
+            Label(self.frame1, text=self.selectedP[i], font="arial 10", bg=colbg).grid(row=i, column=1, pady=5)
+
+        Button(self.FdelProd, text="Delete Product", font="arial 10 bold", bg=colbtn, fg="white", width=20, bd=5).pack()
 
 
 
@@ -1089,8 +1106,8 @@ Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), a
 
 # Footer Frame ------------------------------------------------------------------------------------------------
 FFoot=Frame(root, bg=colbg)
-FFoot.place(x=510, y=700, relwidth=1) # x=140
-link1=Label(FFoot, text="Build with     by Maganbhai (Divyesh Ranpariya)", font=("MV Boli", 10, "bold"), bg=colbg, fg="#264653", bd=0, padx=10)
+FFoot.place(x=420, y=700, relwidth=1) # x=140
+link1=Label(FFoot, text="Build with     by Maganbhai (Divyesh Ranpariya). Just Remember the Name .", font=("MV Boli", 10, "bold"), bg=colbg, fg="#264653", bd=0, padx=10)
 link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
 Label(FFoot, image=imgheart, bd=0).place(x=92, y=3)
