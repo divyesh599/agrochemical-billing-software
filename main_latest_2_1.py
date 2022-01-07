@@ -842,7 +842,7 @@ class modifyProd:
         if self.selectedP == "":
             curr.execute("select count(PID) from productdata")
             self.pid=curr.fetchall()[0][0] + 1
-            self.headlbl.config(text="Adding new product into product list.")
+            self.headlbl.config(text="Adding new product into product list")
             self.btn.config(text="Add")
         else:
             self.pid=self.selectedP[0]
@@ -1091,13 +1091,13 @@ imgheart=PhotoImage(file="img/heart.png")
 
 # Heading Frame -------------------------------------------------------------------------------------------------
 Fheading=Frame(root, bg=colbg)
-Fheading.place(x=0, y=0, relwidth=1)
+Fheading.pack(fill=X)
 Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1, anchor=W, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
 Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1).pack(side=LEFT, expand=TRUE, fill=X)
 Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg, fg=col1, anchor=E, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
-'''Label(Fheading, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=12).grid(row=1, column=1)
-Label(Fheading, image=imgGod, bd=0).place(x=1280, y=25)
-'''
+Label(root, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=9).pack(fill=X)
+Label(root, image=imgGod, bd=0).place(x=1280, y=25)
+
 
 # Label Frames & Buttons ----------------------------------------------------------------------------------------
 f1=LabelFrame(root, text="બિલની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
@@ -1116,7 +1116,6 @@ Fbtn.place(x=20, y=90)
 Button(Fbtn, text="બિલની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
 Button(Fbtn, text="ગ્રાહકની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f2.tkraise()).pack(fill=X)
 Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f3.tkraise()).pack(fill=X)
-
 
 
 
