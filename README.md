@@ -10,7 +10,7 @@ Revised or Learned Questions:
 * TRUNCATE TABLE tempsubbill sql query..
 
 
-Date: 1 Jan 2022
+Date: 7 Jan 2022
 * Working on product class, delete features.
 * Modifying UI of main app view.
 
