@@ -13,7 +13,8 @@ Revised or Learned Questions:
 Date: 7 Jan 2022
 * Working on product class, delete features.
 * Modifying UI of main app view.
-* trying to change UI from .tkraise() to Notebook widget.
+* Trying to change UI from .tkraise() to Notebook widget.
+    - Changing Tab color and styles taking time.
 
 ---------------------------------------------------------------------------------------------
 

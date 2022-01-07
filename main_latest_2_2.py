@@ -1072,9 +1072,11 @@ root.configure(background=colbg)
 
 
 # Treeview colors & Some Extra Variables------------------------------------------------------------------------
-xstyle=ttk.Style()
-xstyle.theme_use("clam")
-xstyle.configure("Treeview", background=colbg, fieldbackground=colbg, foreground="black")
+style=ttk.Style()
+style.theme_use("clam")
+style.configure("Treeview", background=colbg, fieldbackground=colbg, foreground="black")
+style.configure("TNotebook.Tab", background=colbg, fieldbackground=colbg, foreground="black")
+
 
 imgGod=PhotoImage(file="img/ganesha.png")
 imgheart=PhotoImage(file="img/heart.png")
@@ -1097,25 +1099,25 @@ Label(root, image=imgGod, bd=0).place(x=1280, y=25)
 
 
 # Body Frame --------- Labels & Buttons -------------------------------------------------------------------------
-"""
 notebook = ttk.Notebook(root)
-notebook.place(x=0, y=90, width=1370, height=600)
+notebook.pack(fill=BOTH, expand=True)
 
-f1=Frame(notebook, width=1370, height=600)
-f2=Frame(notebook, width=1370, height=600)
-f3=Frame(notebook, width=1370, height=600)
+f1=Frame(notebook)
+f2=Frame(notebook)
+f3=Frame(notebook)
 
 f1.pack(fill='both', expand=True)
 f2.pack(fill='both', expand=True)
 f3.pack(fill='both', expand=True)
 
-objf1=allBills(f1)
-objf2=customerClass(f2)
-objf3=productClass(f3)
+#objf1=allBills(f1)
+#objf2=customerClass(f2)
+#objf3=productClass(f3)
 
 notebook.add(f1, text="બિલની માહિતી")
 notebook.add(f2, text="ગ્રાહકની માહિતી")
 notebook.add(f3, text="દવાની માહિતી")
+
 """
 Fbody=Frame(root, bg=colbg)
 Fbody.place(x=0, y=90, relwidth=1, height=600)
@@ -1138,7 +1140,7 @@ Fbtn.pack(side=LEFT, padx=10, fill=Y)
 Button(Fbtn, text="બિલની માહિતી" , font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
 Button(Fbtn, text="ગ્રાહકની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f2.tkraise()).pack(fill=X)
 Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f3.tkraise()).pack(fill=X)
-
+"""
 
 
 
@@ -1148,8 +1150,8 @@ Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), a
 FFoot=Frame(root, bg=colbg, pady=5)
 FFoot.pack(side=BOTTOM)
 Label(FFoot, text="Build with", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg).pack(side=LEFT)
-Label(FFoot, text="\U0001f394", font=("MV Boli", 10, "bold"), fg="red", bg=colbg).pack(side=LEFT)
-link1=Label(FFoot, text="by Maganbhai (Divyesh Ranpariya) . JUST REMEMBER THE NAME .", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg)
+Label(FFoot, text="\U0001f394", font=("MV Boli", 12, "bold"), fg="red", bg=colbg).pack(side=LEFT)
+link1=Label(FFoot, text="by Maganbhai (Divyesh Ranpariya, Mo. 9601500840) . JUST REMEMBER THE NAME .", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg)
 link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
 
