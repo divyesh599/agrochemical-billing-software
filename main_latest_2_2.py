@@ -434,21 +434,21 @@ class allBills:
 
         # Frame 1 Searching----------------------------------------------------------------------------------
         self.frame1=Frame(self.Fbills, bg=colbg)
-        self.frame1.place(x=0, y=20)
+        self.frame1.pack(pady=20)
 
-        Label(self.frame1, text="Search Bill :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
+        Label(self.frame1, text="Search Bill :", font="arial 10", bg=colbg, fg=colbtn, width=15).pack(side=LEFT)
         self.Etext=Entry(self.frame1, font="arial 11", fg="red", width=40, bd=2)
-        self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
+        self.Etext.pack(side=LEFT)
         self.Etext.bind('<KeyRelease>', self.search_call_bill)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
         self.frame2=Frame(self.Fbills, bg=colbg)
-        self.frame2.place(x=10, y=50, relwidth=1, height=470)
+        self.frame2.pack(fill=BOTH, expand=TRUE, padx=20)
 
         #Treeview----------------start
-        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7"), show="headings", height=22)
-        self.tree.place(x=0, y=0, width=tw-40)
+        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7"), show="headings", height=5)
+        self.tree.pack(side=LEFT, expand=TRUE, fill=BOTH)
 
         self.tree.column("#1", anchor=CENTER, width=80)
         self.tree.column("#2", anchor=CENTER, width=80)
@@ -466,24 +466,21 @@ class allBills:
         self.tree.heading("#7", text="Bill Amount")
 
         self.v=Scrollbar(self.frame2, orient="vertical")
-        self.v.place(x=tw-40, y=0, height=470)
+        self.v.pack(side=RIGHT, fill=Y)
         self.v.config(command=self.tree.yview)
 
-        '''self.h=Scrollbar(self.frame2, orient="horizontal")
-        self.h.place(x=0, y=465, width=763)
-        self.h.config(command=self.tree.xview)'''
-        self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
+        self.tree.configure(yscrollcommand=self.v.set)
 
         #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
         #Treeview----------------END
 
         # Frame 3 Buttons------------------------------------------------------------------------------------
         self.frame3=Frame(self.Fbills, bg=colbg)
-        self.frame3.place(x=10, y=520, relwidth=1)
-        Button(self.frame3, text="New", command=self.newBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=0)
-        Button(self.frame3, text="Edit", command=self.editBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
-        Button(self.frame3, text="Delete", command=self.deleteBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
-        Button(self.frame3, text="Info", command=self.billInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
+        self.frame3.pack(fill=X, side=LEFT, padx=20)
+        Button(self.frame3, text="New", command=self.newBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        Button(self.frame3, text="Edit", command=self.editBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        Button(self.frame3, text="Delete", command=self.deleteBill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        Button(self.frame3, text="Info", command=self.billInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
 
         self.show_all_bill()
 
@@ -556,21 +553,21 @@ class customerClass:
 
         # Frame 1 Searching----------------------------------------------------------------------------------
         self.frame1=Frame(self.Fcust, bg=colbg)
-        self.frame1.place(x=0, y=20)
+        self.frame1.pack(pady=20)
 
-        Label(self.frame1, text="Search Customer :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
+        Label(self.frame1, text="Search Customer :", font="arial 10", bg=colbg, fg=colbtn, width=15).pack(side=LEFT)
         self.Etext=Entry(self.frame1, font="arial 11", fg="red", width=40, bd=2)
-        self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
+        self.Etext.pack(side=LEFT)
         self.Etext.bind('<KeyRelease>', self.search_call_cust)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
         self.frame2=Frame(self.Fcust, bg=colbg)
-        self.frame2.place(x=10, y=50, relwidth=1, height=470)
+        self.frame2.pack(fill=BOTH, expand=TRUE, padx=20)
         
         #Treeview----------------start        
-        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "5"), show="headings", height=22)
-        self.tree.place(x=0, y=0, width=tw-40)
+        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "5"), show="headings", height=5)
+        self.tree.pack(side=LEFT, expand=TRUE, fill=BOTH)
         
         self.tree.column("#1", anchor=CENTER, width=80)
         self.tree.column("#2", anchor=CENTER, width=250)
@@ -584,13 +581,10 @@ class customerClass:
         self.tree.heading("#5", text="")
 
         self.v=Scrollbar(self.frame2, orient="vertical")
-        self.v.place(x=tw-40, y=0, height=470)
+        self.v.pack(side=RIGHT, fill=Y)
         self.v.config(command=self.tree.yview)
 
-        '''self.h=Scrollbar(self.frame2, orient="horizontal")
-        self.h.place(x=0, y=465, width=763)
-        self.h.config(command=self.tree.xview)'''
-        self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
+        self.tree.configure(yscrollcommand=self.v.set)
 
         #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
         self.show_all_cust()
@@ -598,11 +592,11 @@ class customerClass:
 
         # Frame 3 Buttons------------------------------------------------------------------------------------
         self.frame3=Frame(self.Fcust, bg=colbg)
-        self.frame3.place(x=10, y=520, relwidth=1)
-        Button(self.frame3, text="New", command=self.newCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=0)
-        #Button(self.frame3, text="Edit", command=self.editCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
-        #Button(self.frame3, text="Delete", command=self.deleteCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
-        #Button(self.frame3, text="Info", command=self.custInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=4)
+        self.frame3.pack(fill=X, side=LEFT, padx=20)
+        Button(self.frame3, text="New", command=self.newCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        Button(self.frame3, text="Edit", command=self.editCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        Button(self.frame3, text="Delete", command=self.deleteCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        Button(self.frame3, text="Info", command=self.custInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
 
 
 
@@ -674,21 +668,21 @@ class productClass:
 
         # Frame 1 Searching----------------------------------------------------------------------------------
         self.frame1=Frame(self.Fprod, bg=colbg)
-        self.frame1.place(x=0, y=20)
+        self.frame1.pack(pady=20)
 
-        Label(self.frame1, text="Search Product :", font="arial 10", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
+        Label(self.frame1, text="Search Product :", font="arial 10", bg=colbg, fg=colbtn, width=15).pack(side=LEFT)
         self.Etext=Entry(self.frame1, font="arial 11", fg="red", width=40, bd=2)
-        self.Etext.grid(row=0, column=1, columnspan=2, sticky=W)
+        self.Etext.pack(side=LEFT)
         self.Etext.bind('<KeyRelease>', self.search_call_prod)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
         self.frame2=Frame(self.Fprod, bg=colbg)
-        self.frame2.place(x=10, y=50, relwidth=1, height=470)
+        self.frame2.pack(fill=BOTH, expand=TRUE, padx=20)
 
         #Treeview----------------start
-        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8", "#9"), show="headings", height=22)
-        self.tree.place(x=0, y=0, width=tw-40)
+        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8", "#9"), show="headings", height=5)
+        self.tree.pack(side=LEFT, expand=TRUE, fill=BOTH)
 
         self.tree.column("#1", anchor=CENTER, width=30)
         self.tree.column("#2", anchor=CENTER, width=80)
@@ -710,13 +704,10 @@ class productClass:
         self.tree.heading("#9", text="Buying price")
 
         self.v=Scrollbar(self.frame2, orient="vertical")
-        self.v.place(x=tw-40, y=0, height=470)
+        self.v.pack(side=RIGHT, fill=Y)
         self.v.config(command=self.tree.yview)
 
-        '''self.h=Scrollbar(self.frame2, orient="horizontal")
-        self.h.place(x=0, y=465, width=763)
-        self.h.config(command=self.tree.xview)'''
-        self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
+        self.tree.configure(yscrollcommand=self.v.set)
 
         self.tree.bind('<<TreeviewSelect>>', self.selectItem)
         self.tree.bind("<Double-1>", self.double_click_event)
@@ -725,10 +716,10 @@ class productClass:
 
         # Frame 3 Buttons------------------------------------------------------------------------------------
         self.frame3=Frame(self.Fprod, bg=colbg)
-        self.frame3.place(x=10, y=520, relwidth=1)
-        Button(self.frame3, text="New", command=self.newProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=0)
-        Button(self.frame3, text="Edit", command=self.editProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=1)
-        Button(self.frame3, text="Delete", command=self.deleteProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).grid(row=0, column=2)
+        self.frame3.pack(fill=X, side=LEFT, padx=20)
+        Button(self.frame3, text="New", command=self.newProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        Button(self.frame3, text="Edit", command=self.editProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        Button(self.frame3, text="Delete", command=self.deleteProd, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
 
 
     def selectItem(self, a):
@@ -1078,8 +1069,9 @@ tw=root.winfo_screenwidth()
 
 
 # Style Database & Some Extra Variables------------------------------------------------------------------------
-imgGod1=PhotoImage(file="img/bahuchar1.png")
+imgGod1=PhotoImage(file="img/bahuchar.png")
 imgGod2=PhotoImage(file="img/ganesha.png")
+imgheart=PhotoImage(file="img/heart.png")
 
 all_style=ttk.Style()
 all_style.theme_use("clam")
@@ -1106,9 +1098,12 @@ Fheading.pack(fill=X)
 Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg, fg=col1, anchor=W, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
 Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1).pack(side=LEFT, expand=TRUE, fill=X)
 Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1, anchor=E, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
-Label(root, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=9).pack(fill=X)
-Label(root, image=imgGod1, bd=0).place(x=30, y=20)
-Label(root, image=imgGod2, bd=0).place(x=tw-94, y=20)
+
+Ftitle=Frame(root, bg=colbg)
+Ftitle.pack(fill=X, padx=20)
+Label(Ftitle, image=imgGod1, bd=0).pack(side=LEFT)
+Label(Ftitle, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=5).pack(side=LEFT, expand=TRUE)
+Label(Ftitle, image=imgGod2, bd=0).pack(side=RIGHT)
 
 
 # Body Frame --------- Labels & Buttons -------------------------------------------------------------------------
@@ -1138,10 +1133,11 @@ notebook.add(f3, text="દવાની માહિતી")
 
 # Footer Frame ------------------------------------------------------------------------------------------------
 FFoot=Frame(root, bg=colbg, pady=5)
-FFoot.pack(side=BOTTOM)
-Label(FFoot, text="Build with", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg).pack(side=LEFT)
-Label(FFoot, text="\U0001f394", font=("MV Boli", 12, "bold"), fg="red", bg=colbg).pack(side=LEFT)
-link1=Label(FFoot, text="by Maganbhai (Divyesh Ranpariya, Mo. 9601500840) . JUST REMEMBER THE NAME .", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg)
+FFoot.pack(side=BOTTOM, pady=10)
+Label(FFoot, text="Build with ", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg).pack(side=LEFT)
+#Label(FFoot, text="\U0001f394", font=("MV Boli", 12, "bold"), fg="red", bg=colbg).pack(side=LEFT)
+Label(FFoot, image=imgheart, bd=0).pack(side=LEFT)
+link1=Label(FFoot, text=" by Maganbhai (Divyesh Ranpariya, Mo. 9601500840) . JUST REMEMBER THE NAME .", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg)
 link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
 
