@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import ttk
-from tkinter import font
 import pymysql
 import datetime
 import webbrowser
@@ -1074,9 +1073,9 @@ tw=root.winfo_screenwidth()
 
 
 # Style Database & Some Extra Variables------------------------------------------------------------------------
-#imgGod1=PhotoImage(file="img/bahuchar.jpg")
+imgGod1=PhotoImage(file="img/add.ico")
 imgGod2=PhotoImage(file="img/ganesha.png")
-imgheart=PhotoImage(file="img/heart.png")
+
 
 all_style=ttk.Style()
 all_style.theme_use("clam")
@@ -1105,7 +1104,7 @@ Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg
 Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1).pack(side=LEFT, expand=TRUE, fill=X)
 Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1, anchor=E, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
 Label(root, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=9).pack(fill=X)
-#Label(root, image=imgGod1, bd=0).place(x=20, y=20)
+Label(root, image=imgGod1, bd=0).place(x=20, y=20)
 Label(root, image=imgGod2, bd=0).place(x=tw-84, y=20)
 
 
