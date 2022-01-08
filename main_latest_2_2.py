@@ -1073,7 +1073,7 @@ tw=root.winfo_screenwidth()
 
 
 # Style Database & Some Extra Variables------------------------------------------------------------------------
-imgGod1=PhotoImage(file="img/add.ico")
+imgGod1=PhotoImage(file="img/bahuchar.png")
 imgGod2=PhotoImage(file="img/ganesha.png")
 
 
