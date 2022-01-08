@@ -922,8 +922,19 @@ class deleteProduct:
         for i in range(9):
             Label(self.frame1, text=self.selectedP[i], font="arial 10", width=x, bg=colbg).grid(row=i, column=1, pady=5)
 
-        Button(self.FdelProd, text="Delete", font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5).pack()
+        Button(self.FdelProd, text="Delete", command=self.delete, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5).pack()
 
+    def delete(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        curr.execute("DELETE FROM productdata WHERE PID="+str(self.selectedP[0]))
+        conn.commit()
+        conn.close()
+        self.FdelProd.destroy()
+        objf3.show_all_prod()
 
 
 
@@ -1108,15 +1119,15 @@ Label(Ftitle, image=imgGod2, bd=0).pack(side=RIGHT)
 
 # Body Frame --------- Labels & Buttons -------------------------------------------------------------------------
 notebook = ttk.Notebook(root)
-notebook.pack(fill=BOTH, expand=True)
+notebook.pack(fill=BOTH, expand=TRUE)
 
 f1=Frame(notebook, bg=colbg)
 f2=Frame(notebook, bg=colbg)
 f3=Frame(notebook, bg=colbg)
 
-f1.pack(fill='both', expand=True)
-f2.pack(fill='both', expand=True)
-f3.pack(fill='both', expand=True)
+f1.pack()
+f2.pack()
+f3.pack()
 
 objf1=allBills(f1)
 objf2=customerClass(f2)
