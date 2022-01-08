@@ -449,7 +449,7 @@ class allBills:
 
         #Treeview----------------start
         self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7"), show="headings", height=22)
-        self.tree.place(x=0, y=0, width=1150)
+        self.tree.place(x=0, y=0, width=tw-40)
 
         self.tree.column("#1", anchor=CENTER, width=80)
         self.tree.column("#2", anchor=CENTER, width=80)
@@ -467,7 +467,7 @@ class allBills:
         self.tree.heading("#7", text="Bill Amount")
 
         self.v=Scrollbar(self.frame2, orient="vertical")
-        self.v.place(x=1149, y=0, height=470)
+        self.v.place(x=tw-40, y=0, height=470)
         self.v.config(command=self.tree.yview)
 
         '''self.h=Scrollbar(self.frame2, orient="horizontal")
@@ -571,7 +571,7 @@ class customerClass:
         
         #Treeview----------------start        
         self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "5"), show="headings", height=22)
-        self.tree.place(x=0, y=0, width=1150)
+        self.tree.place(x=0, y=0, width=tw-40)
         
         self.tree.column("#1", anchor=CENTER, width=80)
         self.tree.column("#2", anchor=CENTER, width=250)
@@ -585,7 +585,7 @@ class customerClass:
         self.tree.heading("#5", text="")
 
         self.v=Scrollbar(self.frame2, orient="vertical")
-        self.v.place(x=1149, y=0, height=470)
+        self.v.place(x=tw-40, y=0, height=470)
         self.v.config(command=self.tree.yview)
 
         '''self.h=Scrollbar(self.frame2, orient="horizontal")
@@ -672,6 +672,7 @@ class productClass:
         # All Variables -------------------------------------------------------------------------------------
         self.var1=""
 
+
         # Frame 1 Searching----------------------------------------------------------------------------------
         self.frame1=Frame(self.Fprod, bg=colbg)
         self.frame1.place(x=0, y=20)
@@ -688,7 +689,7 @@ class productClass:
 
         #Treeview----------------start
         self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8", "#9"), show="headings", height=22)
-        self.tree.place(x=0, y=0, width=1150)
+        self.tree.place(x=0, y=0, width=tw-40)
 
         self.tree.column("#1", anchor=CENTER, width=30)
         self.tree.column("#2", anchor=CENTER, width=80)
@@ -710,7 +711,7 @@ class productClass:
         self.tree.heading("#9", text="Buying price")
 
         self.v=Scrollbar(self.frame2, orient="vertical")
-        self.v.place(x=1149, y=0, height=470)
+        self.v.place(x=tw-40, y=0, height=470)
         self.v.config(command=self.tree.yview)
 
         '''self.h=Scrollbar(self.frame2, orient="horizontal")
@@ -1069,11 +1070,12 @@ root.title("શ્રી હરી એગ્રો સેન્ટર - Billing 
 root.state('zoomed')
 root.geometry("1350x710+0+0")
 root.configure(background=colbg)
-
+tw=root.winfo_screenwidth()
 
 
 # Style Database & Some Extra Variables------------------------------------------------------------------------
-imgGod=PhotoImage(file="img/ganesha.png")
+#imgGod1=PhotoImage(file="img/bahuchar.jpg")
+imgGod2=PhotoImage(file="img/ganesha.png")
 imgheart=PhotoImage(file="img/heart.png")
 
 all_style=ttk.Style()
@@ -1099,11 +1101,12 @@ all_style.map("TNotebook.Tab", padding=[("selected", [80,5,80,5])], background=[
 # Heading Frame -------------------------------------------------------------------------------------------------
 Fheading=Frame(root, bg=colbg)
 Fheading.pack(fill=X)
-Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1, anchor=W, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
-Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1).pack(side=LEFT, expand=TRUE, fill=X)
-Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg, fg=col1, anchor=E, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
+Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg, fg=col1, anchor=W, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
+Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1).pack(side=LEFT, expand=TRUE, fill=X)
+Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1, anchor=E, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
 Label(root, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=9).pack(fill=X)
-Label(root, image=imgGod, bd=0).place(x=1280, y=25)
+#Label(root, image=imgGod1, bd=0).place(x=20, y=20)
+Label(root, image=imgGod2, bd=0).place(x=tw-84, y=20)
 
 
 # Body Frame --------- Labels & Buttons -------------------------------------------------------------------------
@@ -1117,7 +1120,6 @@ f3=Frame(notebook, bg=colbg)
 f1.pack(fill='both', expand=True)
 f2.pack(fill='both', expand=True)
 f3.pack(fill='both', expand=True)
-
 
 objf1=allBills(f1)
 objf2=customerClass(f2)
