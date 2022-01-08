@@ -1111,9 +1111,9 @@ f1.pack(fill='both', expand=True)
 f2.pack(fill='both', expand=True)
 f3.pack(fill='both', expand=True)
 
-#objf1=allBills(f1)
-#objf2=customerClass(f2)
-#objf3=productClass(f3)
+objf1=allBills(f1)
+objf2=customerClass(f2)
+objf3=productClass(f3)
 
 notebook.add(f1, text="બિલની માહિતી")
 notebook.add(f2, text="ગ્રાહકની માહિતી")
