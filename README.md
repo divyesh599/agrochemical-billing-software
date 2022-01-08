@@ -10,15 +10,6 @@ Revised or Learned Questions:
 * TRUNCATE TABLE tempsubbill sql query..
 
 
-Date: 7 Jan 2022
-* Working on product class, delete features.
-* Modifying UI of main app view.
-* Trying to change UI from .tkraise() to Notebook widget.
-    - Changing Tab color and styles taking time.
-
-Date: 8 Jan 2022
-* Let's try to explore Notebook widget. And learning How to use Style Database ttk::style.
-
 ---------------------------------------------------------------------------------------------
 
 # For my rough use
