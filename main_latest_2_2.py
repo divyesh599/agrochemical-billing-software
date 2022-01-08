@@ -1075,8 +1075,9 @@ root.configure(background=colbg)
 style=ttk.Style()
 style.theme_use("clam")
 style.configure("Treeview", background=colbg, fieldbackground=colbg, foreground="black")
-style.configure("TNotebook.Tab", background=colbg, fieldbackground=colbg, foreground="black")
-
+'''style.configure("TNotebook", background=myTabBarColor)
+style.map("TNotebook.Tab", background=[("selected", myActiveTabBackgroundColor)], foreground=[("selected", myActiveTabForegroundColor)])
+style.configure("TNotebook.Tab", background=myTabBackgroundColor, foreground=myTabForegroundColor)'''
 
 imgGod=PhotoImage(file="img/ganesha.png")
 imgheart=PhotoImage(file="img/heart.png")

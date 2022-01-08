@@ -16,6 +16,9 @@ Date: 7 Jan 2022
 * Trying to change UI from .tkraise() to Notebook widget.
     - Changing Tab color and styles taking time.
 
+Date: 8 Jan 2022
+* Let's try to explore Notebook widget. And learning How to use Style Database ttk::style.
+
 ---------------------------------------------------------------------------------------------
 
 # For my rough use
