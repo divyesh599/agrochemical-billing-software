@@ -1094,13 +1094,13 @@ all_style.map("TNotebook.Tab", padding=[("selected", [80,5,80,5])], background=[
 
 # Heading Frame -------------------------------------------------------------------------------------------------
 Fheading=Frame(root, bg=colbg)
-Fheading.pack(fill=X)
-Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg, fg=col1, anchor=W, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
-Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1).pack(side=LEFT, expand=TRUE, fill=X)
-Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1, anchor=E, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
+Fheading.pack(fill=X, padx=10)
+Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg, fg=col1).pack(side=LEFT)
+Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1).pack(side=LEFT, expand=TRUE)
+Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1).pack(side=RIGHT)
 
 Ftitle=Frame(root, bg=colbg)
-Ftitle.pack(fill=X, padx=20)
+Ftitle.pack(fill=X, padx=30)
 Label(Ftitle, image=imgGod1, bd=0).pack(side=LEFT)
 Label(Ftitle, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=5).pack(side=LEFT, expand=TRUE)
 Label(Ftitle, image=imgGod2, bd=0).pack(side=RIGHT)
