@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import font
 import pymysql
 import datetime
 import webbrowser
@@ -1071,16 +1072,22 @@ root.configure(background=colbg)
 
 
 
-# Treeview colors & Some Extra Variables------------------------------------------------------------------------
-style=ttk.Style()
-style.theme_use("clam")
-style.configure("Treeview", background=colbg, fieldbackground=colbg, foreground="black")
-'''style.configure("TNotebook", background=myTabBarColor)
-style.map("TNotebook.Tab", background=[("selected", myActiveTabBackgroundColor)], foreground=[("selected", myActiveTabForegroundColor)])
-style.configure("TNotebook.Tab", background=myTabBackgroundColor, foreground=myTabForegroundColor)'''
-
+# Style Database & Some Extra Variables------------------------------------------------------------------------
 imgGod=PhotoImage(file="img/ganesha.png")
 imgheart=PhotoImage(file="img/heart.png")
+
+all_style=ttk.Style()
+all_style.theme_use("clam")
+all_style.configure("Treeview", background=colbg, fieldbackground=colbg)
+
+all_style.configure("TNotebook", background=colbg, bordercolor=colbg, tabposition="n")
+all_style.configure("TNotebook.Tab", background=colbg, foreground=colbtn, bordercolor=colbg, font=("", 10, "bold"), padding=[80,5,80,5])
+all_style.map("TNotebook.Tab", padding=[("selected", [80,5,80,5])], background=[("selected", colbg)])
+
+"""
+# option={"font": ("", 11, "bold")}
+"""
+
 
 
 
@@ -1103,13 +1110,14 @@ Label(root, image=imgGod, bd=0).place(x=1280, y=25)
 notebook = ttk.Notebook(root)
 notebook.pack(fill=BOTH, expand=True)
 
-f1=Frame(notebook)
-f2=Frame(notebook)
-f3=Frame(notebook)
+f1=Frame(notebook, bg=colbg)
+f2=Frame(notebook, bg=colbg)
+f3=Frame(notebook, bg=colbg)
 
 f1.pack(fill='both', expand=True)
 f2.pack(fill='both', expand=True)
 f3.pack(fill='both', expand=True)
+
 
 objf1=allBills(f1)
 objf2=customerClass(f2)
@@ -1119,29 +1127,6 @@ notebook.add(f1, text="બિલની માહિતી")
 notebook.add(f2, text="ગ્રાહકની માહિતી")
 notebook.add(f3, text="દવાની માહિતી")
 
-"""
-Fbody=Frame(root, bg=colbg)
-Fbody.place(x=0, y=90, relwidth=1, height=600)
-
-f1=LabelFrame(Fbody, text="બિલની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
-f2=LabelFrame(Fbody, text="ગ્રાહકની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
-f3=LabelFrame(Fbody, text="દવાની માહિતી", font=("", 10, "bold"), bg=colbg, fg=col1)
-f1.place(x=140, y=0, relwidth=1, height=600)
-f2.place(x=140, y=0, relwidth=1, height=600)
-f3.place(x=140, y=0, relwidth=1, height=600)
-
-objf1=allBills(f1)
-objf2=customerClass(f2)
-objf3=productClass(f3)
-
-
-# option={"font": ("", 11, "bold")}
-Fbtn=Frame(Fbody, bg=colbg)
-Fbtn.pack(side=LEFT, padx=10, fill=Y)
-Button(Fbtn, text="બિલની માહિતી" , font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f1.tkraise()).pack(fill=X)
-Button(Fbtn, text="ગ્રાહકની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f2.tkraise()).pack(fill=X)
-Button(Fbtn, text="દવાની માહિતી", font=("", 11, "bold"), anchor=W, bd=0, bg=colbg, fg=colbtn, pady=5, command=lambda:f3.tkraise()).pack(fill=X)
-"""
 
 
 
@@ -1161,5 +1146,6 @@ link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh5
 
 
 
-f3.tkraise()
+
+
 root.mainloop()
