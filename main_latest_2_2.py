@@ -1072,15 +1072,18 @@ root.configure(background=colbg)
 tw=root.winfo_screenwidth()
 
 
-# Style Database & Some Extra Variables------------------------------------------------------------------------
-imgGod1=PhotoImage(file="img/bahuchar.png")
-imgGod2=PhotoImage(file="img/ganesha.png")
 
+
+
+
+
+# Style Database & Some Extra Variables------------------------------------------------------------------------
+imgGod1=PhotoImage(file="img/bahuchar1.png")
+imgGod2=PhotoImage(file="img/ganesha.png")
 
 all_style=ttk.Style()
 all_style.theme_use("clam")
 all_style.configure("Treeview", background=colbg, fieldbackground=colbg)
-
 all_style.configure("TNotebook", background=colbg, bordercolor=colbg, tabposition="n")
 all_style.configure("TNotebook.Tab", background=colbg, foreground=colbtn, bordercolor=colbg, font=("", 10, "bold"), padding=[80,5,80,5])
 all_style.map("TNotebook.Tab", padding=[("selected", [80,5,80,5])], background=[("selected", colbg)])
@@ -1104,8 +1107,8 @@ Label(Fheading, text="|| શ્રી બહુચર કૃપા ||", bg=colbg
 Label(Fheading, text="|| શ્રી શ્રીનાથજી કૃપા ||", bg=colbg, fg=col1).pack(side=LEFT, expand=TRUE, fill=X)
 Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, fg=col1, anchor=E, padx=10).pack(side=LEFT, expand=TRUE, fill=X)
 Label(root, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=9).pack(fill=X)
-Label(root, image=imgGod1, bd=0).place(x=20, y=20)
-Label(root, image=imgGod2, bd=0).place(x=tw-84, y=20)
+Label(root, image=imgGod1, bd=0).place(x=30, y=20)
+Label(root, image=imgGod2, bd=0).place(x=tw-94, y=20)
 
 
 # Body Frame --------- Labels & Buttons -------------------------------------------------------------------------
