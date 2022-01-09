@@ -681,7 +681,7 @@ class productClass:
         self.frame2.pack(fill=BOTH, expand=TRUE, padx=20)
 
         #Treeview----------------start
-        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8", "#9"), show="headings", height=5)
+        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8"), show="headings", height=5)
         self.tree.pack(side=LEFT, expand=TRUE, fill=BOTH)
 
         self.tree.column("#1", anchor=CENTER, width=30)
@@ -692,7 +692,7 @@ class productClass:
         self.tree.column("#6", anchor=CENTER, width=80)
         self.tree.column("#7", anchor=CENTER, width=80)
         self.tree.column("#8", anchor=CENTER, width=80)
-        self.tree.column("#9", anchor=CENTER, width=80)
+        #self.tree.column("#9", anchor=CENTER, width=80)
         self.tree.heading("#1", text="PID")
         self.tree.heading("#2", text="Product name")
         self.tree.heading("#3", text="Technical name")
@@ -701,7 +701,7 @@ class productClass:
         self.tree.heading("#6", text="Net Content")
         self.tree.heading("#7", text="Printed price")
         self.tree.heading("#8", text="Selling price")
-        self.tree.heading("#9", text="Buying price")
+        #self.tree.heading("#9", text="Buying price")
 
         self.v=Scrollbar(self.frame2, orient="vertical")
         self.v.pack(side=RIGHT, fill=Y)
@@ -725,13 +725,13 @@ class productClass:
     def selectItem(self, a):
         treeItem = self.tree.focus()
         try:
-            self.var1=self.tree.item(treeItem)['values']
+            self.var1=self.tree.item(treeItem)['values'][0]
         except:
             self.var1=""
     
     def double_click_event(self, a):
         treeItem = self.tree.focus()
-        self.var1=self.tree.item(treeItem)['values']
+        self.var1=self.tree.item(treeItem)['values'][0]
         self.editProd()
 
 
@@ -745,7 +745,7 @@ class productClass:
         plist=curr.fetchall()
         self.tree.delete(*self.tree.get_children())
         for row in plist:
-            self.tree.insert("", END, values=row)
+            self.tree.insert("", END, values=row[:8])
         conn.commit()
         conn.close()
 
@@ -762,7 +762,7 @@ class productClass:
             plist=curr.fetchall()
             self.tree.delete(*self.tree.get_children())
             for row in plist:
-                self.tree.insert("", END, values=row)
+                self.tree.insert("", END, values=row[:8])
             conn.commit()
             conn.close()
         else:
@@ -784,7 +784,7 @@ class modifyProd:
     def __init__(self, var1):
         # All Variables -------------------------------------------------------------------------------------
         self.selectedP=var1
-        self.pid=""
+        self.var2show=1
 
         
         self.Fmodifyprod=Toplevel(root)
@@ -819,10 +819,22 @@ class modifyProd:
             self.list1.append(Entry(self.frame1, width=40))
             self.list1[i].grid(row=i+1, column=1, padx=10)
 
+        self.list1[7].config(show="*")
+
+        Button(self.frame1, text="Show", command=self.show, bg=colbg, bd=1).grid(row=8, column=2)
+
         self.btn=Button(self.Fmodifyprod, text=" ", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5)
         self.btn.pack()
 
         self.modify_Entry()
+
+    def show(self):
+        if self.var2show==1:
+            self.list1[7].config(show="")
+            self.var2show=0
+        else:
+            self.list1[7].config(show="*")
+            self.var2show=1
 
     def modify_Entry(self):
         conn=pymysql.connect(host="localhost",
@@ -832,16 +844,18 @@ class modifyProd:
         curr=conn.cursor()
         if self.selectedP == "":
             curr.execute("select count(PID) from productdata")
-            self.pid=curr.fetchall()[0][0] + 1
+            pid=curr.fetchall()[0][0] + 1
             self.headlbl.config(text="Adding new product into product list")
             self.btn.config(text="Add")
         else:
-            self.pid=self.selectedP[0]
+            pid=self.selectedP
+            curr.execute("select * from productdata where PID="+str(pid))
+            item=curr.fetchall()
             for i in range(8):
-                self.list1[i].insert(0, self.selectedP[i+1])
+                self.list1[i].insert(0, item[0][i+1])
             self.headlbl.config(text="Are you sure to edit into this product?")
             self.btn.config(text="Update")
-        self.pidlbl.config(text=self.pid)
+        self.pidlbl.config(text=pid)
 
 
     def addProd(self):
@@ -888,9 +902,17 @@ class modifyProd:
 
 class deleteProduct:
     def __init__(self, var1):
-
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        curr.execute("select * from productdata where PID="+str(var1))
         # All Variables -------------------------------------------------------------------------------------
-        self.selectedP=var1
+        self.selectedP=curr.fetchall()
+        
+        conn.commit()
+        conn.close()
 
 
         self.FdelProd=Toplevel(root)
@@ -918,9 +940,9 @@ class deleteProduct:
         Label(self.frame1, text="Buying price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=8, column=0, pady=5)
 
 
-        x=max(20, len(self.selectedP[1]), len(self.selectedP[2]), len(self.selectedP[3]))
+        x=max(20, len(self.selectedP[0][1]), len(self.selectedP[0][2]), len(self.selectedP[0][3]))
         for i in range(9):
-            Label(self.frame1, text=self.selectedP[i], font="arial 10", width=x, bg=colbg).grid(row=i, column=1, pady=5)
+            Label(self.frame1, text=self.selectedP[0][i], font="arial 10", width=x, bg=colbg).grid(row=i, column=1, pady=5)
 
         Button(self.FdelProd, text="Delete", command=self.delete, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5).pack()
 
@@ -1088,7 +1110,7 @@ all_style=ttk.Style()
 all_style.theme_use("clam")
 all_style.configure("Treeview", background=colbg, fieldbackground=colbg)
 all_style.configure("TNotebook", background=colbg, bordercolor=colbg, tabposition="n")
-all_style.configure("TNotebook.Tab", background=colbg, foreground=colbtn, bordercolor=colbg, font=("", 10, "bold"), padding=[80,5,80,5])
+all_style.configure("TNotebook.Tab", background="#cfe2d3", foreground=colbtn, bordercolor=colbg, font=("", 10, "bold"), padding=[80,5,80,5])
 all_style.map("TNotebook.Tab", padding=[("selected", [80,5,80,5])], background=[("selected", colbg)])
 
 """
@@ -1113,7 +1135,7 @@ Label(Fheading, text="|| શ્રી ગણેશાય નમ: ||", bg=colbg, 
 Ftitle=Frame(root, bg=colbg)
 Ftitle.pack(fill=X, padx=30)
 Label(Ftitle, image=imgGod1, bd=0).pack(side=LEFT)
-Label(Ftitle, text="શ્રી હરી એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=5).pack(side=LEFT, expand=TRUE)
+Label(Ftitle, text="શ્રી હરિ એગ્રો સેન્ટર", font=("", 30, "bold"), bg=colbg, fg=colhead, pady=5).pack(side=LEFT, expand=TRUE)
 Label(Ftitle, image=imgGod2, bd=0).pack(side=RIGHT)
 
 
