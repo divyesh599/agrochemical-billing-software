@@ -773,10 +773,8 @@ class productClass:
     def editProd(self):
         ogj=modifyProd(self.var1)
     def deleteProd(self):
-        if self.var1!="":
-            obj=deleteProduct(self.var1)
-        else:
-            self.newProd()
+        obj=modifyProd(self.var1)
+
 
 
 
@@ -823,8 +821,12 @@ class modifyProd:
 
         Button(self.frame1, text="Show", command=self.show, bg=colbg, bd=1).grid(row=8, column=2)
 
-        self.btn=Button(self.Fmodifyprod, text=" ", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5)
-        self.btn.pack()
+        # Button Frame ---------------------------------------------------
+        self.frame2=Frame(self.Fmodifyprod, bg=colbg)
+        self.frame2.pack()
+        self.dltbtn=Button(self.frame2, text="Delete", command=self.delete, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5)
+        self.editbtn=Button(self.frame2, text=" ", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5)
+        self.editbtn.pack(side=LEFT, padx=5)
 
         self.modify_Entry()
 
@@ -846,7 +848,7 @@ class modifyProd:
             curr.execute("select count(PID) from productdata")
             pid=curr.fetchall()[0][0] + 1
             self.headlbl.config(text="Adding new product into product list")
-            self.btn.config(text="Add")
+            self.editbtn.config(text="Add")
         else:
             pid=self.selectedP
             curr.execute("select * from productdata where PID="+str(pid))
@@ -854,7 +856,8 @@ class modifyProd:
             for i in range(8):
                 self.list1[i].insert(0, item[0][i+1])
             self.headlbl.config(text="Are you sure to edit into this product?")
-            self.btn.config(text="Update")
+            self.editbtn.config(text="Update")
+            self.dltbtn.pack(side=LEFT, padx=5)
         self.pidlbl.config(text=pid)
 
 
@@ -896,67 +899,24 @@ class modifyProd:
         self.Fmodifyprod.destroy()
         objf3.show_all_prod()
 
-
-
-
-
-class deleteProduct:
-    def __init__(self, var1):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database23Nov")
-        curr=conn.cursor()
-        curr.execute("select * from productdata where PID="+str(var1))
-        # All Variables -------------------------------------------------------------------------------------
-        self.selectedP=curr.fetchall()
-        
-        conn.commit()
-        conn.close()
-
-
-        self.FdelProd=Toplevel(root)
-        self.FdelProd.title("Delete Product")
-        self.FdelProd.geometry("600x400")
-        center(self.FdelProd)
-        self.FdelProd.grab_set()
-        self.FdelProd.configure(background=colbg)    
-
-        Label(self.FdelProd, text="Are you sure to delete this product data?", font="arial 12 bold", bg=colbg, fg=col1).pack(pady=5)
-
-
-        #--------------Frame1--------------
-        self.frame1=Frame(self.FdelProd, bg=colbg)
-        self.frame1.pack()
-
-        Label(self.frame1, text="PID :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=0, column=0, pady=5)
-        Label(self.frame1, text="Product name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=1, column=0, pady=5)
-        Label(self.frame1, text="Technical name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=2, column=0, pady=5)
-        Label(self.frame1, text="Company name :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=3, column=0, pady=5)
-        Label(self.frame1, text="Batch no. :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=4, column=0, pady=5)
-        Label(self.frame1, text="Net Content (ml/gm) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=5, column=0, pady=5)
-        Label(self.frame1, text="Printed price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=6, column=0, pady=5)
-        Label(self.frame1, text="Selling price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=7, column=0, pady=5)
-        Label(self.frame1, text="Buying price (Rs.) :", font="arial 10", anchor=E, width=20, bg=colbg).grid(row=8, column=0, pady=5)
-
-
-        x=max(20, len(self.selectedP[0][1]), len(self.selectedP[0][2]), len(self.selectedP[0][3]))
-        for i in range(9):
-            Label(self.frame1, text=self.selectedP[0][i], font="arial 10", width=x, bg=colbg).grid(row=i, column=1, pady=5)
-
-        Button(self.FdelProd, text="Delete", command=self.delete, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5).pack()
-
     def delete(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
                             database="Database23Nov")
         curr=conn.cursor()
-        curr.execute("DELETE FROM productdata WHERE PID="+str(self.selectedP[0]))
+        curr.execute("DELETE FROM productdata WHERE PID="+str(self.pidlbl["text"]))
         conn.commit()
         conn.close()
-        self.FdelProd.destroy()
+        self.Fmodifyprod.destroy()
         objf3.show_all_prod()
+
+
+
+
+
+
+
 
 
 
