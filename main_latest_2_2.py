@@ -586,19 +586,31 @@ class customerClass:
 
         self.tree.configure(yscrollcommand=self.v.set)
 
-        #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
-        self.show_all_cust()
+        self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        self.tree.bind("<Double-1>", self.double_click_event)
         #Treeview----------------END
+        self.show_all_cust()
+        
 
         # Frame 3 Buttons------------------------------------------------------------------------------------
         self.frame3=Frame(self.Fcust, bg=colbg)
         self.frame3.pack(fill=X, side=LEFT, padx=20)
         Button(self.frame3, text="New", command=self.newCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
         Button(self.frame3, text="Edit", command=self.editCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
-        Button(self.frame3, text="Delete", command=self.deleteCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        #Button(self.frame3, text="Delete", command=self.deleteCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
         Button(self.frame3, text="Info", command=self.custInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
 
-
+    def selectItem(self, a):
+        treeItem = self.tree.focus()
+        try:
+            self.var1=self.tree.item(treeItem)['values'][0]
+        except:
+            self.var1=""
+    
+    def double_click_event(self, a):
+        treeItem = self.tree.focus()
+        self.var1=self.tree.item(treeItem)['values'][0]
+        self.editCust()
 
     def show_all_cust(self):
         conn=pymysql.connect(host="localhost",
@@ -633,13 +645,135 @@ class customerClass:
             self.show_all_cust()
 
     def newCust(self):
-        pass
+        obj=modifyCust("")
     def editCust(self):
-        pass
+        obj=modifyCust(self.var1)
     def deleteCust(self):
         pass
     def custInfo(self):
         pass
+
+
+
+
+class modifyCust:
+    def __init__(self, var1):
+        # All Variables -------------------------------------------------------------------------------------
+        self.selectedC=var1
+        
+
+        
+        self.FmodifyCust=Toplevel(root)
+        if self.selectedC=="":
+            self.FmodifyCust.title("Add New Customer")
+        else:
+            self.FmodifyCust.title("Edit into Customer Data")
+        self.FmodifyCust.geometry("600x350")
+        center(self.FmodifyCust)
+        self.FmodifyCust.grab_set()
+        self.FmodifyCust.configure(background=colbg)
+
+        self.headlbl=Label(self.FmodifyCust, text=" ", font="arial 12 bold", bg=colbg, fg=col1)
+        self.headlbl.pack(pady=5)
+        
+        #--------------Frame1--------------------------------------------------------------------------------
+        self.frame1=Frame(self.FmodifyCust, bg=colbg)
+        self.frame1.pack()
+
+        Label(self.frame1, text="Mobile No :", font="arial 10", anchor=E, width=10, bg=colbg).grid(row=0, column=0, pady=5)
+        Label(self.frame1, text="First Name :", font="arial 10", anchor=E, width=10, bg=colbg).grid(row=1, column=0, pady=5)
+        Label(self.frame1, text="Middle name :", font="arial 10", anchor=E, width=10, bg=colbg).grid(row=2, column=0, pady=5)
+        Label(self.frame1, text="Surname :", font="arial 10", anchor=E, width=10, bg=colbg).grid(row=3, column=0, pady=5)
+        Label(self.frame1, text="City :", font="arial 10", anchor=E, width=10, bg=colbg).grid(row=4, column=0, pady=5)
+        Label(self.frame1, text="Balance :", font="arial 10", anchor=E, width=10, bg=colbg).grid(row=5, column=0, pady=5)
+        
+        self.list1=[]
+
+        for i in range(5):
+            self.list1.append(Entry(self.frame1, width=40))
+            self.list1[i].grid(row=i, column=1, padx=10)
+
+        self.Lbalance=Label(self.frame1, text="", font="arial 10", bg=colbg, fg="red")
+        self.Lbalance.grid(row=5, column=1)
+
+        # Button Frame ---------------------------------------------------
+        self.frame2=Frame(self.FmodifyCust, bg=colbg)
+        self.frame2.pack(pady=10)
+        self.editbtn=Button(self.frame2, text=" ",command=self.addCust, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5)
+        self.editbtn.pack(side=LEFT, padx=5,)
+
+        self.modify_Entry()
+
+    def modify_Entry(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        if self.selectedC == "":
+            self.headlbl.config(text="Adding new Customer into database.")
+            self.editbtn.config(text="Add")
+            self.Lbalance.config(text="0")
+            self.list1[0].config(fg="red")
+        else:
+            curr.execute("select * from customerdata where MobileNo="+str(self.selectedC))
+            item=curr.fetchall()
+            for i in range(5):
+                self.list1[i].insert(0, item[0][i])
+            self.Lbalance.config(text=item[0][5])
+            self.headlbl.config(text="Are you sure to edit into this customer?")
+            self.editbtn.config(text="Update")
+            self.list1[0].config(state=DISABLED)
+        conn.commit()
+        conn.close()
+
+
+
+    def addCust(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        try:
+            if self.selectedC == "":
+                curr.execute("insert into customerdata values(%s, %s, %s, %s, %s, %s)",
+                                (self.list1[0].get(),
+                                self.list1[1].get(),
+                                self.list1[2].get(),
+                                self.list1[3].get(),
+                                self.list1[4].get(),
+                                0)
+                            )
+            else:
+                curr.execute("UPDATE customerdata SET FName='"+self.list1[1].get()
+                            +"', MName='"+self.list1[2].get()
+                            +"', LName='"+self.list1[3].get()
+                            +"', City='"+self.list1[4].get()
+                            +"' WHERE MobileNo="+str(self.list1[0].get())
+                            )
+        except pymysql.err.Error as e:
+            pass
+        finally:
+            conn.commit()
+            conn.close()
+        self.FmodifyCust.destroy()
+        objf2.show_all_cust()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -786,7 +920,11 @@ class modifyProd:
 
         
         self.Fmodifyprod=Toplevel(root)
-        self.Fmodifyprod.title("Add New Product")
+        if self.selectedP=="":
+            self.Fmodifyprod.title("Add New Product")
+        else:
+            self.Fmodifyprod.title("Edit into Product Data")
+        
         self.Fmodifyprod.geometry("600x400")
         center(self.Fmodifyprod)
         self.Fmodifyprod.grab_set()
@@ -823,7 +961,7 @@ class modifyProd:
 
         # Button Frame ---------------------------------------------------
         self.frame2=Frame(self.Fmodifyprod, bg=colbg)
-        self.frame2.pack()
+        self.frame2.pack(pady=10)
         self.dltbtn=Button(self.frame2, text="Delete", command=self.delete, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5)
         self.editbtn=Button(self.frame2, text=" ", command=self.addProd, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=5)
         self.editbtn.pack(side=LEFT, padx=5)
