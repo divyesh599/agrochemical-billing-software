@@ -18,9 +18,11 @@ class generateBill:
 
 
         self.Fnewbill=Toplevel(root)
-        self.Fnewbill.protocol("WM_DELETE_WINDOW", self.close_window)
+        #self.Fnewbill.protocol("WM_DELETE_WINDOW", self.close_window)
         self.Fnewbill.title("Add New Bill")
-        self.Fnewbill.geometry("1150x500+150+150")
+        self.Fnewbill.geometry("1150x500")
+        center(self.Fnewbill)
+        self.Fnewbill.grab_set()
         self.Fnewbill.configure(background=colbg)
         
 
@@ -442,7 +444,7 @@ class allBills:
         self.Etext.bind('<KeyRelease>', self.search_call_bill)
 
 
-        # Frame 2 Table---------------------------------------------------------------------------------------
+        # Frame 2 Table-------------------------------------------------------------------------------------
         self.frame2=Frame(self.Fbills, bg=colbg)
         self.frame2.pack(fill=BOTH, expand=TRUE, padx=20)
 
@@ -549,7 +551,7 @@ class customerClass:
         self.Fcust=F
         
         # All Variables -------------------------------------------------------------------------------------
-
+        self.var1=""
 
         # Frame 1 Searching----------------------------------------------------------------------------------
         self.frame1=Frame(self.Fcust, bg=colbg)
@@ -1265,10 +1267,10 @@ notebook.add(f3, text="દવાની માહિતી")
 # Footer Frame ------------------------------------------------------------------------------------------------
 FFoot=Frame(root, bg=colbg, pady=5)
 FFoot.pack(side=BOTTOM, pady=10)
-Label(FFoot, text="Build with ", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg).pack(side=LEFT)
+Label(FFoot, text="Build with ", font=("MV Boli", 9, "bold"), fg="#264653", bg=colbg).pack(side=LEFT)
 #Label(FFoot, text="\U0001f394", font=("MV Boli", 12, "bold"), fg="red", bg=colbg).pack(side=LEFT)
 Label(FFoot, image=imgheart, bd=0).pack(side=LEFT)
-link1=Label(FFoot, text=" by Maganbhai (Divyesh Ranpariya, Mo. 9601500840) . JUST REMEMBER THE NAME .", font=("MV Boli", 10, "bold"), fg="#264653", bg=colbg)
+link1=Label(FFoot, text=" by Maganbhai (Divyesh Ranpariya, Mo. 9601500840) . JUST REMEMBER THE NAME .", font=("MV Boli", 9, "bold"), fg="#264653", bg=colbg)
 link1.pack(side=LEFT)
 link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh599/"))
 
