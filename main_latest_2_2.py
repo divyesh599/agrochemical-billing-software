@@ -347,6 +347,7 @@ class generateBill:
                          sql_data=sql_data+"'"+str(self.all_item[i][10])+"'),"
                     else:
                         sql_data=sql_data+"'"+str(self.all_item[i][j])+"',"
+            
             curr.execute("insert into subbilldetails (`BillDate`, `MobileNo`, `BillNo`, `PID`, `Description`, `Company`, `BatchNo`, `NetContent`, `SellPrice`, `Qty`, `Amount`) VALUES"+sql_data[:-1])
             curr.execute("insert into allbills values(%s, %s, %s, %s, %s, %s, %s)",
                             (self.billdate,
@@ -376,6 +377,185 @@ class generateBill:
 
 
 
+class billInfoClass:
+    def __init__(self, var1):
+        #---variables--------------------------------------
+        self.billdetail=var1
+        self.billdate=self.billdetail[0]
+        self.billno=self.billdetail[1]
+        self.all_item=[]
+
+
+        self.Fnewbill=Toplevel(root)
+        #self.Fnewbill.protocol("WM_DELETE_WINDOW", self.close_window)
+        self.Fnewbill.title("Add New Bill")
+        self.Fnewbill.geometry("1150x500")
+        center(self.Fnewbill)
+        self.Fnewbill.grab_set()
+        self.Fnewbill.configure(background=colbg)
+
+
+        #--------------Frame1-------------------------------------------------------------------------------
+        self.frame1=Frame(self.Fnewbill, bg=colbg)
+        self.frame1.pack(pady=5)
+
+        Label(self.frame1, text="બિલની તારીખ :", bg=colbg, anchor=E, width=15).pack(side=LEFT)
+        Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
+        Label(self.frame1, text="બિલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
+        Label(self.frame1, text=self.billno, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
+        #Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
+
+
+
+        #--------------Frame2-------------------------------------------------------------------------------
+        self.frame2=Frame(self.Fnewbill, bg=colbg)
+        self.frame2.pack(fill=X, pady=5, padx=10)
+
+        Label(self.frame2, text="* Search Customer :", bg=colbg, fg=colbtn, width=15, anchor=E).pack(side=LEFT)
+        self.ECust=Entry(self.frame2, bg=colbglight, bd=1, font="arial 10", fg="red", width=30)
+        self.ECust.pack(side=LEFT)
+        self.ECust.bind('<KeyRelease>', self.search_cust)
+
+        #--------------Customer SearchFrame1--------------
+        self.sFrame1=Frame(self.Fnewbill)
+
+        self.clistbox=Listbox(self.sFrame1, width=70, bg=colbglight)
+        self.clistbox.pack()
+        self.clistbox.bind("<Double-1>", self.cust_two_click_evt)
+        self.clistbox.bind("<<ListboxSelect>>", self.on_select_evt1)
+        Button(self.sFrame1, text="Add", command=self.add_cust_info).pack(fill=X)
+
+
+        #--------------Frame3--------------------------------------------------------------------------------
+        self.frame3=Frame(self.Fnewbill, bg=colbg)
+        self.frame3.pack(pady=5)
+
+        Label(self.frame3, text="નામ :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
+        self.cnamelbl=Label(self.frame3, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red")
+        self.cnamelbl.pack(side=LEFT)
+        Label(self.frame3, text="મોબાઈલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
+        self.mobilelbl=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
+        self.mobilelbl.pack(side=LEFT)
+        Label(self.frame3, text="ગામ :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
+        self.villagelbl=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
+        self.villagelbl.pack(side=LEFT)
+
+
+
+        #--------------Frame4----------------------------------------------------------------------------------
+        self.frame4=Frame(self.Fnewbill, bg=colbg)
+        self.frame4.pack(fill=X, pady=5, padx=10)
+
+        Label(self.frame4, text="Search Product :", bg=colbg, fg=colbtn, width=15, anchor=E).pack(side=LEFT)
+        self.EProd=Entry(self.frame4, bg=colbglight, bd=1, font="arial 10", fg="red", width=30)
+        self.EProd.bind('<KeyRelease>', self.search_prod)
+
+        #--------------Product SearchFrame2--------------
+        self.sFrame2=Frame(self.Fnewbill)
+
+        self.plistbox=Listbox(self.sFrame2, width=90, bg=colbglight)
+        self.plistbox.pack()
+        self.plistbox.bind("<Double-1>", self.prod_two_click_evt)
+        self.plistbox.bind("<<ListboxSelect>>", self.on_select_evt2)
+        Button(self.sFrame2, text="Add", command=self.add_prod_info).pack(fill=X)
+
+
+        # Frame 5 Table---------------------------------------------------------------------------------------
+        self.frame5=Frame(self.Fnewbill, bg=colbg)
+        self.frame5.pack(fill=X, padx=10)
+
+        #Treeview----------------start
+        self.tree=ttk.Treeview(self.frame5, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8"), show="headings", height=7)
+        self.tree.pack(fill=X, expand=TRUE, side=LEFT)
+
+        self.tree.column("#1", anchor=CENTER, width=30)
+        self.tree.column("#2", anchor=CENTER, width=200)
+        self.tree.column("#3", anchor=CENTER, width=150)
+        self.tree.column("#4", anchor=CENTER, width=80)
+        self.tree.column("#5", anchor=CENTER, width=90)
+        self.tree.column("#6", anchor=CENTER, width=80)
+        self.tree.column("#7", anchor=CENTER, width=80)
+        self.tree.column("#8", anchor=CENTER, width=80)
+        self.tree.heading("#1", text="PID")
+        self.tree.heading("#2", text="Product name")
+        self.tree.heading("#3", text="Company name")
+        self.tree.heading("#4", text="Batch no.")
+        self.tree.heading("#5", text="Net Content (ml/gm)")
+        self.tree.heading("#6", text="Selling price (Rs.)")
+        self.tree.heading("#7", text="Quantity")
+        self.tree.heading("#8", text="Amount (Rs.)")
+
+        self.v=Scrollbar(self.frame5, orient="vertical")
+        self.v.pack(side=LEFT, fill=Y)
+        self.v.config(command=self.tree.yview)
+
+        self.tree.configure(yscrollcommand=self.v.set)
+
+        self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        #Treeview----------------END
+
+
+        # Frame 6 Buttons------------------------------------------------------------------------------------
+        self.frame6=Frame(self.Fnewbill, bg=colbg)
+        self.frame6.pack(fill=X, padx=10)
+        Label(self.frame6, text="PID :", anchor=E, bg=colbg).pack(side=LEFT)
+        self.pidlbl=Label(self.frame6, text="", anchor=W, width=5, bg=colbg)
+        self.pidlbl.pack(side=LEFT)
+        Label(self.frame6, text="Selling Price :", anchor=E, width=10, bg=colbg).pack(side=LEFT)
+        self.Etree1=Entry(self.frame6, font="arial 10", bg=colbglight, fg="red", width=10, bd=1)
+        self.Etree1.pack(side=LEFT)
+        Label(self.frame6, text="Quantity :", anchor=E, width=10, bg=colbg).pack(side=LEFT)
+        self.Etree2=Entry(self.frame6, font="arial 10", bg=colbglight, fg="red", width=10, bd=1)
+        self.Etree2.pack(side=LEFT)
+        Button(self.frame6, text="Update", command=self.edit_into_table, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=2).pack(side=LEFT, padx=10)
+        Button(self.frame6, text="Delete", command=self.delete_into_table, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=2).pack(side=LEFT)
+        Label(self.frame6, text="* Including all taxes", font="arial 9 bold", bg=colbg).pack(side=RIGHT)
+
+
+        #--------------Frame7----------------------------------------------------------------------------------
+        self.frame7=Frame(self.Fnewbill, bg=colbg)
+        self.frame7.pack(pady=10)
+
+        Label(self.frame7, text="Total Amount :", anchor=E, width=15, bg=colbg).grid(row=0, column=0)
+        self.totalamonut=Label(self.frame7, text=0, font="arial 20 bold", bg=colbg, fg="red", anchor=W)
+        self.totalamonut.grid(row=0, column=1)
+        Label(self.frame7, text="Rs.", anchor=E, bg=colbg).grid(row=0, column=2)
+        Label(self.frame7, text="Cash / Debit :", anchor=E, width=15, bg=colbg).grid(row=1, column=0)
+        self.cd=ttk.Combobox(self.frame7, state="readonly")
+        self.cd.grid(row=1, column=1)
+        self.cd["values"]=("Cash", "Debit")
+        self.cd.current(1)
+
+
+        # Frame 8 Buttons------------------------------------------------------------------------------------
+        self.frame8=Frame(self.Fnewbill, bg=colbg)
+        self.frame8.pack(side=BOTTOM, pady=10)
+        Button(self.frame8, text="OK", command=self.create_bill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT, padx=10)
+        Button(self.frame8, text="Print", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT, padx=10)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -384,7 +564,7 @@ class allBills:
         self.Fbills=F
         
         # All Variables -------------------------------------------------------------------------------------
-
+        self.var1=""
 
 
         # Frame 1 Searching----------------------------------------------------------------------------------
@@ -426,7 +606,8 @@ class allBills:
 
         self.tree.configure(yscrollcommand=self.v.set)
 
-        #self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        self.tree.bind('<<TreeviewSelect>>', self.selectItem)
+        self.tree.bind("<Double-1>", self.double_click_event)
         #Treeview----------------END
 
         # Frame 3 Buttons------------------------------------------------------------------------------------
@@ -440,18 +621,20 @@ class allBills:
         self.show_all_bill()
 
 
-    def newBill(self):
-        obj=generateBill()
 
-    def editBill(self):
-        pass
-    def deleteBill(self):
-        pass
-    def billInfo(self):
-        pass
+    def selectItem(self, evt):
+        treeItem = self.tree.focus()
+        try:
+            self.var1=self.tree.item(treeItem)['values']
+        except:
+            self.var1=""
+    
+    def double_click_event(self, evt):
+        treeItem = self.tree.focus()
+        self.var1=self.tree.item(treeItem)['values']
+        self.billInfo()
 
-
-    def search_call_bill(self, e):
+    def search_call_bill(self, evt):
         if self.Etext.get() != "":
             conn=pymysql.connect(host="localhost",
                                 user="root",
@@ -485,6 +668,21 @@ class allBills:
             self.tree.insert("", END, values=row)
         conn.commit()
         conn.close()
+
+    def newBill(self):
+        obj_new_bill=generateBill()
+    def editBill(self):
+        pass
+    def deleteBill(self):
+        pass
+    def billInfo(self):
+        obj_bill_info=billInfoClass(self.var1)
+
+
+
+
+
+
 
 
 
@@ -600,9 +798,9 @@ class customerClass:
             self.show_all_cust()
 
     def newCust(self):
-        obj=modifyCust("")
+        obj_new_cust=modifyCust("")
     def editCust(self):
-        obj=modifyCust(self.var1)
+        obj_edit_cust=modifyCust(self.var1)
     def deleteCust(self):
         pass
     def custInfo(self):
@@ -858,11 +1056,11 @@ class productClass:
             self.show_all_prod()
 
     def newProd(self):
-        ogj=modifyProd("")
+        ogj_new_prod=modifyProd("")
     def editProd(self):
-        ogj=modifyProd(self.var1)
+        ogj_edit_prod=modifyProd(self.var1)
     def deleteProd(self):
-        obj=modifyProd(self.var1)
+        obj_delete_prod=modifyProd(self.var1)
 
 
 
