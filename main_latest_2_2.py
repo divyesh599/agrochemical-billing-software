@@ -28,22 +28,22 @@ class generateBill:
 
         #--------------Frame1-------------------------------------------------------------------------------
         self.frame1=Frame(self.Fnewbill, bg=colbg)
-        self.frame1.place(x=698, y=10)
+        self.frame1.pack(pady=5)
 
-        Label(self.frame1, text="બિલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT, pady=10)
-        Label(self.frame1, text=self.billno, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=12).pack(side=LEFT)
-        Label(self.frame1, text="બિલની તારીખ :", bg=colbg, anchor=E, width=12).pack(side=LEFT)
+        Label(self.frame1, text="બિલની તારીખ :", bg=colbg, anchor=E, width=15).pack(side=LEFT)
         Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
+        Label(self.frame1, text="બિલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
+        Label(self.frame1, text=self.billno, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
         #Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
 
 
         #--------------Frame2-------------------------------------------------------------------------------
         self.frame2=Frame(self.Fnewbill, bg=colbg)
-        self.frame2.place(x=0, y=70)
+        self.frame2.pack(fill=X, pady=5, padx=10)     #.place(x=0, y=70)
 
-        Label(self.frame2, text="Search Customer * :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
-        self.ECust=Entry(self.frame2, font="arial 10", fg="red", width=30, bd=2)
-        self.ECust.grid(row=0, column=1, columnspan=2, sticky=W)
+        Label(self.frame2, text="* Search Customer :", bg=colbg, fg=colbtn, width=15, anchor=E).pack(side=LEFT)
+        self.ECust=Entry(self.frame2, bg="#cfe2d3", bd=1, font="arial 10", fg="red", width=30)
+        self.ECust.pack(side=LEFT)
         self.ECust.bind('<KeyRelease>', self.search_call_cust)
 
 
@@ -59,26 +59,25 @@ class generateBill:
 
         #--------------Frame3--------------------------------------------------------------------------------
         self.frame3=Frame(self.Fnewbill, bg=colbg)
-        self.frame3.place(x=340, y=70)
+        self.frame3.pack(pady=5)      #.place(x=340, y=70)
 
-        Label(self.frame3, text="નામ :", anchor=E, width=15, bg=colbg).grid(row=0, column=0)
+        Label(self.frame3, text="નામ :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
         self.cnamelbl=Label(self.frame3, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red")
-        self.cnamelbl.grid(row=0, column=1)
-        Label(self.frame3, text="મોબાઈલ નંબર :", anchor=E, width=15, bg=colbg).grid(row=0, column=2)
-        self.mobilelbl=Label(self.frame3, anchor=W, width=12, font="arial 10 bold", bg=colbg, fg="red")
-        self.mobilelbl.grid(row=0, column=3)
-        Label(self.frame3, text="ગામ :", anchor=E, width=12, bg=colbg).grid(row=0, column=4)
+        self.cnamelbl.pack(side=LEFT)
+        Label(self.frame3, text="મોબાઈલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
+        self.mobilelbl=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
+        self.mobilelbl.pack(side=LEFT)
+        Label(self.frame3, text="ગામ :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
         self.villagelbl=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
-        self.villagelbl.grid(row=0, column=5)
+        self.villagelbl.pack(side=LEFT)
 
 
         #--------------Frame4----------------------------------------------------------------------------------
         self.frame4=Frame(self.Fnewbill, bg=colbg)
-        self.frame4.place(x=0, y=110)
+        self.frame4.pack(fill=X, pady=5, padx=10) #place(x=0, y=110)
 
-        Label(self.frame4, text="Search Product    :", bg=colbg, fg=colbtn).grid(row=0, column=0, sticky=W, padx=10)
-        self.EProd=Entry(self.frame4, font="arial 10", fg="red", width=30, bd=2, state="disabled")
-        self.EProd.grid(row=0, column=1, columnspan=2, sticky=W)
+        Label(self.frame4, text="Search Product :", bg=colbg, fg=colbtn, width=15, anchor=E).pack(side=LEFT)
+        self.EProd=Entry(self.frame4, bg="#cfe2d3", bd=1, font="arial 10", fg="red", width=30)
         self.EProd.bind('<KeyRelease>', self.search_call_prod)
 
         #--------------Product SearchFrame2--------------
@@ -267,13 +266,14 @@ class generateBill:
         conn.close()
         self.ECust.delete(0, END)
         self.sFrame1.place_forget()
-        self.EProd.config(state="normal")
+        #self.EProd.config(state="normal")
+        self.EProd.pack(side=LEFT)
 
 
     def search_call_cust(self, e):
         if self.ECust.get() != "":
             self.sFrame1.lift()
-            self.sFrame1.place(x=122, y=93)
+            self.sFrame1.place(x=120, y=58)
             conn=pymysql.connect(host="localhost",
                                 user="root",
                                 password="",
@@ -343,7 +343,7 @@ class generateBill:
     def search_call_prod(self, e):
         if self.EProd.get() != "":
             self.sFrame2.lift()
-            self.sFrame2.place(x=122, y=133)
+            self.sFrame2.place(x=120, y=121)
             conn=pymysql.connect(host="localhost",
                                 user="root",
                                 password="",
@@ -1278,7 +1278,7 @@ link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh5
 
 
 
-
+ogj=generateBill()
 
 
 root.mainloop()
