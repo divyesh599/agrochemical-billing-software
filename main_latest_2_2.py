@@ -378,10 +378,10 @@ class generateBill:
 
 
 class billInfoClass:
-    def __init__(self, list1, var1):
+    def __init__(self, var1, var2):
         #---variables--------------------------------------
-        self.billdetail=list1
-        self.var1=var1
+        self.billdetail=var1
+        self.var2=var2
         self.billdate=self.billdetail[0]
         self.billno=self.billdetail[1]
 
@@ -471,7 +471,7 @@ class billInfoClass:
         self.frame6=Frame(self.Fbillinfo, bg=colbg)
         self.frame6.pack(side=BOTTOM, pady=20)
         Button(self.frame6, text="Print", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT, padx=5)
-        if self.var1==0:
+        if self.var2==0:
             Button(self.frame6, text="Delete", command=self.bill_info_delete, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT, padx=5)
 
         self.show_all_item()
@@ -641,7 +641,7 @@ class allBills:
     def newBill(self):
         obj_new_bill=generateBill()
     def editBill(self):
-        pass
+        obj_edit_bill=instructionClass("You can not edit into Bill. You must need Admin access.")
     def deleteBill(self):
         obj_delete_bill=billInfoClass(self.var1, 0)
     def billInfo(self):
@@ -719,7 +719,7 @@ class customerClass:
         self.frame3.pack(fill=X, side=LEFT, padx=20)
         Button(self.frame3, text="New", command=self.newCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
         Button(self.frame3, text="Edit", command=self.editCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
-        #Button(self.frame3, text="Delete", command=self.deleteCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        Button(self.frame3, text="Delete", command=self.deleteCust, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
         Button(self.frame3, text="Info", command=self.custInfo, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
 
     def selectItem(self, a):
@@ -771,7 +771,7 @@ class customerClass:
     def editCust(self):
         obj_edit_cust=modifyCust(self.var1)
     def deleteCust(self):
-        pass
+        obj_delete_cust=instructionClass("You can not Delete Customer Data. You must need Admin access.")
     def custInfo(self):
         pass
 
@@ -1174,6 +1174,24 @@ class modifyProd:
 
 
 
+
+
+class instructionClass:
+    def __init__(self, msg):
+        self.msg=msg
+
+        self.Fmessage=Toplevel(root)
+        self.Fmessage.title("Instruction")
+        self.Fmessage.geometry("600x150")
+        center(self.Fmessage)
+        self.Fmessage.grab_set()
+        self.Fmessage.configure(background=colbg)
+
+        Label(self.Fmessage, text=self.msg, font="arial 10 bold", bg=colbg, fg=col1).pack(fill=BOTH, expand=True, padx=5, pady=10)
+        Button(self.Fmessage, text="OK", command=self.ok, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=3).pack(side=BOTTOM, pady=10)
+
+    def ok(self):
+        self.Fmessage.destroy()
 
 
 
