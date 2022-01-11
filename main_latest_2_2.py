@@ -643,9 +643,15 @@ class allBills:
     def editBill(self):
         obj_edit_bill=instructionClass("You can not edit into Bill. You must need Admin access.")
     def deleteBill(self):
-        obj_delete_bill=billInfoClass(self.var1, 0)
+        if self.var1 != "":
+            obj_delete_bill=billInfoClass(self.var1, 0)
+        else:
+            obj_delete_bill=instructionClass("Please, Select one Bill item from table.")
     def billInfo(self):
-        obj_bill_info=billInfoClass(self.var1, 1)
+        if self.var1 != "":
+            obj_bill_info=billInfoClass(self.var1, 1)
+        else:
+            obj_delete_bill=instructionClass("Please, Select one Bill item from table.")
 
 
 
