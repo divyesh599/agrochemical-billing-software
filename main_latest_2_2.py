@@ -213,7 +213,6 @@ class generateBill:
                     self.all_item[i][10]=int(self.Etree1.get())*int(self.Etree2.get())
         self.total_sum_amount()
         self.update_tree()
-        print(self.all_item)
 
 
     def delete_into_table(self):
