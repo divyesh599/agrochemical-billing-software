@@ -9,7 +9,7 @@ import webbrowser
 
 class generateBill:
     def __init__(self):
-        #---variables------
+        #---variables--------------------------------------
         self.cdate=datetime.datetime.now()
         self.selectedC=""
         self.selectedP=""
@@ -38,6 +38,7 @@ class generateBill:
         #Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
 
 
+
         #--------------Frame2-------------------------------------------------------------------------------
         self.frame2=Frame(self.Fnewbill, bg=colbg)
         self.frame2.pack(fill=X, pady=5, padx=10)
@@ -46,7 +47,6 @@ class generateBill:
         self.ECust=Entry(self.frame2, bg=colbglight, bd=1, font="arial 10", fg="red", width=30)
         self.ECust.pack(side=LEFT)
         self.ECust.bind('<KeyRelease>', self.search_cust)
-
 
         #--------------Customer SearchFrame1--------------
         self.sFrame1=Frame(self.Fnewbill)
@@ -71,6 +71,7 @@ class generateBill:
         Label(self.frame3, text="ગામ :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
         self.villagelbl=Label(self.frame3, anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red")
         self.villagelbl.pack(side=LEFT)
+
 
 
         #--------------Frame4----------------------------------------------------------------------------------
@@ -125,6 +126,7 @@ class generateBill:
         self.tree.bind('<<TreeviewSelect>>', self.selectItem)
         #Treeview----------------END
 
+
         # Frame 6 Buttons------------------------------------------------------------------------------------
         self.frame6=Frame(self.Fnewbill, bg=colbg)
         self.frame6.pack(fill=X, padx=10)
@@ -157,9 +159,6 @@ class generateBill:
         self.cd.current(1)
 
 
-
-
-
         # Frame 8 Buttons------------------------------------------------------------------------------------
         self.frame8=Frame(self.Fnewbill, bg=colbg)
         self.frame8.pack(side=BOTTOM, pady=10)
@@ -168,27 +167,47 @@ class generateBill:
 
 
 
+    def search_cust(self, evt):
+        if self.ECust.get() != "":
+            self.sFrame1.lift()
+            self.sFrame1.place(x=120, y=58)
+            conn=pymysql.connect(host="localhost",
+                                user="root",
+                                password="",
+                                database="Database23Nov")
+            curr=conn.cursor()
+            varx=self.ECust.get()
+            curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
+            clist=curr.fetchall()
+            self.clistbox.delete(0, END)
+            if len(clist)!=0:
+                for row in clist:
+                    s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]+"    "+str(row[5])+" Rs."
+                    self.clistbox.insert("end", s)
+        else:
+            self.sFrame1.place_forget()
 
-    def create_bill(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database23Nov")
-        curr=conn.cursor()
-        if self.mobilelbl["text"] != "":
-            curr.execute("insert into subbilldetails select * from tempsubbill")
-            curr.execute("insert into allbills values(%s, %s, %s, %s, %s, %s, %s)",
-                            (self.billdate,
-                            self.billno,
-                            self.mobilelbl["text"],
-                            self.cnamelbl["text"],
-                            self.villagelbl["text"],
-                            self.cd.get(),
-                            self.totalamonut["text"])
-                        )
-            conn.commit()
-            conn.close()
-        
+
+    def search_prod(self, e):
+        if self.EProd.get() != "":
+            self.sFrame2.lift()
+            self.sFrame2.place(x=120, y=121)
+            conn=pymysql.connect(host="localhost",
+                                user="root",
+                                password="",
+                                database="Database23Nov")
+            curr=conn.cursor()
+            varx=self.EProd.get()
+            curr.execute("select * from productdata where PName LIKE '%"+ varx +"%' OR TechName LIKE '%"+ varx +"%' OR Company LIKE '%"+ varx +"%' OR BatchNo LIKE '%"+ varx +"%'")
+            plist=curr.fetchall()
+            self.plistbox.delete(0, END)
+            if len(plist)!=0:
+                for row in plist:
+                    s=str(row[0])+"    "+row[1]+" "+row[2]+"    "+row[3]+"    "+row[4]+"    "+str(row[5])+" ml/gm"      #+"    "+str(row[7])+" Rs."
+                    self.plistbox.insert("end", s)
+        else:
+            self.sFrame2.place_forget()
+
 
     def selectItem(self, evt):
         treeItem = self.tree.focus()
@@ -211,20 +230,17 @@ class generateBill:
                     self.all_item[i][8]=int(self.Etree1.get())
                     self.all_item[i][9]=int(self.Etree2.get())
                     self.all_item[i][10]=int(self.Etree1.get())*int(self.Etree2.get())
+                    break
         self.total_sum_amount()
         self.update_tree()
 
 
     def delete_into_table(self):
         if self.pidlbl["text"] !="":
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="Database23Nov")
-            curr=conn.cursor()
-            curr.execute("DELETE FROM tempsubbill WHERE PID="+str(self.pidlbl["text"]))
-            conn.commit()
-            conn.close()
+            for i in range(len(self.all_item)):
+                if self.all_item[i][3]==int(self.pidlbl["text"]):
+                    self.all_item.pop(i)
+                    break
         self.total_sum_amount()
         self.update_tree()
 
@@ -260,27 +276,6 @@ class generateBill:
         self.ECust.delete(0, END)
         self.sFrame1.place_forget()
         self.EProd.pack(side=LEFT)
-
-
-    def search_cust(self, evt):
-        if self.ECust.get() != "":
-            self.sFrame1.lift()
-            self.sFrame1.place(x=120, y=58)
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="Database23Nov")
-            curr=conn.cursor()
-            varx=self.ECust.get()
-            curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
-            clist=curr.fetchall()
-            self.clistbox.delete(0, END)
-            if len(clist)!=0:
-                for row in clist:
-                    s=str(row[0])+"    "+row[1]+" "+row[2]+" "+row[3]+"    "+row[4]+"    "+str(row[5])+" Rs."
-                    self.clistbox.insert("end", s)
-        else:
-            self.sFrame1.place_forget()
 
 
     def prod_two_click_evt(self, evt):
@@ -324,27 +319,6 @@ class generateBill:
         self.sFrame2.place_forget()
 
 
-    def search_prod(self, e):
-        if self.EProd.get() != "":
-            self.sFrame2.lift()
-            self.sFrame2.place(x=120, y=121)
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="Database23Nov")
-            curr=conn.cursor()
-            varx=self.EProd.get()
-            curr.execute("select * from productdata where PName LIKE '%"+ varx +"%' OR TechName LIKE '%"+ varx +"%' OR Company LIKE '%"+ varx +"%' OR BatchNo LIKE '%"+ varx +"%'")
-            plist=curr.fetchall()
-            self.plistbox.delete(0, END)
-            if len(plist)!=0:
-                for row in plist:
-                    s=str(row[0])+"    "+row[1]+" "+row[2]+"    "+row[3]+"    "+row[4]+"    "+str(row[5])+" ml/gm"      #+"    "+str(row[7])+" Rs."
-                    self.plistbox.insert("end", s)
-        else:
-            self.sFrame2.place_forget()
-
-
     def update_tree(self):
         self.tree.delete(*self.tree.get_children())
         for row in self.all_item:
@@ -358,8 +332,36 @@ class generateBill:
         self.totalamonut.config(text=total)
 
 
-    """def close_window(self):
-        self.Fnewbill.destroy()"""
+    def create_bill(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        if len(self.all_item) !=0:
+            sql_data=""
+            for i in range(len(self.all_item)):
+                sql_data+="("
+                for j in range(11):
+                    if j == 10:
+                         sql_data=sql_data+"'"+str(self.all_item[i][10])+"'),"
+                    else:
+                        sql_data=sql_data+"'"+str(self.all_item[i][j])+"',"
+            curr.execute("insert into subbilldetails (`BillDate`, `MobileNo`, `BillNo`, `PID`, `Description`, `Company`, `BatchNo`, `NetContent`, `SellPrice`, `Qty`, `Amount`) VALUES"+sql_data[:-1])
+            curr.execute("insert into allbills values(%s, %s, %s, %s, %s, %s, %s)",
+                            (self.billdate,
+                            self.billno,
+                            self.mobilelbl["text"],
+                            self.cnamelbl["text"],
+                            self.villagelbl["text"],
+                            self.cd.get(),
+                            self.totalamonut["text"])
+                        )
+            conn.commit()
+            conn.close()
+        self.Fnewbill.destroy()
+        objf1.show_all_bill()
+
 
 
 
@@ -1230,7 +1232,7 @@ link1.bind("<Button-1>", lambda e: callfooter("https://www.facebook.com/divyesh5
 
 
 
-ogj=generateBill()
+
 
 
 root.mainloop()
