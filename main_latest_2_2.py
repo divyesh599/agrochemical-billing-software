@@ -1297,7 +1297,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.subbilldetails\
     Qty INT,\
     Amount INT,\
     PRIMARY KEY (BillNo, PID))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.tempsubbill\
+"""curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.tempsubbill\
     (BillDate VARCHAR(20),\
     MobileNo BIGINT,\
     BillNo BIGINT,\
@@ -1309,7 +1309,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.tempsubbill\
     SellPrice INT,\
     Qty INT,\
     Amount INT,\
-    PRIMARY KEY (BillNo, PID))")
+    PRIMARY KEY (BillNo, PID))")"""
 conn.commit()
 conn.close()
 
