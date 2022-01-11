@@ -15,6 +15,7 @@ class generateBill:
         self.selectedP=""
         self.billno=self.cdate.strftime("%y%m%d%H%M")
         self.billdate=self.cdate.strftime("%d %b %Y")
+        self.all_item=[]
 
 
         self.Fnewbill=Toplevel(root)
@@ -24,7 +25,7 @@ class generateBill:
         center(self.Fnewbill)
         self.Fnewbill.grab_set()
         self.Fnewbill.configure(background=colbg)
-        
+
 
         #--------------Frame1-------------------------------------------------------------------------------
         self.frame1=Frame(self.Fnewbill, bg=colbg)
@@ -39,27 +40,27 @@ class generateBill:
 
         #--------------Frame2-------------------------------------------------------------------------------
         self.frame2=Frame(self.Fnewbill, bg=colbg)
-        self.frame2.pack(fill=X, pady=5, padx=10)     #.place(x=0, y=70)
+        self.frame2.pack(fill=X, pady=5, padx=10)
 
         Label(self.frame2, text="* Search Customer :", bg=colbg, fg=colbtn, width=15, anchor=E).pack(side=LEFT)
-        self.ECust=Entry(self.frame2, bg="#cfe2d3", bd=1, font="arial 10", fg="red", width=30)
+        self.ECust=Entry(self.frame2, bg=colbglight, bd=1, font="arial 10", fg="red", width=30)
         self.ECust.pack(side=LEFT)
-        self.ECust.bind('<KeyRelease>', self.search_call_cust)
+        self.ECust.bind('<KeyRelease>', self.search_cust)
 
 
         #--------------Customer SearchFrame1--------------
         self.sFrame1=Frame(self.Fnewbill)
 
-        self.clistbox=Listbox(self.sFrame1, width=70)
+        self.clistbox=Listbox(self.sFrame1, width=70, bg=colbglight)
         self.clistbox.pack()
-        self.clistbox.bind("<Double-1>", self.on2clickL1)
-        self.clistbox.bind("<<ListboxSelect>>", self.onSelectL1)
-        Button(self.sFrame1, text="Add", command=self.addCustInfo).pack(fill=X)
+        self.clistbox.bind("<Double-1>", self.cust_two_click_evt)
+        self.clistbox.bind("<<ListboxSelect>>", self.on_select_evt1)
+        Button(self.sFrame1, text="Add", command=self.add_cust_info).pack(fill=X)
 
 
         #--------------Frame3--------------------------------------------------------------------------------
         self.frame3=Frame(self.Fnewbill, bg=colbg)
-        self.frame3.pack(pady=5)      #.place(x=340, y=70)
+        self.frame3.pack(pady=5)
 
         Label(self.frame3, text="નામ :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
         self.cnamelbl=Label(self.frame3, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red")
@@ -74,29 +75,29 @@ class generateBill:
 
         #--------------Frame4----------------------------------------------------------------------------------
         self.frame4=Frame(self.Fnewbill, bg=colbg)
-        self.frame4.pack(fill=X, pady=5, padx=10) #place(x=0, y=110)
+        self.frame4.pack(fill=X, pady=5, padx=10)
 
         Label(self.frame4, text="Search Product :", bg=colbg, fg=colbtn, width=15, anchor=E).pack(side=LEFT)
-        self.EProd=Entry(self.frame4, bg="#cfe2d3", bd=1, font="arial 10", fg="red", width=30)
-        self.EProd.bind('<KeyRelease>', self.search_call_prod)
+        self.EProd=Entry(self.frame4, bg=colbglight, bd=1, font="arial 10", fg="red", width=30)
+        self.EProd.bind('<KeyRelease>', self.search_prod)
 
         #--------------Product SearchFrame2--------------
         self.sFrame2=Frame(self.Fnewbill)
 
-        self.plistbox=Listbox(self.sFrame2, width=90)
+        self.plistbox=Listbox(self.sFrame2, width=90, bg=colbglight)
         self.plistbox.pack()
-        self.plistbox.bind("<Double-1>", self.on2clickL2)
-        self.plistbox.bind("<<ListboxSelect>>", self.onSelectL2)
-        Button(self.sFrame2, text="Add", command=self.addProdInfo).pack(fill=X)
+        self.plistbox.bind("<Double-1>", self.prod_two_click_evt)
+        self.plistbox.bind("<<ListboxSelect>>", self.on_select_evt2)
+        Button(self.sFrame2, text="Add", command=self.add_prod_info).pack(fill=X)
 
 
         # Frame 5 Table---------------------------------------------------------------------------------------
         self.frame5=Frame(self.Fnewbill, bg=colbg)
-        self.frame5.place(x=10, y=150, relwidth=1, height=470)
+        self.frame5.pack(fill=X, padx=10)
 
         #Treeview----------------start
         self.tree=ttk.Treeview(self.frame5, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8"), show="headings", height=7)
-        self.tree.place(x=0, y=0, width=1110)
+        self.tree.pack(fill=X, expand=TRUE, side=LEFT)
 
         self.tree.column("#1", anchor=CENTER, width=30)
         self.tree.column("#2", anchor=CENTER, width=200)
@@ -116,57 +117,56 @@ class generateBill:
         self.tree.heading("#8", text="Amount (Rs.)")
 
         self.v=Scrollbar(self.frame5, orient="vertical")
-        self.v.place(x=1110, y=0, height=170)
+        self.v.pack(side=LEFT, fill=Y)
         self.v.config(command=self.tree.yview)
 
-        '''self.h=Scrollbar(self.frame2, orient="horizontal")
-        self.h.place(x=0, y=465, width=763)
-        self.h.config(command=self.tree.xview)'''
-        self.tree.configure(yscrollcommand=self.v.set) #xscrollcommand=self.h.set
+        self.tree.configure(yscrollcommand=self.v.set)
 
         self.tree.bind('<<TreeviewSelect>>', self.selectItem)
-        #self.show_all_product()
         #Treeview----------------END
 
-
-        #--------------Frame6----------------------------------------------------------------------------------
+        # Frame 6 Buttons------------------------------------------------------------------------------------
         self.frame6=Frame(self.Fnewbill, bg=colbg)
-        self.frame6.place(x=820, y=330)
+        self.frame6.pack(fill=X, padx=10)
+        Label(self.frame6, text="PID :", anchor=E, bg=colbg).pack(side=LEFT)
+        self.pidlbl=Label(self.frame6, text="", anchor=W, width=5, bg=colbg)
+        self.pidlbl.pack(side=LEFT)
+        Label(self.frame6, text="Selling Price :", anchor=E, width=10, bg=colbg).pack(side=LEFT)
+        self.Etree1=Entry(self.frame6, font="arial 10", bg=colbglight, fg="red", width=10, bd=1)
+        self.Etree1.pack(side=LEFT)
+        Label(self.frame6, text="Quantity :", anchor=E, width=10, bg=colbg).pack(side=LEFT)
+        self.Etree2=Entry(self.frame6, font="arial 10", bg=colbglight, fg="red", width=10, bd=1)
+        self.Etree2.pack(side=LEFT)
+        Button(self.frame6, text="Update", command=self.edit_into_table, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=2).pack(side=LEFT, padx=10)
+        Button(self.frame6, text="Delete", command=self.delete_into_table, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=2).pack(side=LEFT)
+        Label(self.frame6, text="* Including all taxes", font="arial 9 bold", bg=colbg).pack(side=RIGHT)
 
-        Label(self.frame6, text="Total Amount :", anchor=E, width=15, bg=colbg).grid(row=0, column=0)
-        self.totalamonut=Label(self.frame6, text=0, font="arial 20 bold", bg=colbg, fg="red", anchor=W)
+
+        #--------------Frame7----------------------------------------------------------------------------------
+        self.frame7=Frame(self.Fnewbill, bg=colbg)
+        self.frame7.pack(pady=10)
+
+        Label(self.frame7, text="Total Amount :", anchor=E, width=15, bg=colbg).grid(row=0, column=0)
+        self.totalamonut=Label(self.frame7, text=0, font="arial 20 bold", bg=colbg, fg="red", anchor=W)
         self.totalamonut.grid(row=0, column=1)
-        Label(self.frame6, text="Rs.", anchor=E, bg=colbg).grid(row=0, column=2)
-        Label(self.frame6, text="Cash / Debit :", anchor=E, width=15, bg=colbg).grid(row=1, column=0)
-        self.cd=ttk.Combobox(self.frame6, state="readonly")
+        Label(self.frame7, text="Rs.", anchor=E, bg=colbg).grid(row=0, column=2)
+        Label(self.frame7, text="Cash / Debit :", anchor=E, width=15, bg=colbg).grid(row=1, column=0)
+        self.cd=ttk.Combobox(self.frame7, state="readonly")
         self.cd.grid(row=1, column=1)
         self.cd["values"]=("Cash", "Debit")
         self.cd.current(1)
 
 
-        # Frame 7 Buttons------------------------------------------------------------------------------------
-        self.frame7=Frame(self.Fnewbill, bg=colbg)
-        self.frame7.place(x=10, y=320)
-        Label(self.frame7, text="PID :", anchor=E, width=5, bg=colbg).grid(row=0, column=0)
-        self.pidlbl=Label(self.frame7, text="", anchor=W, width=5, bg=colbg)
-        self.pidlbl.grid(row=0, column=1)
-        Label(self.frame7, text="Selling Price :", anchor=E, width=10, bg=colbg).grid(row=0, column=2)
-        self.Etree1=Entry(self.frame7, font="arial 10", fg="red", width=10, bd=2)
-        self.Etree1.grid(row=0, column=3, padx=10)
-        Label(self.frame7, text="Quantity :", anchor=E, width=10, bg=colbg).grid(row=0, column=4)
-        self.Etree2=Entry(self.frame7, font="arial 10", fg="red", width=10, bd=2)
-        self.Etree2.grid(row=0, column=5, padx=10)
-        Button(self.frame7, text="Edit", command=self.edit_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=2).grid(row=0, column=6)
-        Button(self.frame7, text="Delete", command=self.delete_into_tableI, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=2).grid(row=0, column=7)
+
 
 
         # Frame 8 Buttons------------------------------------------------------------------------------------
         self.frame8=Frame(self.Fnewbill, bg=colbg)
-        self.frame8.place(x=900, y=450)
-        Button(self.frame8, text="OK", command=self.create_bill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
-        Button(self.frame8, text="Print", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT)
+        self.frame8.pack(side=BOTTOM, pady=10)
+        Button(self.frame8, text="OK", command=self.create_bill, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT, padx=10)
+        Button(self.frame8, text="Print", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=5).pack(side=LEFT, padx=10)
 
-        self.clear_tempbill_table()
+
 
 
     def create_bill(self):
@@ -188,10 +188,9 @@ class generateBill:
                         )
             conn.commit()
             conn.close()
-            self.close_window()
         
 
-    def selectItem(self, e):
+    def selectItem(self, evt):
         treeItem = self.tree.focus()
         try:
             self.pidlbl.config(text=self.tree.item(treeItem)['values'][0])
@@ -205,24 +204,19 @@ class generateBill:
             self.Etree2.delete(0,END)
 
 
-    def edit_into_tableI(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database23Nov")
-        curr=conn.cursor()
+    def edit_into_table(self):
         if self.pidlbl["text"] !="":
-            curr.execute("UPDATE tempsubbill SET Qty="+self.Etree2.get()
-                        +", SellPrice="+self.Etree1.get()
-                        +", Amount="+str(int(self.Etree1.get())*int(self.Etree2.get()))
-                        +" WHERE PID="+str(self.pidlbl["text"]))
-        conn.commit()
-        conn.close()
+            for i in range(len(self.all_item)):
+                if self.all_item[i][3]==int(self.pidlbl["text"]):
+                    self.all_item[i][8]=int(self.Etree1.get())
+                    self.all_item[i][9]=int(self.Etree2.get())
+                    self.all_item[i][10]=int(self.Etree1.get())*int(self.Etree2.get())
         self.total_sum_amount()
-        self.show_tempbill()
+        self.update_tree()
+        print(self.all_item)
 
 
-    def delete_into_tableI(self):
+    def delete_into_table(self):
         if self.pidlbl["text"] !="":
             conn=pymysql.connect(host="localhost",
                                 user="root",
@@ -233,23 +227,23 @@ class generateBill:
             conn.commit()
             conn.close()
         self.total_sum_amount()
-        self.show_tempbill()
+        self.update_tree()
 
 
-    def on2clickL1(self, evt):
+    def cust_two_click_evt(self, evt):
         varx=self.clistbox.curselection()
         if varx:
             self.selectedC=self.clistbox.get(varx)[:10]
-        self.addCustInfo()
+        self.add_cust_info()
 
 
-    def onSelectL1(self, evt):
+    def on_select_evt1(self, evt):
         varx=self.clistbox.curselection()
         if varx:
             self.selectedC=self.clistbox.get(varx)[:10]
 
 
-    def addCustInfo(self):
+    def add_cust_info(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
@@ -266,11 +260,10 @@ class generateBill:
         conn.close()
         self.ECust.delete(0, END)
         self.sFrame1.place_forget()
-        #self.EProd.config(state="normal")
         self.EProd.pack(side=LEFT)
 
 
-    def search_call_cust(self, e):
+    def search_cust(self, evt):
         if self.ECust.get() != "":
             self.sFrame1.lift()
             self.sFrame1.place(x=120, y=58)
@@ -291,22 +284,22 @@ class generateBill:
             self.sFrame1.place_forget()
 
 
-    def on2clickL2(self, evt):
+    def prod_two_click_evt(self, evt):
         varx=self.plistbox.curselection()
         if varx:
             i=self.plistbox.get(varx).index(" ")
             self.selectedP=self.plistbox.get(varx)[:i]
-        self.addProdInfo()
+        self.add_prod_info()
 
 
-    def onSelectL2(self, evt):
+    def on_select_evt2(self, evt):
         varx=self.plistbox.curselection()
         if varx:
             i=self.plistbox.get(varx).index(" ")
             self.selectedP=self.plistbox.get(varx)[:i]
 
 
-    def addProdInfo(self):
+    def add_prod_info(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
@@ -315,32 +308,24 @@ class generateBill:
         if self.selectedP!="":
             curr.execute("select * from productdata where PID="+self.selectedP)
             plist=curr.fetchall()
-            if len(plist)!=0:
-                try:
-                    curr.execute("insert into tempsubbill values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                                    (self.billdate,
-                                    self.mobilelbl["text"],
-                                    self.billno,
-                                    plist[0][0],
-                                    plist[0][1]+ "  " +plist[0][2],
-                                    plist[0][3],
-                                    plist[0][4],
-                                    plist[0][5],
-                                    plist[0][7],
-                                    1,
-                                    plist[0][7])
-                                )
-                except pymysql.err.Error as e:
-                    pass
+            plist=list(plist[0])
+            
+            flag=True
+            for i in range(len(self.all_item)):
+                if self.all_item[i][3]==plist[0]:
+                    flag=False
+                    break
+            if flag:
+                self.all_item.append([self.billdate, self.mobilelbl["text"], self.billno, plist[0], plist[1]+" "+plist[2], plist[3], plist[4], plist[5], plist[7], 1, plist[7]])
         conn.commit()
         conn.close()
         self.total_sum_amount()
-        self.show_tempbill()
+        self.update_tree()
         self.EProd.delete(0, END)
         self.sFrame2.place_forget()
 
 
-    def search_call_prod(self, e):
+    def search_prod(self, e):
         if self.EProd.get() != "":
             self.sFrame2.lift()
             self.sFrame2.place(x=120, y=121)
@@ -355,60 +340,27 @@ class generateBill:
             self.plistbox.delete(0, END)
             if len(plist)!=0:
                 for row in plist:
-                    s=str(row[0])+"    "+row[1]+" "+row[2]+"    "+row[3]+"    "+row[4]+"    "+str(row[5])+" ml/gm"+"    "+str(row[7])+" Rs."
+                    s=str(row[0])+"    "+row[1]+" "+row[2]+"    "+row[3]+"    "+row[4]+"    "+str(row[5])+" ml/gm"      #+"    "+str(row[7])+" Rs."
                     self.plistbox.insert("end", s)
         else:
             self.sFrame2.place_forget()
 
 
-    def show_tempbill(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database23Nov")
-        curr=conn.cursor()
-        curr.execute("select * from tempsubbill")
-        plist=curr.fetchall()
+    def update_tree(self):
         self.tree.delete(*self.tree.get_children())
-        for row in plist:
+        for row in self.all_item:
             self.tree.insert("", END, values=row[3:])
-        conn.commit()
-        conn.close()
 
 
     def total_sum_amount(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database23Nov")
-        curr=conn.cursor()
-        try:
-            curr.execute("select sum(Amount) from tempsubbill")
-            total=curr.fetchall()
-            if total[0][0] != None:
-                self.totalamonut.config(text=total[0][0])
-            else:
-                self.totalamonut.config(text=0)
-        except pymysql.err.Error as e:
-            pass
-        conn.commit()
-        conn.close()
+        total=0
+        for i in range(len(self.all_item)):
+            total+=self.all_item[i][-1]
+        self.totalamonut.config(text=total)
 
 
-    def clear_tempbill_table(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database23Nov")
-        curr=conn.cursor()
-        curr.execute("TRUNCATE TABLE tempsubbill")
-        conn.commit()
-        conn.close()
-
-
-    def close_window(self):
-        self.clear_tempbill_table()
-        self.Fnewbill.destroy()
+    """def close_window(self):
+        self.Fnewbill.destroy()"""
 
 
 
@@ -560,7 +512,7 @@ class customerClass:
         Label(self.frame1, text="Search Customer :", font="arial 10", bg=colbg, fg=colbtn, width=15).pack(side=LEFT)
         self.Etext=Entry(self.frame1, font="arial 11", fg="red", width=40, bd=2)
         self.Etext.pack(side=LEFT)
-        self.Etext.bind('<KeyRelease>', self.search_call_cust)
+        self.Etext.bind('<KeyRelease>', self.search_cust)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
@@ -628,7 +580,7 @@ class customerClass:
         conn.commit()
         conn.close()
 
-    def search_call_cust(self, e):
+    def search_cust(self, e):
         if self.Etext.get() != "":
             conn=pymysql.connect(host="localhost",
                                 user="root",
@@ -809,7 +761,7 @@ class productClass:
         Label(self.frame1, text="Search Product :", font="arial 10", bg=colbg, fg=colbtn, width=15).pack(side=LEFT)
         self.Etext=Entry(self.frame1, font="arial 11", fg="red", width=40, bd=2)
         self.Etext.pack(side=LEFT)
-        self.Etext.bind('<KeyRelease>', self.search_call_prod)
+        self.Etext.bind('<KeyRelease>', self.search_prod)
 
 
         # Frame 2 Table---------------------------------------------------------------------------------------
@@ -886,7 +838,7 @@ class productClass:
         conn.close()
 
 
-    def search_call_prod(self, e):
+    def search_prod(self, e):
         if self.Etext.get() != "":
             conn=pymysql.connect(host="localhost",
                                 user="root",
@@ -1177,6 +1129,7 @@ conn.close()
 
 # Color Variables ----------------------------------------------------------------------------------------------
 colbg="#B8D4BD"
+colbglight="#cfe2d3"
 colbtn="#3C4ACA"
 colhead="#0F9D58"
 col1="#DE3163"
@@ -1210,7 +1163,7 @@ all_style=ttk.Style()
 all_style.theme_use("clam")
 all_style.configure("Treeview", background=colbg, fieldbackground=colbg)
 all_style.configure("TNotebook", background=colbg, bordercolor=colbg, tabposition="n")
-all_style.configure("TNotebook.Tab", background="#cfe2d3", foreground=colbtn, bordercolor=colbg, font=("", 10, "bold"), padding=[80,5,80,5])
+all_style.configure("TNotebook.Tab", background=colbglight, foreground=colbtn, bordercolor=colbg, font=("", 10, "bold"), padding=[80,5,80,5])
 all_style.map("TNotebook.Tab", padding=[("selected", [80,5,80,5])], background=[("selected", colbg)])
 
 """
