@@ -951,7 +951,6 @@ class balanceSheet:
         self.billdate=self.cdate.strftime("%d %b %Y")
 
 
-
         self.Fbalancesheet=Toplevel(root)
         self.Fbalancesheet.title("Balance Sheet >> મોબાઈલ નંબર :  "+str(self.var1[0])+" >> નામ :  "+ self.var1[1])
         self.Fbalancesheet.geometry("1300x500")
