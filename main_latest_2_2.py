@@ -534,11 +534,15 @@ class billInfoClass:
         curr.execute("delete from balancesheet where BillNo="+str(self.billdetail[1]))
         curr.execute("select sum(Balance) from balancesheet where MobileNo="+str(self.billdetail[2]))
         temp_var=curr.fetchall()
-        curr.execute("update customerdata set Balance="+str(temp_var[0][0])+" where MobileNo="+str(self.billdetail[2]))
+        temp_var1=0
+        if temp_var[0][0]!=None:
+            temp_var1=temp_var[0][0]
+        curr.execute("update customerdata set Balance="+str(temp_var1)+" where MobileNo="+str(self.billdetail[2]))
         conn.commit()
         conn.close()
         self.Fbillinfo.destroy()
         objf1.show_all_bill()
+        objf2.show_all_cust()
 
 
 
