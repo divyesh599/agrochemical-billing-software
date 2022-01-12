@@ -303,14 +303,14 @@ class generateBill:
             curr.execute("select * from productdata where PID="+self.selectedP)
             plist=curr.fetchall()
             plist=list(plist[0])
-            
-            flag=True
-            for i in range(len(self.all_item)):
-                if self.all_item[i][3]==plist[0]:
-                    flag=False
-                    break
-            if flag:
-                self.all_item.append([self.billdate, self.mobilelbl["text"], self.billno, plist[0], plist[1]+" "+plist[2], plist[3], plist[4], plist[5], plist[7], 1, plist[7]])
+            if plist[0]!=0:
+                flag=True
+                for i in range(len(self.all_item)):
+                    if self.all_item[i][3]==plist[0]:
+                        flag=False
+                        break
+                if flag:
+                    self.all_item.append([self.billdate, self.mobilelbl["text"], self.billno, plist[0], plist[1]+" "+plist[2], plist[3], plist[4], plist[5], plist[7], 1, plist[7]])
         conn.commit()
         conn.close()
         self.total_sum_amount()
@@ -731,14 +731,14 @@ class customerClass:
     def selectItem(self, a):
         treeItem = self.tree.focus()
         try:
-            self.var1=self.tree.item(treeItem)['values'][0]
+            self.var1=self.tree.item(treeItem)['values']
         except:
             self.var1=""
     
     def double_click_event(self, a):
         treeItem = self.tree.focus()
-        self.var1=self.tree.item(treeItem)['values'][0]
-        self.editCust()
+        self.var1=self.tree.item(treeItem)['values']
+        self.custInfo()
 
     def show_all_cust(self):
         conn=pymysql.connect(host="localhost",
@@ -775,11 +775,11 @@ class customerClass:
     def newCust(self):
         obj_new_cust=modifyCust("")
     def editCust(self):
-        obj_edit_cust=modifyCust(self.var1)
+        obj_edit_cust=modifyCust(self.var1[0])
     def deleteCust(self):
         obj_delete_cust=instructionClass("You can not Delete Customer Data. You must need Admin access.")
     def custInfo(self):
-        pass
+        obj_cust_info=balanceSheet(self.var1)
 
 
 
@@ -887,6 +887,99 @@ class modifyCust:
             conn.close()
         self.FmodifyCust.destroy()
         objf2.show_all_cust()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class balanceSheet:
+    def __init__(self, var1):
+        #--------------All Variables-----------------------------------------------------------------------------
+        self.var1=var1
+        self.cdate=datetime.datetime.now()
+        self.billdate=self.cdate.strftime("%d %b %Y")
+
+
+
+        self.Fbalancesheet=Toplevel(root)
+        self.Fbalancesheet.title("Balance Sheet >> મોબાઈલ નંબર :  "+str(self.var1[0])+" >> નામ :  "+ self.var1[1])
+        self.Fbalancesheet.geometry("1150x500")
+        center(self.Fbalancesheet)
+        self.Fbalancesheet.grab_set()
+        self.Fbalancesheet.configure(background=colbg, padx=10)
+
+
+
+        #--------------Frame1-----------------------------------------------------------------------------
+        self.frame1=Frame(self.Fbalancesheet, bg=colbg)
+        self.frame1.pack(fill=X, pady=20)
+        Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=RIGHT)
+        Label(self.frame1, text="તારીખ :", bg=colbg, anchor=E, width=15).pack(side=RIGHT)
+
+
+        #--------------Frame2-----------------------------------------------------------------------------
+        self.frame2=Frame(self.Fbalancesheet, bg=colbg)
+        self.frame2.pack(pady=20)
+
+        Label(self.frame2, text="નામ :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
+        Label(self.frame2, text=self.var1[1], anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red").pack(side=LEFT)
+        Label(self.frame2, text="મોબાઈલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
+        Label(self.frame2, text=self.var1[0], anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red").pack(side=LEFT)
+        Label(self.frame2, text="ગામ :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
+        Label(self.frame2, text=self.var1[2], anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red").pack(side=LEFT)
+
+
+        #--------------Frame 3 Table----------------------------------------------------------------------
+        self.frame3=Frame(self.Fbalancesheet, bg=colbg)
+        self.frame3.pack(fill=X, padx=10)
+
+        #Treeview----------------start
+        self.tree=ttk.Treeview(self.frame3, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8"), show="headings", height=7)
+        self.tree.pack(fill=X, expand=TRUE, side=LEFT)
+
+        self.tree.column("#1", anchor=CENTER, width=30)
+        self.tree.column("#2", anchor=CENTER, width=200)
+        self.tree.column("#3", anchor=CENTER, width=150)
+        self.tree.column("#4", anchor=CENTER, width=80)
+        self.tree.column("#5", anchor=CENTER, width=90)
+        self.tree.column("#6", anchor=CENTER, width=80)
+        self.tree.column("#7", anchor=CENTER, width=80)
+        self.tree.column("#8", anchor=CENTER, width=80)
+        self.tree.heading("#1", text="PID")
+        self.tree.heading("#2", text="Product name")
+        self.tree.heading("#3", text="Company name")
+        self.tree.heading("#4", text="Batch no.")
+        self.tree.heading("#5", text="Net Content (ml/gm)")
+        self.tree.heading("#6", text="Selling price (Rs.)")
+        self.tree.heading("#7", text="Quantity")
+        self.tree.heading("#8", text="Amount (Rs.)")
+
+        self.v=Scrollbar(self.frame3, orient="vertical")
+        self.v.pack(side=LEFT, fill=Y)
+        self.v.config(command=self.tree.yview)
+
+        self.tree.configure(yscrollcommand=self.v.set)
+        
+        #Treeview----------------END
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1033,9 +1126,11 @@ class productClass:
     def newProd(self):
         ogj_new_prod=modifyProd("")
     def editProd(self):
-        ogj_edit_prod=modifyProd(self.var1)
+        if self.var1!=0:
+            ogj_edit_prod=modifyProd(self.var1)
     def deleteProd(self):
-        obj_delete_prod=modifyProd(self.var1)
+        if self.var1!=0:
+            obj_delete_prod=modifyProd(self.var1)
 
 
 
@@ -1112,7 +1207,7 @@ class modifyProd:
         curr=conn.cursor()
         if self.selectedP == "":
             curr.execute("select count(PID) from productdata")
-            pid=curr.fetchall()[0][0] + 1
+            pid=curr.fetchall()[0][0]
             self.headlbl.config(text="Adding new product into product list")
             self.editbtn.config(text="Add")
         else:
@@ -1193,7 +1288,7 @@ class instructionClass:
         self.Fmessage.grab_set()
         self.Fmessage.configure(background=colbg)
 
-        Label(self.Fmessage, text=self.msg, font="arial 10 bold", bg=colbg, fg=col1).pack(fill=BOTH, expand=True, padx=5, pady=10)
+        Label(self.Fmessage, text=self.msg, font="arial 10", bg=colbg, fg=col1).pack(fill=BOTH, expand=True, padx=5, pady=10)
         Button(self.Fmessage, text="OK", command=self.ok, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=3).pack(side=BOTTOM, pady=10)
 
     def ok(self):
@@ -1297,19 +1392,12 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.subbilldetails\
     Qty INT,\
     Amount INT,\
     PRIMARY KEY (BillNo, PID))")
-"""curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.tempsubbill\
-    (BillDate VARCHAR(20),\
-    MobileNo BIGINT,\
-    BillNo BIGINT,\
-    PID INT,\
-    Description VARCHAR(100),\
-    Company VARCHAR(40),\
-    BatchNo VARCHAR(20),\
-    NetContent INT,\
-    SellPrice INT,\
-    Qty INT,\
-    Amount INT,\
-    PRIMARY KEY (BillNo, PID))")"""
+
+curr.execute("insert ignore into Database23Nov.productdata values(0,'CASH', 'Payment', '-', '0000', 0, 0, 0, 0)")
+
+
+
+
 conn.commit()
 conn.close()
 
