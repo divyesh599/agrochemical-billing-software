@@ -497,7 +497,7 @@ class billInfoClass:
         Label(self.frame5, text=self.billdetail[-1], font="arial 20 bold", bg=colbg, fg="red", anchor=W).grid(row=0, column=1)
         Label(self.frame5, text="Rs.", anchor=E, bg=colbg).grid(row=0, column=2)
         Label(self.frame5, text="Cash / Debit :", anchor=E, width=15, bg=colbg).grid(row=1, column=0)
-        Label(self.frame5, text=self.billdetail[-2], anchor=E, width=15, bg=colbg).grid(row=1, column=1)
+        Label(self.frame5, text=self.billdetail[-2], font="arial 10 bold", width=15, bg=colbg).grid(row=1, column=1)
         
 
         # Frame 6 Buttons------------------------------------------------------------------------------------
@@ -899,7 +899,6 @@ class modifyCust:
         conn.close()
 
 
-
     def addCust(self):
         conn=pymysql.connect(host="localhost",
                             user="root",
@@ -974,9 +973,9 @@ class balanceSheet:
         Label(self.frame1, text="ગામ :", anchor=E, width=15, bg=colbg).grid(row=3, column=0, pady=10)
         Label(self.frame1, text=self.var1[2], anchor=W, width=30, font="arial 10 bold", bg=colbg).grid(row=3, column=1)
         Label(self.frame1, text="Total Balance :", anchor=E, width=15, bg=colbg).grid(row=4, column=0, pady=10)
-        self.total=Label(self.frame1, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg=col1)
+        self.total=Label(self.frame1, anchor=W, width=15, font="arial 12 bold", bg=colbg, fg=col1)
         self.total.grid(row=4, column=1)
-        
+
         # Frame 3 Buttons------------------------------------------------------------------------------------
         self.frame3=Frame(self.frame1, bg=colbg)
         self.frame3.grid(row=5, column=0, columnspan=2, pady=20)
