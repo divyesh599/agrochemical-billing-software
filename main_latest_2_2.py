@@ -1010,7 +1010,7 @@ class balanceSheet:
 
         self.tree.configure(yscrollcommand=self.v.set)
         
-        #Treeview----------------END
+        #Treeview----------------------------------------------END
 
         self.show_all_records()
 
