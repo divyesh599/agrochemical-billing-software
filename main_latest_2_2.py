@@ -358,10 +358,43 @@ class generateBill:
                             self.cd.get(),
                             self.totalamonut["text"])
                         )
+            if self.cd.get()=="Debit":
+                curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
+                                (self.mobilelbl["text"],
+                                self.billdate,
+                                self.billno,
+                                "Debit Product Buying",
+                                self.totalamonut["text"],
+                                0,
+                                -(self.totalamonut["text"]))
+                            )
+                curr.execute("select sum(Balance) from balancesheet where MobileNo="+str(self.mobilelbl["text"]))
+                temp_var=curr.fetchall()
+                curr.execute("update customerdata set Balance="+str(temp_var[0][0])+" where MobileNo="+str(self.mobilelbl["text"]))
+            elif self.cd.get()=="Cash":
+                curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
+                                (self.mobilelbl["text"],
+                                self.billdate,
+                                self.billno,
+                                "Cash payment",
+                                self.totalamonut["text"],
+                                0,
+                                -(self.totalamonut["text"]))
+                            )
+                curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
+                                (self.mobilelbl["text"],
+                                self.billdate,
+                                self.billno,
+                                "Cash payment",
+                                0,
+                                self.totalamonut["text"],
+                                self.totalamonut["text"])
+                            )
             conn.commit()
             conn.close()
         self.Fnewbill.destroy()
         objf1.show_all_bill()
+        objf2.show_all_cust()
 
 
 
@@ -498,6 +531,10 @@ class billInfoClass:
         curr=conn.cursor()
         curr.execute("delete from subbilldetails where BillNo="+str(self.billdetail[1]))
         curr.execute("delete from allbills where BillNo="+str(self.billdetail[1]))
+        curr.execute("delete from balancesheet where BillNo="+str(self.billdetail[1]))
+        curr.execute("select sum(Balance) from balancesheet where MobileNo="+str(self.billdetail[2]))
+        temp_var=curr.fetchall()
+        curr.execute("update customerdata set Balance="+str(temp_var[0][0])+" where MobileNo="+str(self.billdetail[2]))
         conn.commit()
         conn.close()
         self.Fbillinfo.destroy()
@@ -748,6 +785,7 @@ class customerClass:
         curr=conn.cursor()
         curr.execute("select * from customerdata")
         clist=curr.fetchall()
+        clist=clist[::-1]
         self.tree.delete(*self.tree.get_children())
         for row in clist:
             self.tree.insert("", END, values=(row[0], row[1]+" "+row[2]+" "+row[3], row[4], row[5]))
@@ -779,7 +817,8 @@ class customerClass:
     def deleteCust(self):
         obj_delete_cust=instructionClass("You can not Delete Customer Data. You must need Admin access.")
     def custInfo(self):
-        obj_cust_info=balanceSheet(self.var1)
+        if self.var1!="":
+            obj_cust_info=balanceSheet(self.var1)
 
 
 
@@ -912,58 +951,58 @@ class balanceSheet:
 
         self.Fbalancesheet=Toplevel(root)
         self.Fbalancesheet.title("Balance Sheet >> મોબાઈલ નંબર :  "+str(self.var1[0])+" >> નામ :  "+ self.var1[1])
-        self.Fbalancesheet.geometry("1150x500")
+        self.Fbalancesheet.geometry("1300x500")
         center(self.Fbalancesheet)
         self.Fbalancesheet.grab_set()
-        self.Fbalancesheet.configure(background=colbg, padx=10)
+        self.Fbalancesheet.configure(background=colbg, padx=20)
 
 
 
         #--------------Frame1-----------------------------------------------------------------------------
         self.frame1=Frame(self.Fbalancesheet, bg=colbg)
-        self.frame1.pack(fill=X, pady=20)
-        Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=RIGHT)
-        Label(self.frame1, text="તારીખ :", bg=colbg, anchor=E, width=15).pack(side=RIGHT)
+        self.frame1.pack(side=LEFT, fill=Y, pady=40)
+        Label(self.frame1, text="તારીખ :", bg=colbg, anchor=E, width=15).grid(row=0, column=0, pady=10)
+        Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, anchor=W, width=30).grid(row=0, column=1)
+        Label(self.frame1, text="મોબાઈલ નંબર :", anchor=E, width=15, bg=colbg).grid(row=1, column=0, pady=10)
+        Label(self.frame1, text=self.var1[0], anchor=W, width=30, font="arial 10 bold", bg=colbg).grid(row=1, column=1)
+        Label(self.frame1, text="નામ :", anchor=E, width=15, bg=colbg).grid(row=2, column=0, pady=10)
+        Label(self.frame1, text=self.var1[1], anchor=W, width=30, font="arial 10 bold", bg=colbg).grid(row=2, column=1)
+        Label(self.frame1, text="ગામ :", anchor=E, width=15, bg=colbg).grid(row=3, column=0, pady=10)
+        Label(self.frame1, text=self.var1[2], anchor=W, width=30, font="arial 10 bold", bg=colbg).grid(row=3, column=1)
+        Label(self.frame1, text="Total Balance :", anchor=E, width=15, bg=colbg).grid(row=4, column=0, pady=10)
+        self.total=Label(self.frame1, anchor=W, width=30, font="arial 10 bold", bg=colbg, fg=col1)
+        self.total.grid(row=4, column=1)
+        
+        # Frame 3 Buttons------------------------------------------------------------------------------------
+        self.frame3=Frame(self.frame1, bg=colbg)
+        self.frame3.grid(row=5, column=0, columnspan=2, pady=20)
+        Button(self.frame3, text="OK", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=3).pack(side=LEFT, padx=10)
+        Button(self.frame3, text="Print", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=3).pack(side=LEFT, padx=10)
 
 
-        #--------------Frame2-----------------------------------------------------------------------------
+
+        #--------------Frame 2 Table----------------------------------------------------------------------
         self.frame2=Frame(self.Fbalancesheet, bg=colbg)
-        self.frame2.pack(pady=20)
-
-        Label(self.frame2, text="નામ :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
-        Label(self.frame2, text=self.var1[1], anchor=W, width=30, font="arial 10 bold", bg=colbg, fg="red").pack(side=LEFT)
-        Label(self.frame2, text="મોબાઈલ નંબર :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
-        Label(self.frame2, text=self.var1[0], anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red").pack(side=LEFT)
-        Label(self.frame2, text="ગામ :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
-        Label(self.frame2, text=self.var1[2], anchor=W, width=15, font="arial 10 bold", bg=colbg, fg="red").pack(side=LEFT)
-
-
-        #--------------Frame 3 Table----------------------------------------------------------------------
-        self.frame3=Frame(self.Fbalancesheet, bg=colbg)
-        self.frame3.pack(fill=X, padx=10)
+        self.frame2.pack(side=LEFT, expand=TRUE, fill=BOTH, pady=10)
 
         #Treeview----------------start
-        self.tree=ttk.Treeview(self.frame3, columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8"), show="headings", height=7)
-        self.tree.pack(fill=X, expand=TRUE, side=LEFT)
+        self.tree=ttk.Treeview(self.frame2, columns=("#1", "#2", "#3", "#4", "#5", "#6"), show="headings", height=10)
+        self.tree.pack(fill=BOTH, expand=TRUE, side=LEFT)
 
-        self.tree.column("#1", anchor=CENTER, width=30)
-        self.tree.column("#2", anchor=CENTER, width=200)
+        self.tree.column("#1", anchor=CENTER, width=100)
+        self.tree.column("#2", anchor=CENTER, width=100)
         self.tree.column("#3", anchor=CENTER, width=150)
-        self.tree.column("#4", anchor=CENTER, width=80)
-        self.tree.column("#5", anchor=CENTER, width=90)
-        self.tree.column("#6", anchor=CENTER, width=80)
-        self.tree.column("#7", anchor=CENTER, width=80)
-        self.tree.column("#8", anchor=CENTER, width=80)
-        self.tree.heading("#1", text="PID")
-        self.tree.heading("#2", text="Product name")
-        self.tree.heading("#3", text="Company name")
-        self.tree.heading("#4", text="Batch no.")
-        self.tree.heading("#5", text="Net Content (ml/gm)")
-        self.tree.heading("#6", text="Selling price (Rs.)")
-        self.tree.heading("#7", text="Quantity")
-        self.tree.heading("#8", text="Amount (Rs.)")
+        self.tree.column("#4", anchor=CENTER, width=100)
+        self.tree.column("#5", anchor=CENTER, width=100)
+        self.tree.column("#6", anchor=CENTER, width=100)
+        self.tree.heading("#1", text="Date")
+        self.tree.heading("#2", text="Bill No.")
+        self.tree.heading("#3", text="Description")
+        self.tree.heading("#4", text="Debit")
+        self.tree.heading("#5", text="Credit")
+        self.tree.heading("#6", text="Balance")
 
-        self.v=Scrollbar(self.frame3, orient="vertical")
+        self.v=Scrollbar(self.frame2, orient="vertical")
         self.v.pack(side=LEFT, fill=Y)
         self.v.config(command=self.tree.yview)
 
@@ -971,9 +1010,28 @@ class balanceSheet:
         
         #Treeview----------------END
 
+        self.show_all_records()
 
 
 
+    def show_all_records(self):
+        conn=pymysql.connect(host="localhost",
+                            user="root",
+                            password="",
+                            database="Database23Nov")
+        curr=conn.cursor()
+        curr.execute("select * from balancesheet where MobileNo="+str(self.var1[0])+" order by BillNo desc")
+        records=curr.fetchall()
+        records[::-1]
+        self.tree.delete(*self.tree.get_children())
+        for row in records:
+            self.tree.insert("", END, values=row[1:])
+        
+        curr.execute("select sum(Balance) from balancesheet where MobileNo="+str(self.var1[0]))
+        temp_var=curr.fetchall()
+        self.total.config(text=temp_var[0][0])
+        conn.commit()
+        conn.close()
 
 
 
@@ -1392,7 +1450,14 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.subbilldetails\
     Qty INT,\
     Amount INT,\
     PRIMARY KEY (BillNo, PID))")
-
+curr.execute("CREATE TABLE IF NOT EXISTS Database23Nov.balancesheet\
+    (MobileNo BIGINT,\
+    BillDate VARCHAR(20),\
+    BillNo BIGINT,\
+    Description VARCHAR(100),\
+    DebitAmount INT,\
+    CreditAmount INT,\
+    Balance INT)")
 curr.execute("insert ignore into Database23Nov.productdata values(0,'CASH', 'Payment', '-', '0000', 0, 0, 0, 0)")
 
 
