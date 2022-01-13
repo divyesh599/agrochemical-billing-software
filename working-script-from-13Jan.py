@@ -175,7 +175,7 @@ class generateBill:
             conn=pymysql.connect(host="localhost",
                                 user="root",
                                 password="",
-                                database="Database14jan")
+                                database="database23nov")
             curr=conn.cursor()
             varx=self.ECust.get()
             curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
@@ -196,7 +196,7 @@ class generateBill:
             conn=pymysql.connect(host="localhost",
                                 user="root",
                                 password="",
-                                database="Database14jan")
+                                database="database23nov")
             curr=conn.cursor()
             varx=self.EProd.get()
             curr.execute("select * from productdata where PName LIKE '%"+ varx +"%' OR TechName LIKE '%"+ varx +"%' OR Company LIKE '%"+ varx +"%' OR BatchNo LIKE '%"+ varx +"%'")
@@ -263,7 +263,7 @@ class generateBill:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         if self.selected_cust!="":
             curr.execute("select * from customerdata where MobileNo="+self.selected_cust)
@@ -298,7 +298,7 @@ class generateBill:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         if self.selected_prod!="":
             curr.execute("select * from productdata where PID="+self.selected_prod)
@@ -337,7 +337,7 @@ class generateBill:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         if len(self.all_item) !=0:
             sql_data=""
@@ -514,7 +514,7 @@ class billInfoClass:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         curr.execute("select * from subbilldetails where BillNo="+str(self.billdetail[1]))
         item=curr.fetchall()
@@ -528,7 +528,7 @@ class billInfoClass:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         curr.execute("delete from subbilldetails where BillNo="+str(self.billdetail[1]))
         curr.execute("delete from allbills where BillNo="+str(self.billdetail[1]))
@@ -650,7 +650,7 @@ class allBills:
             conn=pymysql.connect(host="localhost",
                                 user="root",
                                 password="",
-                                database="Database14jan")
+                                database="database23nov")
             curr=conn.cursor()
             varx=self.Etext.get()
             curr.execute("select * from allbills where BillDate LIKE '%"+ varx +"%' OR BillNo LIKE '%"+ varx +"%' OR MobileNo LIKE '%"+ varx +"%' OR Name LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
@@ -669,7 +669,7 @@ class allBills:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         curr.execute("select * from allbills")
         blist=curr.fetchall()
@@ -792,7 +792,7 @@ class customerClass:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         curr.execute("select * from customerdata")
         clist=curr.fetchall()
@@ -809,7 +809,7 @@ class customerClass:
             conn=pymysql.connect(host="localhost",
                                 user="root",
                                 password="",
-                                database="Database14jan")
+                                database="database23nov")
             curr=conn.cursor()
             varx=self.Etext.get()
             curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
@@ -900,7 +900,7 @@ class modifyCust:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         if self.selected_cust == "":
             self.headlbl.config(text="Adding new Customer into database.")
@@ -924,7 +924,7 @@ class modifyCust:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         try:
             if self.selected_cust == "":
@@ -1040,7 +1040,7 @@ class balanceSheet:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         curr.execute("select * from balancesheet where MobileNo="+str(self.var1[0])+" order by BillNo desc")
         records=curr.fetchall()
@@ -1178,7 +1178,7 @@ class productClass:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         curr.execute("select * from productdata")
         plist=curr.fetchall()
@@ -1194,7 +1194,7 @@ class productClass:
             conn=pymysql.connect(host="localhost",
                                 user="root",
                                 password="",
-                                database="Database14jan")
+                                database="database23nov")
             curr=conn.cursor()
             varx=self.search_entry.get()
             curr.execute("select * from productdata where PName LIKE '%"+ varx +"%' OR TechName LIKE '%"+ varx +"%' OR Company LIKE '%"+ varx +"%' OR BatchNo LIKE '%"+ varx +"%'")
@@ -1291,7 +1291,7 @@ class modifyProd:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         if self.selected_prod == "":
             curr.execute("select count(PID) from productdata")
@@ -1314,7 +1314,7 @@ class modifyProd:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         try:
             if self.selected_prod == "":
@@ -1353,7 +1353,7 @@ class modifyProd:
         conn=pymysql.connect(host="localhost",
                             user="root",
                             password="",
-                            database="Database14jan")
+                            database="database23nov")
         curr=conn.cursor()
         curr.execute("DELETE FROM productdata WHERE PID="+str(self.pid_lbl["text"]))
         conn.commit()
@@ -1426,8 +1426,8 @@ def center(win):
 conn=pymysql.connect(host="localhost", user="root", password="")
 curr=conn.cursor()
 
-curr.execute("CREATE DATABASE IF NOT EXISTS Database14jan")
-curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.customerdata\
+curr.execute("CREATE DATABASE IF NOT EXISTS database23nov")
+curr.execute("CREATE TABLE IF NOT EXISTS database23nov.customerdata\
     (MobileNo BIGINT,\
     FName VARCHAR(20),\
     MName VARCHAR(40),\
@@ -1435,7 +1435,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.customerdata\
     City VARCHAR(20),\
     Balance INT,\
     PRIMARY KEY (MobileNo))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.productdata\
+curr.execute("CREATE TABLE IF NOT EXISTS database23nov.productdata\
     (PID INT,\
     PName VARCHAR(20),\
     TechName VARCHAR(40),\
@@ -1446,7 +1446,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.productdata\
     SellPrice INT,\
     BuyPrice INT,\
     PRIMARY KEY (PID))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.allbills\
+curr.execute("CREATE TABLE IF NOT EXISTS database23nov.allbills\
     (BillDate VARCHAR(20),\
     BillNo BIGINT,\
     MobileNo BIGINT,\
@@ -1455,7 +1455,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.allbills\
     CashDebit VARCHAR(10),\
     BillAmount INT,\
     PRIMARY KEY (BillNo, MobileNo))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.subbilldetails\
+curr.execute("CREATE TABLE IF NOT EXISTS database23nov.subbilldetails\
     (BillDate VARCHAR(20),\
     MobileNo BIGINT,\
     BillNo BIGINT,\
@@ -1468,7 +1468,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.subbilldetails\
     Qty INT,\
     Amount INT,\
     PRIMARY KEY (BillNo, PID))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.balancesheet\
+curr.execute("CREATE TABLE IF NOT EXISTS database23nov.balancesheet\
     (MobileNo BIGINT,\
     BillDate VARCHAR(20),\
     BillNo BIGINT,\
@@ -1476,7 +1476,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.balancesheet\
     DebitAmount INT,\
     CreditAmount INT,\
     Balance INT)")
-curr.execute("insert ignore into Database14jan.productdata values(0,'CASH', 'Payment', '-', '0000', 0, 0, 0, 0)")
+curr.execute("insert ignore into database23nov.productdata values(0,'CASH', 'Payment', '-', '0000', 0, 0, 0, 0)")
 
 conn.commit()
 conn.close()
