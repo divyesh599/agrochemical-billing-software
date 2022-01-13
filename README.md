@@ -10,3 +10,6 @@ Revised or Learned Questions:
 * TRUNCATE TABLE tempsubbill sql query..
 
 
+---------------------------------------------------------------------------------------------
+
+To Run main_latest_2_2.exe, Just start your XAMPP server module Apache and mysql.
