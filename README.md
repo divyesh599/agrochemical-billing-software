@@ -1,5 +1,9 @@
-# Billing Management software (shree-hari-agro.exe)
+# Invoice Management Desktop System (agro-invoice-manager.exe)
 Billing and selling management software for Agricultural chemical products. Python based with SQL database desktop software. Currently working on this project. Date: 1 Jan 2022
+
+---------------------------------------------------------------------------------------------
+
+To Run agro-invoice-manager.exe, Just start your XAMPP server(module Apache and mysql).
 
 ---------------------------------------------------------------------------------------------
 Revised or Learned Questions:
@@ -9,7 +13,3 @@ Revised or Learned Questions:
 * Tracing Tkinter textvariable in Python?
 * TRUNCATE TABLE tempsubbill sql query..
 
-
----------------------------------------------------------------------------------------------
-
-To Run main_latest_2_2.exe, Just start your XAMPP server module Apache and mysql.
