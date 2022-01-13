@@ -3,7 +3,8 @@ from tkinter import ttk
 import pymysql
 import datetime
 import webbrowser
-
+from fpdf import FPDF
+import socket
 
 
 
