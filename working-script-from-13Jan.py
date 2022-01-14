@@ -930,7 +930,7 @@ class balanceSheet:
     To view customer's debit, credit and total balance. 
     """
     def __init__(self, var1):
-        #--------------All Variables-----------------------------------------------------------------------------
+        #--------------All Variables----------------------------------------------------------------------
         self.var1=var1
         self.cdate=datetime.datetime.now()
         self.bill_date=self.cdate.strftime("%d %b %Y")
