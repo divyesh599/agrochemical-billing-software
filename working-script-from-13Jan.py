@@ -3,8 +3,8 @@ from tkinter import ttk
 import pymysql
 import datetime
 import webbrowser
-"""from fpdf import FPDF
-import socket"""
+"""from fpdf import FPDF"""
+import socket
 
 
 
@@ -36,7 +36,7 @@ class generateBill:
         Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
         Label(self.frame1, text="Bill Number :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
         Label(self.frame1, text=self.billno, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
-        #Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
+
 
 
 
@@ -172,10 +172,7 @@ class generateBill:
         if self.ECust.get() != "":
             self.sFrame1.lift()
             self.sFrame1.place(x=120, y=58)
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="database23nov")
+            conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
             curr=conn.cursor()
             varx=self.ECust.get()
             curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
@@ -193,10 +190,7 @@ class generateBill:
         if self.EProd.get() != "":
             self.sFrame2.lift()
             self.sFrame2.place(x=120, y=121)
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="database23nov")
+            conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
             curr=conn.cursor()
             varx=self.EProd.get()
             curr.execute("select * from productdata where PName LIKE '%"+ varx +"%' OR TechName LIKE '%"+ varx +"%' OR Company LIKE '%"+ varx +"%' OR BatchNo LIKE '%"+ varx +"%'")
@@ -260,10 +254,7 @@ class generateBill:
 
 
     def add_cust_info(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         if self.selected_cust!="":
             curr.execute("select * from customerdata where MobileNo="+self.selected_cust)
@@ -295,10 +286,7 @@ class generateBill:
 
 
     def add_prod_info(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         if self.selected_prod!="":
             curr.execute("select * from productdata where PID="+self.selected_prod)
@@ -334,10 +322,7 @@ class generateBill:
 
 
     def create_bill(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         if len(self.all_item) !=0:
             sql_data=""
@@ -511,10 +496,7 @@ class billInfoClass:
         self.show_all_item()
 
     def show_all_item(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         curr.execute("select * from subbilldetails where BillNo="+str(self.billdetail[1]))
         item=curr.fetchall()
@@ -525,10 +507,7 @@ class billInfoClass:
         conn.close()
     
     def bill_info_delete(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         curr.execute("delete from subbilldetails where BillNo="+str(self.billdetail[1]))
         curr.execute("delete from allbills where BillNo="+str(self.billdetail[1]))
@@ -647,10 +626,7 @@ class allBills:
 
     def search_call_bill(self, evt):
         if self.Etext.get() != "":
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="database23nov")
+            conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
             curr=conn.cursor()
             varx=self.Etext.get()
             curr.execute("select * from allbills where BillDate LIKE '%"+ varx +"%' OR BillNo LIKE '%"+ varx +"%' OR MobileNo LIKE '%"+ varx +"%' OR Name LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
@@ -666,10 +642,7 @@ class allBills:
 
 
     def show_all_bill(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         curr.execute("select * from allbills")
         blist=curr.fetchall()
@@ -789,10 +762,7 @@ class customerClass:
 
 
     def show_all_cust(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         curr.execute("select * from customerdata")
         clist=curr.fetchall()
@@ -806,10 +776,7 @@ class customerClass:
 
     def search_cust(self, e):
         if self.Etext.get() != "":
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="database23nov")
+            conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
             curr=conn.cursor()
             varx=self.Etext.get()
             curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
@@ -897,10 +864,7 @@ class modifyCust:
 
 
     def modify_Entry(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         if self.selected_cust == "":
             self.headlbl.config(text="Adding new Customer into database.")
@@ -921,10 +885,7 @@ class modifyCust:
 
 
     def addCust(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         try:
             if self.selected_cust == "":
@@ -1037,10 +998,7 @@ class balanceSheet:
 
 
     def show_all_records(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         curr.execute("select * from balancesheet where MobileNo="+str(self.var1[0])+" order by BillNo desc")
         records=curr.fetchall()
@@ -1175,10 +1133,7 @@ class productClass:
 
 
     def show_all_prod(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         curr.execute("select * from productdata")
         plist=curr.fetchall()
@@ -1191,10 +1146,7 @@ class productClass:
 
     def search_prod(self, e):
         if self.search_entry.get() != "":
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="database23nov")
+            conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
             curr=conn.cursor()
             varx=self.search_entry.get()
             curr.execute("select * from productdata where PName LIKE '%"+ varx +"%' OR TechName LIKE '%"+ varx +"%' OR Company LIKE '%"+ varx +"%' OR BatchNo LIKE '%"+ varx +"%'")
@@ -1288,10 +1240,7 @@ class modifyProd:
 
 
     def modify_Entry(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         if self.selected_prod == "":
             curr.execute("select count(PID) from productdata")
@@ -1311,10 +1260,7 @@ class modifyProd:
 
 
     def add_Prod(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         try:
             if self.selected_prod == "":
@@ -1350,10 +1296,7 @@ class modifyProd:
 
 
     def delete(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="database23nov")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
         curr.execute("DELETE FROM productdata WHERE PID="+str(self.pid_lbl["text"]))
         conn.commit()
@@ -1423,7 +1366,7 @@ def center(win):
 
 
 # Create Tables ---------------------------------------------------------------------------------------------
-conn=pymysql.connect(host="localhost", user="root", password="")
+conn=pymysql.connect(host="127.0.0.1",user="root",password="")
 curr=conn.cursor()
 
 curr.execute("CREATE DATABASE IF NOT EXISTS database23nov")
