@@ -1,5 +1,5 @@
 # Invoice Management Desktop System (agro-invoice-manager.exe)
-Billing and selling management software for Agricultural chemical products. Python based with SQL database desktop software. Currently working on this project. Date: 1 Jan 2022
+Billing and selling management software for Agricultural chemical products. Python based with SQL database desktop software. Currently working on this project. Date: 15 Jan 2022
 
 ---------------------------------------------------------------------------------------------
 
