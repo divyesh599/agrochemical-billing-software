@@ -3,10 +3,10 @@ Billing and selling management software for Agricultural chemical products. Pyth
 
 ---------------------------------------------------------------------------------------------
 
-To Run agro-invoice-manager.exe, Just start your XAMPP server(module Apache and mysql).
+To check my project, Just run agro-invoice-manager.exe, And start your XAMPP server(start module Apache and mysql).
 
 ---------------------------------------------------------------------------------------------
-Revised or Learned Questions:
+Revised or Learned Questions: (Rough Note)
 
 * Difference between Primary key and Unique key?
 * SQL Composite Key?
