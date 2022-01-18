@@ -1145,37 +1145,12 @@ class settlementClass:
         temp_var=curr.fetchall()
         curr.execute("update customerdata set Balance="+str(temp_var[0][0])+" where MobileNo="+str(self.cust_var[0]))
 
-
-
-            
-        """
-                curr.execute("select sum(Balance) from balancesheet where MobileNo="+str(self.mobilelbl["text"]))
-                temp_var=curr.fetchall()
-                curr.execute("update customerdata set Balance="+str(temp_var[0][0])+" where MobileNo="+str(self.mobilelbl["text"]))
-            elif self.cd.get()=="Cash":
-                curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
-                                (self.mobilelbl["text"],
-                                self.billdate,
-                                self.billno,
-                                "Cash payment",
-                                self.totalamonut["text"],
-                                0,
-                                -(self.totalamonut["text"]))
-                            )
-                curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
-                                (self.mobilelbl["text"],
-                                self.billdate,
-                                self.billno,
-                                "Cash payment",
-                                0,
-                                self.totalamonut["text"],
-                                self.totalamonut["text"])
-                            )
-            conn.commit()
-            conn.close()
-        self.Fnewbill.destroy()
+        conn.commit()
+        conn.close()
+        self.child_frame.destroy()
         objf1.show_all_bill()
-        objf2.show_all_cust()"""
+        objf2.show_all_cust()
+
 
 
 
