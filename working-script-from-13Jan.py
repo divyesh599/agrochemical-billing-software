@@ -963,8 +963,10 @@ class balanceSheet:
         # Frame 3 Buttons------------------------------------------------------------------------------------
         self.frame3=Frame(self.frame1, bg=colbg)
         self.frame3.grid(row=5, column=0, columnspan=2, pady=20)
-        Button(self.frame3, text="OK", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=3).pack(side=LEFT, padx=10)
+        Button(self.frame3, text="OK", command=self.close, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=3).pack(side=LEFT, padx=10)
         Button(self.frame3, text="Print", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=3).pack(side=LEFT, padx=10)
+        
+        Button(self.frame1, text="Settle Balance", command=self.settlement, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=3).grid(row=6, column=0, columnspan=2, pady=20)
 
 
         #--------------Frame 2 Table----------------------------------------------------------------------
@@ -1013,9 +1015,46 @@ class balanceSheet:
         conn.commit()
         conn.close()
 
+    def close(self):
+        self.child_frame.destroy()
+
+    def settlement(self):
+        obj_settlement=settlementClass(self.var1, self.total["text"])
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+class settlementClass:
+    def __init__(self, var1, total):
+        #--------------All Variables----------------------------------------------------------------------
+        self.var1=var1
+        self.total=total
+        self.cdate=datetime.datetime.now()
+        self.bill_date=self.cdate.strftime("%d %b %Y")
+
+
+        self.child_frame=Toplevel(root)
+        self.child_frame.title("Settle Balance --> Mobile No. :  "+str(self.var1[0])+" --> Name :  "+ self.var1[1])
+        self.child_frame.geometry("150x150")
+        center(self.child_frame)
+        self.child_frame.grab_set()
+        self.child_frame.configure(background=colbg, padx=20)
+
+
+        #--------------Frame1-----------------------------------------------------------------------------
+        self.frame1=Frame(self.child_frame, bg=colbg)
+        self.frame1.pack(side=LEFT, fill=Y, pady=40)
+        
 
 
 
