@@ -349,7 +349,7 @@ class generateBill:
                                 (self.mobilelbl["text"],
                                 self.billdate,
                                 self.billno,
-                                "Debit Product Buying",
+                                "Unpaid (Debit)",
                                 self.totalamonut["text"],
                                 0,
                                 -(self.totalamonut["text"]))
@@ -362,7 +362,7 @@ class generateBill:
                                 (self.mobilelbl["text"],
                                 self.billdate,
                                 self.billno,
-                                "Cash payment",
+                                "Paid (Cash)(0)",
                                 self.totalamonut["text"],
                                 0,
                                 -(self.totalamonut["text"]))
@@ -371,7 +371,7 @@ class generateBill:
                                 (self.mobilelbl["text"],
                                 self.billdate,
                                 self.billno,
-                                "Cash payment",
+                                "Paid (Cash)(-0)",
                                 0,
                                 self.totalamonut["text"],
                                 self.totalamonut["text"])
@@ -1037,29 +1037,133 @@ class balanceSheet:
 class settlementClass:
     def __init__(self, var1, total):
         #--------------All Variables----------------------------------------------------------------------
-        self.var1=var1
+        self.cust_var=var1
         self.total=total
+        self.radio_var=IntVar()
+        self.cash_amount=IntVar()
         self.cdate=datetime.datetime.now()
-        self.bill_date=self.cdate.strftime("%d %b %Y")
+        self.billno=self.cdate.strftime("%y%m%d%H%M")
+        self.billdate=self.cdate.strftime("%d %b %Y")
+        
 
 
         self.child_frame=Toplevel(root)
-        self.child_frame.title("Settle Balance --> Mobile No. :  "+str(self.var1[0])+" --> Name :  "+ self.var1[1])
-        self.child_frame.geometry("150x150")
+        self.child_frame.title("Settle Balance --> Mobile No. :  "+str(self.cust_var[0]))
+        self.child_frame.geometry("500x250")
         center(self.child_frame)
         self.child_frame.grab_set()
-        self.child_frame.configure(background=colbg, padx=20)
+        self.child_frame.configure(background=colbg, padx=10, pady=10)
+
+        #--------------Frame3-----------------------------------------------------------------------------
+        self.frame3=Frame(self.child_frame, bg=colbg)
+        self.frame3.pack(fill=X)
+        Label(self.frame3, text="Customer :  "+str(self.cust_var[0])+"  "+self.cust_var[1], font="arial 10 bold", bg=colbg).pack()
+
+
+        Label(self.child_frame, text="How much amount do you want to deposit?", font="arial 10", bg=colbg).pack(fill=X)
+        Button(self.child_frame, text="Deposite", command=self.pay_now, font="arial 10 bold", bg=colbtn, fg="white", bd=3).pack(fill=X, side=BOTTOM)
 
 
         #--------------Frame1-----------------------------------------------------------------------------
-        self.frame1=Frame(self.child_frame, bg=colbg)
-        self.frame1.pack(side=LEFT, fill=Y, pady=40)
+        self.frame1=LabelFrame(self.child_frame, bg=colbglight)
+        self.frame1.pack(side=LEFT,fill=BOTH, expand=TRUE, pady=5, padx=5)
+
+        self.R1=Radiobutton(self.frame1, text=str(-int(self.total))+" Rs.", variable=self.radio_var, value=1, font="arial 10", bg=colbglight, fg="red")
+        self.R1.pack(expand=True)
+        
+        self.frame1.bind("<Button-1>", self.radio_1_select)
+
+
+        #--------------Frame2-----------------------------------------------------------------------------
+        self.frame2=LabelFrame(self.child_frame, bg=colbglight)
+        self.frame2.pack(side=LEFT, fill=BOTH, expand=TRUE, pady=5, padx=5)
+
+        self.R2=Radiobutton(self.frame2, text="Deposite manualy", variable=self.radio_var, value=2, font="arial 10", bg=colbglight, fg="red")
+        self.lbl_var=Label(self.frame2, text="Enter Amount (Rs.)", font="arial 9", bg=colbglight)
+        self.entry_var=Entry(self.frame2, textvariable=self.cash_amount, bd=1, font="arial 10", fg="red", width=17)
+        self.R2.pack(expand=True)
+        self.lbl_var.pack()
+        self.entry_var.pack(pady=15)
+        
+        self.frame2.bind("<Button-1>", self.radio_2_select)
+        self.lbl_var.bind("<Button-1>", self.radio_2_select)
+        self.entry_var.bind("<Button-1>", self.radio_2_select)
+        
+        self.R1.select()
+
+
+    def radio_1_select(self, evt):
+        self.R1.select()
+
+    def radio_2_select(self, evt):
+        self.R2.select()
+
+
+    def pay_now(self):
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
+        curr=conn.cursor()
+        if self.radio_var.get()==1:
+            amount=self.total
+        curr.execute("insert into subbilldetails (`BillDate`, `MobileNo`, `BillNo`, `PID`, `Description`, `Company`, `BatchNo`, `NetContent`, `SellPrice`, `Qty`, `Amount`) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                        (self.billdate,
+                        self.cust_var[0],
+                        self.billno,
+                        0,
+                        "CASH PAYMENT "+str())
+                    )
+
         
 
 
 
-
-
+            
+        """curr.execute("insert into subbilldetails (`BillDate`, `MobileNo`, `BillNo`, `PID`, `Description`, `Company`, `BatchNo`, `NetContent`, `SellPrice`, `Qty`, `Amount`) VALUES"+sql_data[:-1])
+            curr.execute("insert into allbills values(%s, %s, %s, %s, %s, %s, %s)",
+                            (self.billdate,
+                            self.billno,
+                            self.mobilelbl["text"],
+                            self.cnamelbl["text"],
+                            self.villagelbl["text"],
+                            self.cd.get(),
+                            self.totalamonut["text"])
+                        )
+            if self.cd.get()=="Debit":
+                curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
+                                (self.mobilelbl["text"],
+                                self.billdate,
+                                self.billno,
+                                "Debit Product Buying",
+                                self.totalamonut["text"],
+                                0,
+                                -(self.totalamonut["text"]))
+                            )
+                curr.execute("select sum(Balance) from balancesheet where MobileNo="+str(self.mobilelbl["text"]))
+                temp_var=curr.fetchall()
+                curr.execute("update customerdata set Balance="+str(temp_var[0][0])+" where MobileNo="+str(self.mobilelbl["text"]))
+            elif self.cd.get()=="Cash":
+                curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
+                                (self.mobilelbl["text"],
+                                self.billdate,
+                                self.billno,
+                                "Cash payment",
+                                self.totalamonut["text"],
+                                0,
+                                -(self.totalamonut["text"]))
+                            )
+                curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
+                                (self.mobilelbl["text"],
+                                self.billdate,
+                                self.billno,
+                                "Cash payment",
+                                0,
+                                self.totalamonut["text"],
+                                self.totalamonut["text"])
+                            )
+            conn.commit()
+            conn.close()
+        self.Fnewbill.destroy()
+        objf1.show_all_bill()
+        objf2.show_all_cust()"""
 
 
 
@@ -1458,7 +1562,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS database23nov.balancesheet\
     DebitAmount INT,\
     CreditAmount INT,\
     Balance INT)")
-curr.execute("insert ignore into database23nov.productdata values(0,'CASH', 'Payment', '-', '0000', 0, 0, 0, 0)")
+curr.execute("insert ignore into database23nov.productdata values(0,'CASH', 'PAYMENT', '-', '0000', 0, 0, 0, 0)")
 
 conn.commit()
 conn.close()
