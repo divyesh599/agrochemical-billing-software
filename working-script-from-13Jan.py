@@ -936,16 +936,16 @@ class balanceSheet:
         self.bill_date=self.cdate.strftime("%d %b %Y")
 
 
-        self.child_frame=Toplevel(root)
-        self.child_frame.title("Balance Sheet --> Mobile No. :  "+str(self.var1[0])+" --> Name :  "+ self.var1[1])
-        self.child_frame.geometry("1300x500")
-        center(self.child_frame)
-        self.child_frame.grab_set()
-        self.child_frame.configure(background=colbg, padx=20)
+        self.child_window=Toplevel(root)
+        self.child_window.title("Balance Sheet --> Mobile No. :  "+str(self.var1[0])+" --> Name :  "+ self.var1[1])
+        self.child_window.geometry("1300x500")
+        center(self.child_window)
+        self.child_window.grab_set()
+        self.child_window.configure(background=colbg, padx=20)
 
 
         #--------------Frame1-----------------------------------------------------------------------------
-        self.frame1=Frame(self.child_frame, bg=colbg)
+        self.frame1=Frame(self.child_window, bg=colbg)
         self.frame1.pack(side=LEFT, fill=Y, pady=40)
         Label(self.frame1, text="Date :", bg=colbg, anchor=E, width=15).grid(row=0, column=0, pady=10)
         Label(self.frame1, text=self.bill_date, font="arial 10 bold", bg=colbg, anchor=W, width=30).grid(row=0, column=1)
@@ -970,7 +970,7 @@ class balanceSheet:
 
 
         #--------------Frame 2 Table----------------------------------------------------------------------
-        self.frame2=Frame(self.child_frame, bg=colbg)
+        self.frame2=Frame(self.child_window, bg=colbg)
         self.frame2.pack(side=LEFT, expand=TRUE, fill=BOTH, pady=10)
 
         #Treeview----------------start
@@ -1016,7 +1016,7 @@ class balanceSheet:
         conn.close()
 
     def close(self):
-        self.child_frame.destroy()
+        self.child_window.destroy()
 
     def settlement(self):
         obj_settlement=settlementClass(self.var1)
@@ -1034,7 +1034,7 @@ class balanceSheet:
 
 
 
-class settlementClass:
+class settlementClass(balanceSheet):
     def __init__(self, var1):
         #--------------All Variables----------------------------------------------------------------------
         self.cust_var=var1
@@ -1046,25 +1046,25 @@ class settlementClass:
         
 
 
-        self.child_frame=Toplevel(root)
-        self.child_frame.title("Settle Balance --> Mobile No. :  "+str(self.cust_var[0]))
-        self.child_frame.geometry("500x250")
-        center(self.child_frame)
-        self.child_frame.grab_set()
-        self.child_frame.configure(background=colbg, padx=10, pady=10)
+        self.child_window=Toplevel(root)
+        self.child_window.title("Settle Balance --> Mobile No. :  "+str(self.cust_var[0]))
+        self.child_window.geometry("500x250")
+        center(self.child_window)
+        self.child_window.grab_set()
+        self.child_window.configure(background=colbg, padx=10, pady=10)
 
         #--------------Frame3-----------------------------------------------------------------------------
-        self.frame3=Frame(self.child_frame, bg=colbg)
+        self.frame3=Frame(self.child_window, bg=colbg)
         self.frame3.pack(fill=X)
         Label(self.frame3, text="Customer :  "+str(self.cust_var[0])+"  "+self.cust_var[1], font="arial 10 bold", bg=colbg).pack()
 
 
-        Label(self.child_frame, text="How much amount do you want to deposit?", font="arial 10", bg=colbg).pack(fill=X)
-        Button(self.child_frame, text="Deposite", command=self.pay_now, font="arial 10 bold", bg=colbtn, fg="white", bd=3).pack(fill=X, side=BOTTOM)
+        Label(self.child_window, text="How much amount do you want to deposit?", font="arial 10", bg=colbg).pack(fill=X)
+        Button(self.child_window, text="Deposite", command=self.pay_now, font="arial 10 bold", bg=colbtn, fg="white", bd=3).pack(fill=X, side=BOTTOM)
 
 
         #--------------Frame1-----------------------------------------------------------------------------
-        self.frame1=LabelFrame(self.child_frame, bg=colbglight)
+        self.frame1=LabelFrame(self.child_window, bg=colbglight)
         self.frame1.pack(side=LEFT,fill=BOTH, expand=TRUE, pady=5, padx=5)
 
         self.R1=Radiobutton(self.frame1, text=str(abs(self.cust_var[3]))+" Rs.", variable=self.radio_var, value=1, font="arial 10", bg=colbglight, fg="red")
@@ -1074,7 +1074,7 @@ class settlementClass:
 
 
         #--------------Frame2-----------------------------------------------------------------------------
-        self.frame2=LabelFrame(self.child_frame, bg=colbglight)
+        self.frame2=LabelFrame(self.child_window, bg=colbglight)
         self.frame2.pack(side=LEFT, fill=BOTH, expand=TRUE, pady=5, padx=5)
 
         self.R2=Radiobutton(self.frame2, text="Deposite manualy", variable=self.radio_var, value=2, font="arial 10", bg=colbglight, fg="red")
@@ -1147,7 +1147,7 @@ class settlementClass:
 
         conn.commit()
         conn.close()
-        self.child_frame.destroy()
+        self.child_window.destroy()
         objf1.show_all_bill()
         objf2.show_all_cust()
 
