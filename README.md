@@ -1,12 +1,12 @@
 # Invoice Management Desktop System (agro-invoice-manager.exe)
-Billing and selling management software for Agricultural chemical products. Python based with SQL database desktop software. Currently working on this project. Date: 1 Jan 2022
+Billing and selling management software for Agricultural chemical products. Python based with SQL database desktop software. Currently working on this project. Date: 15 Jan 2022
 
 ---------------------------------------------------------------------------------------------
 
-To Run agro-invoice-manager.exe, Just start your XAMPP server(module Apache and mysql).
+To check my project, Just run agro-invoice-manager.exe, And start your XAMPP server(start module Apache and mysql).
 
 ---------------------------------------------------------------------------------------------
-Revised or Learned Questions:
+Revised or Learned Questions: (Rough Note)
 
 * Difference between Primary key and Unique key?
 * SQL Composite Key?
