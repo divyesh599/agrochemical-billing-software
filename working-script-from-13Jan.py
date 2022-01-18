@@ -1133,28 +1133,22 @@ class settlementClass:
                         self.total)
                     )
         curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
-                        (self.mobilelbl["text"],
+                        (self.cust_var[0],
                         self.billdate,
                         self.billno,
-                        "Debit Product Buying",
-                        self.totalamonut["text"],
+                        "CASH PAYMENT Rs. "+str(self.total),
                         0,
-                        -(self.totalamonut["text"]))
+                        self.total,
+                        self.total)
                     )
+        curr.execute("select sum(Balance) from balancesheet where MobileNo="+str(self.cust_var[0]))
+        temp_var=curr.fetchall()
+        curr.execute("update customerdata set Balance="+str(temp_var[0][0])+" where MobileNo="+str(self.cust_var[0]))
 
 
 
             
-        """if self.cd.get()=="Debit":
-                curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
-                                (self.mobilelbl["text"],
-                                self.billdate,
-                                self.billno,
-                                "Debit Product Buying",
-                                self.totalamonut["text"],
-                                0,
-                                -(self.totalamonut["text"]))
-                            )
+        """
                 curr.execute("select sum(Balance) from balancesheet where MobileNo="+str(self.mobilelbl["text"]))
                 temp_var=curr.fetchall()
                 curr.execute("update customerdata set Balance="+str(temp_var[0][0])+" where MobileNo="+str(self.mobilelbl["text"]))
