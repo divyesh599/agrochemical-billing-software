@@ -1019,7 +1019,7 @@ class balanceSheet:
         self.child_frame.destroy()
 
     def settlement(self):
-        obj_settlement=settlementClass(self.var1, self.total["text"])
+        obj_settlement=settlementClass(self.var1)
 
 
 
@@ -1035,12 +1035,11 @@ class balanceSheet:
 
 
 class settlementClass:
-    def __init__(self, var1, total):
+    def __init__(self, var1):
         #--------------All Variables----------------------------------------------------------------------
         self.cust_var=var1
-        self.total=total
         self.radio_var=IntVar()
-        self.cash_amount=IntVar()
+        self.total=abs(self.cust_var[3])
         self.cdate=datetime.datetime.now()
         self.billno=self.cdate.strftime("%y%m%d%H%M")
         self.billdate=self.cdate.strftime("%d %b %Y")
@@ -1068,7 +1067,7 @@ class settlementClass:
         self.frame1=LabelFrame(self.child_frame, bg=colbglight)
         self.frame1.pack(side=LEFT,fill=BOTH, expand=TRUE, pady=5, padx=5)
 
-        self.R1=Radiobutton(self.frame1, text=str(-int(self.total))+" Rs.", variable=self.radio_var, value=1, font="arial 10", bg=colbglight, fg="red")
+        self.R1=Radiobutton(self.frame1, text=str(abs(self.cust_var[3]))+" Rs.", variable=self.radio_var, value=1, font="arial 10", bg=colbglight, fg="red")
         self.R1.pack(expand=True)
         
         self.frame1.bind("<Button-1>", self.radio_1_select)
@@ -1080,7 +1079,7 @@ class settlementClass:
 
         self.R2=Radiobutton(self.frame2, text="Deposite manualy", variable=self.radio_var, value=2, font="arial 10", bg=colbglight, fg="red")
         self.lbl_var=Label(self.frame2, text="Enter Amount (Rs.)", font="arial 9", bg=colbglight)
-        self.entry_var=Entry(self.frame2, textvariable=self.cash_amount, bd=1, font="arial 10", fg="red", width=17)
+        self.entry_var=Entry(self.frame2, bd=1, font="arial 10", fg="red", width=17)
         self.R2.pack(expand=True)
         self.lbl_var.pack()
         self.entry_var.pack(pady=15)
@@ -1100,34 +1099,53 @@ class settlementClass:
 
 
     def pay_now(self):
+        if self.radio_var.get()==2:
+            try:
+                self.total=int(self.entry_var.get())
+            except:
+                self.total=0
+        else:
+            self.total=abs(self.cust_var[3])
+        
         conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="database23nov")
         curr=conn.cursor()
-        if self.radio_var.get()==1:
-            amount=self.total
+        
         curr.execute("insert into subbilldetails (`BillDate`, `MobileNo`, `BillNo`, `PID`, `Description`, `Company`, `BatchNo`, `NetContent`, `SellPrice`, `Qty`, `Amount`) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                         (self.billdate,
                         self.cust_var[0],
                         self.billno,
                         0,
-                        "CASH PAYMENT "+str())
+                        "CASH PAYMENT Rs. "+str(self.total),
+                        "-",
+                        "0000",
+                        0,
+                        0,
+                        0,
+                        self.total)
                     )
-
-        
+        curr.execute("insert into allbills values(%s, %s, %s, %s, %s, %s, %s)",
+                        (self.billdate,
+                        self.billno,
+                        self.cust_var[0],
+                        self.cust_var[1],
+                        self.cust_var[2],
+                        "DEPOSITE",
+                        self.total)
+                    )
+        curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
+                        (self.mobilelbl["text"],
+                        self.billdate,
+                        self.billno,
+                        "Debit Product Buying",
+                        self.totalamonut["text"],
+                        0,
+                        -(self.totalamonut["text"]))
+                    )
 
 
 
             
-        """curr.execute("insert into subbilldetails (`BillDate`, `MobileNo`, `BillNo`, `PID`, `Description`, `Company`, `BatchNo`, `NetContent`, `SellPrice`, `Qty`, `Amount`) VALUES"+sql_data[:-1])
-            curr.execute("insert into allbills values(%s, %s, %s, %s, %s, %s, %s)",
-                            (self.billdate,
-                            self.billno,
-                            self.mobilelbl["text"],
-                            self.cnamelbl["text"],
-                            self.villagelbl["text"],
-                            self.cd.get(),
-                            self.totalamonut["text"])
-                        )
-            if self.cd.get()=="Debit":
+        """if self.cd.get()=="Debit":
                 curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
                                 (self.mobilelbl["text"],
                                 self.billdate,
