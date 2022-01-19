@@ -3,8 +3,8 @@ from tkinter import ttk
 import pymysql
 import datetime
 import webbrowser
-"""from fpdf import FPDF
-import socket"""
+"""from fpdf import FPDF"""
+import socket
 
 
 
@@ -36,7 +36,7 @@ class generateBill:
         Label(self.frame1, text=self.billdate, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
         Label(self.frame1, text="Bill Number :", anchor=E, width=15, bg=colbg).pack(side=LEFT)
         Label(self.frame1, text=self.billno, font="arial 10 bold", bg=colbg, fg="red", anchor=W, width=15).pack(side=LEFT)
-        #Button(self.frame1, text="Refresh Bill", font="arial 10 bold", width=15, bd=2, bg=colbtn, fg="white").pack(side=LEFT)
+
 
 
 
@@ -172,10 +172,7 @@ class generateBill:
         if self.ECust.get() != "":
             self.sFrame1.lift()
             self.sFrame1.place(x=120, y=58)
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="Database14jan")
+            conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
             curr=conn.cursor()
             varx=self.ECust.get()
             curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
@@ -193,10 +190,7 @@ class generateBill:
         if self.EProd.get() != "":
             self.sFrame2.lift()
             self.sFrame2.place(x=120, y=121)
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="Database14jan")
+            conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
             curr=conn.cursor()
             varx=self.EProd.get()
             curr.execute("select * from productdata where PName LIKE '%"+ varx +"%' OR TechName LIKE '%"+ varx +"%' OR Company LIKE '%"+ varx +"%' OR BatchNo LIKE '%"+ varx +"%'")
@@ -260,10 +254,7 @@ class generateBill:
 
 
     def add_cust_info(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         if self.selected_cust!="":
             curr.execute("select * from customerdata where MobileNo="+self.selected_cust)
@@ -295,10 +286,7 @@ class generateBill:
 
 
     def add_prod_info(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         if self.selected_prod!="":
             curr.execute("select * from productdata where PID="+self.selected_prod)
@@ -334,10 +322,7 @@ class generateBill:
 
 
     def create_bill(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         if len(self.all_item) !=0:
             sql_data=""
@@ -364,7 +349,7 @@ class generateBill:
                                 (self.mobilelbl["text"],
                                 self.billdate,
                                 self.billno,
-                                "Debit Product Buying",
+                                "Unpaid (Debit)",
                                 self.totalamonut["text"],
                                 0,
                                 -(self.totalamonut["text"]))
@@ -377,7 +362,7 @@ class generateBill:
                                 (self.mobilelbl["text"],
                                 self.billdate,
                                 self.billno,
-                                "Cash payment",
+                                "Paid (Cash)(0)",
                                 self.totalamonut["text"],
                                 0,
                                 -(self.totalamonut["text"]))
@@ -386,7 +371,7 @@ class generateBill:
                                 (self.mobilelbl["text"],
                                 self.billdate,
                                 self.billno,
-                                "Cash payment",
+                                "Paid (Cash)(-0)",
                                 0,
                                 self.totalamonut["text"],
                                 self.totalamonut["text"])
@@ -511,10 +496,7 @@ class billInfoClass:
         self.show_all_item()
 
     def show_all_item(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         curr.execute("select * from subbilldetails where BillNo="+str(self.billdetail[1]))
         item=curr.fetchall()
@@ -525,10 +507,7 @@ class billInfoClass:
         conn.close()
     
     def bill_info_delete(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         curr.execute("delete from subbilldetails where BillNo="+str(self.billdetail[1]))
         curr.execute("delete from allbills where BillNo="+str(self.billdetail[1]))
@@ -647,10 +626,7 @@ class allBills:
 
     def search_call_bill(self, evt):
         if self.Etext.get() != "":
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="Database14jan")
+            conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
             curr=conn.cursor()
             varx=self.Etext.get()
             curr.execute("select * from allbills where BillDate LIKE '%"+ varx +"%' OR BillNo LIKE '%"+ varx +"%' OR MobileNo LIKE '%"+ varx +"%' OR Name LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
@@ -666,10 +642,7 @@ class allBills:
 
 
     def show_all_bill(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         curr.execute("select * from allbills")
         blist=curr.fetchall()
@@ -789,10 +762,7 @@ class customerClass:
 
 
     def show_all_cust(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         curr.execute("select * from customerdata")
         clist=curr.fetchall()
@@ -806,10 +776,7 @@ class customerClass:
 
     def search_cust(self, e):
         if self.Etext.get() != "":
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="Database14jan")
+            conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
             curr=conn.cursor()
             varx=self.Etext.get()
             curr.execute("select * from customerdata where MobileNo LIKE '%"+ varx +"%' OR FName LIKE '%"+ varx +"%' OR MName LIKE '%"+ varx +"%' OR LName LIKE '%"+ varx +"%' OR City LIKE '%"+ varx +"%'")
@@ -897,10 +864,7 @@ class modifyCust:
 
 
     def modify_Entry(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         if self.selected_cust == "":
             self.headlbl.config(text="Adding new Customer into database.")
@@ -921,10 +885,7 @@ class modifyCust:
 
 
     def addCust(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         try:
             if self.selected_cust == "":
@@ -969,22 +930,22 @@ class balanceSheet:
     To view customer's debit, credit and total balance. 
     """
     def __init__(self, var1):
-        #--------------All Variables-----------------------------------------------------------------------------
+        #--------------All Variables----------------------------------------------------------------------
         self.var1=var1
         self.cdate=datetime.datetime.now()
         self.bill_date=self.cdate.strftime("%d %b %Y")
 
 
-        self.child_frame=Toplevel(root)
-        self.child_frame.title("Balance Sheet --> Mobile No. :  "+str(self.var1[0])+" --> Name :  "+ self.var1[1])
-        self.child_frame.geometry("1300x500")
-        center(self.child_frame)
-        self.child_frame.grab_set()
-        self.child_frame.configure(background=colbg, padx=20)
+        self.child_window=Toplevel(root)
+        self.child_window.title("Balance Sheet --> Mobile No. :  "+str(self.var1[0])+" --> Name :  "+ self.var1[1])
+        self.child_window.geometry("1300x500")
+        center(self.child_window)
+        self.child_window.grab_set()
+        self.child_window.configure(background=colbg, padx=20)
 
 
         #--------------Frame1-----------------------------------------------------------------------------
-        self.frame1=Frame(self.child_frame, bg=colbg)
+        self.frame1=Frame(self.child_window, bg=colbg)
         self.frame1.pack(side=LEFT, fill=Y, pady=40)
         Label(self.frame1, text="Date :", bg=colbg, anchor=E, width=15).grid(row=0, column=0, pady=10)
         Label(self.frame1, text=self.bill_date, font="arial 10 bold", bg=colbg, anchor=W, width=30).grid(row=0, column=1)
@@ -1002,12 +963,14 @@ class balanceSheet:
         # Frame 3 Buttons------------------------------------------------------------------------------------
         self.frame3=Frame(self.frame1, bg=colbg)
         self.frame3.grid(row=5, column=0, columnspan=2, pady=20)
-        Button(self.frame3, text="OK", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=3).pack(side=LEFT, padx=10)
+        Button(self.frame3, text="OK", command=self.close, font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=3).pack(side=LEFT, padx=10)
         Button(self.frame3, text="Print", font="arial 10 bold", bg=colbtn, fg="white", width=10, bd=3).pack(side=LEFT, padx=10)
+        
+        Button(self.frame1, text="Settle Balance", command=self.settlement, font="arial 10 bold", bg=colbtn, fg="white", width=15, bd=3).grid(row=6, column=0, columnspan=2, pady=20)
 
 
         #--------------Frame 2 Table----------------------------------------------------------------------
-        self.frame2=Frame(self.child_frame, bg=colbg)
+        self.frame2=Frame(self.child_window, bg=colbg)
         self.frame2.pack(side=LEFT, expand=TRUE, fill=BOTH, pady=10)
 
         #Treeview----------------start
@@ -1037,10 +1000,7 @@ class balanceSheet:
 
 
     def show_all_records(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         curr.execute("select * from balancesheet where MobileNo="+str(self.var1[0])+" order by BillNo desc")
         records=curr.fetchall()
@@ -1055,6 +1015,11 @@ class balanceSheet:
         conn.commit()
         conn.close()
 
+    def close(self):
+        self.child_window.destroy()
+
+    def settlement(self):
+        obj_settlement=settlementClass(self.var1)
 
 
 
@@ -1062,6 +1027,129 @@ class balanceSheet:
 
 
 
+
+
+
+
+
+
+
+class settlementClass(balanceSheet):
+    def __init__(self, var1):
+        #--------------All Variables----------------------------------------------------------------------
+        self.cust_var=var1
+        self.radio_var=IntVar()
+        self.total=abs(self.cust_var[3])
+        self.cdate=datetime.datetime.now()
+        self.billno=self.cdate.strftime("%y%m%d%H%M")
+        self.billdate=self.cdate.strftime("%d %b %Y")
+        
+
+
+        self.child_window=Toplevel(root)
+        self.child_window.title("Settle Balance --> Mobile No. :  "+str(self.cust_var[0]))
+        self.child_window.geometry("500x250")
+        center(self.child_window)
+        self.child_window.grab_set()
+        self.child_window.configure(background=colbg, padx=10, pady=10)
+
+        #--------------Frame3-----------------------------------------------------------------------------
+        self.frame3=Frame(self.child_window, bg=colbg)
+        self.frame3.pack(fill=X)
+        Label(self.frame3, text="Customer :  "+str(self.cust_var[0])+"  "+self.cust_var[1], font="arial 10 bold", bg=colbg).pack()
+
+
+        Label(self.child_window, text="How much amount do you want to deposit?", font="arial 10", bg=colbg).pack(fill=X)
+        Button(self.child_window, text="Deposite", command=self.pay_now, font="arial 10 bold", bg=colbtn, fg="white", bd=3).pack(fill=X, side=BOTTOM)
+
+
+        #--------------Frame1-----------------------------------------------------------------------------
+        self.frame1=LabelFrame(self.child_window, bg=colbglight)
+        self.frame1.pack(side=LEFT,fill=BOTH, expand=TRUE, pady=5, padx=5)
+
+        self.R1=Radiobutton(self.frame1, text=str(abs(self.cust_var[3]))+" Rs.", variable=self.radio_var, value=1, font="arial 10", bg=colbglight, fg="red")
+        self.R1.pack(expand=True)
+        
+        self.frame1.bind("<Button-1>", self.radio_1_select)
+
+
+        #--------------Frame2-----------------------------------------------------------------------------
+        self.frame2=LabelFrame(self.child_window, bg=colbglight)
+        self.frame2.pack(side=LEFT, fill=BOTH, expand=TRUE, pady=5, padx=5)
+
+        self.R2=Radiobutton(self.frame2, text="Deposite manualy", variable=self.radio_var, value=2, font="arial 10", bg=colbglight, fg="red")
+        self.lbl_var=Label(self.frame2, text="Enter Amount (Rs.)", font="arial 9", bg=colbglight)
+        self.entry_var=Entry(self.frame2, bd=1, font="arial 10", fg="red", width=17)
+        self.R2.pack(expand=True)
+        self.lbl_var.pack()
+        self.entry_var.pack(pady=15)
+        
+        self.frame2.bind("<Button-1>", self.radio_2_select)
+        self.lbl_var.bind("<Button-1>", self.radio_2_select)
+        self.entry_var.bind("<Button-1>", self.radio_2_select)
+        
+        self.R1.select()
+
+
+    def radio_1_select(self, evt):
+        self.R1.select()
+
+    def radio_2_select(self, evt):
+        self.R2.select()
+
+
+    def pay_now(self):
+        if self.radio_var.get()==2:
+            try:
+                self.total=int(self.entry_var.get())
+            except:
+                self.total=0
+        else:
+            self.total=abs(self.cust_var[3])
+        
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
+        curr=conn.cursor()
+        
+        curr.execute("insert into subbilldetails (`BillDate`, `MobileNo`, `BillNo`, `PID`, `Description`, `Company`, `BatchNo`, `NetContent`, `SellPrice`, `Qty`, `Amount`) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                        (self.billdate,
+                        self.cust_var[0],
+                        self.billno,
+                        0,
+                        "CASH PAYMENT Rs. "+str(self.total),
+                        "-",
+                        "0000",
+                        0,
+                        0,
+                        0,
+                        self.total)
+                    )
+        curr.execute("insert into allbills values(%s, %s, %s, %s, %s, %s, %s)",
+                        (self.billdate,
+                        self.billno,
+                        self.cust_var[0],
+                        self.cust_var[1],
+                        self.cust_var[2],
+                        "DEPOSITE",
+                        self.total)
+                    )
+        curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
+                        (self.cust_var[0],
+                        self.billdate,
+                        self.billno,
+                        "CASH PAYMENT Rs. "+str(self.total),
+                        0,
+                        self.total,
+                        self.total)
+                    )
+        curr.execute("select sum(Balance) from balancesheet where MobileNo="+str(self.cust_var[0]))
+        temp_var=curr.fetchall()
+        curr.execute("update customerdata set Balance="+str(temp_var[0][0])+" where MobileNo="+str(self.cust_var[0]))
+
+        conn.commit()
+        conn.close()
+        self.child_window.destroy()
+        objf1.show_all_bill()
+        objf2.show_all_cust()
 
 
 
@@ -1175,10 +1263,7 @@ class productClass:
 
 
     def show_all_prod(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         curr.execute("select * from productdata")
         plist=curr.fetchall()
@@ -1191,10 +1276,7 @@ class productClass:
 
     def search_prod(self, e):
         if self.search_entry.get() != "":
-            conn=pymysql.connect(host="localhost",
-                                user="root",
-                                password="",
-                                database="Database14jan")
+            conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
             curr=conn.cursor()
             varx=self.search_entry.get()
             curr.execute("select * from productdata where PName LIKE '%"+ varx +"%' OR TechName LIKE '%"+ varx +"%' OR Company LIKE '%"+ varx +"%' OR BatchNo LIKE '%"+ varx +"%'")
@@ -1288,10 +1370,7 @@ class modifyProd:
 
 
     def modify_Entry(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         if self.selected_prod == "":
             curr.execute("select count(PID) from productdata")
@@ -1311,10 +1390,7 @@ class modifyProd:
 
 
     def add_Prod(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         try:
             if self.selected_prod == "":
@@ -1350,10 +1426,7 @@ class modifyProd:
 
 
     def delete(self):
-        conn=pymysql.connect(host="localhost",
-                            user="root",
-                            password="",
-                            database="Database14jan")
+        conn=pymysql.connect(host="127.0.0.1",user="root",password="",database="hariagrodatabase")
         curr=conn.cursor()
         curr.execute("DELETE FROM productdata WHERE PID="+str(self.pid_lbl["text"]))
         conn.commit()
@@ -1423,11 +1496,11 @@ def center(win):
 
 
 # Create Tables ---------------------------------------------------------------------------------------------
-conn=pymysql.connect(host="localhost", user="root", password="")
+conn=pymysql.connect(host="127.0.0.1",user="root",password="")
 curr=conn.cursor()
 
-curr.execute("CREATE DATABASE IF NOT EXISTS Database14jan")
-curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.customerdata\
+curr.execute("CREATE DATABASE IF NOT EXISTS hariagrodatabase")
+curr.execute("CREATE TABLE IF NOT EXISTS hariagrodatabase.customerdata\
     (MobileNo BIGINT,\
     FName VARCHAR(20),\
     MName VARCHAR(40),\
@@ -1435,7 +1508,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.customerdata\
     City VARCHAR(20),\
     Balance INT,\
     PRIMARY KEY (MobileNo))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.productdata\
+curr.execute("CREATE TABLE IF NOT EXISTS hariagrodatabase.productdata\
     (PID INT,\
     PName VARCHAR(20),\
     TechName VARCHAR(40),\
@@ -1446,7 +1519,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.productdata\
     SellPrice INT,\
     BuyPrice INT,\
     PRIMARY KEY (PID))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.allbills\
+curr.execute("CREATE TABLE IF NOT EXISTS hariagrodatabase.allbills\
     (BillDate VARCHAR(20),\
     BillNo BIGINT,\
     MobileNo BIGINT,\
@@ -1455,7 +1528,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.allbills\
     CashDebit VARCHAR(10),\
     BillAmount INT,\
     PRIMARY KEY (BillNo, MobileNo))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.subbilldetails\
+curr.execute("CREATE TABLE IF NOT EXISTS hariagrodatabase.subbilldetails\
     (BillDate VARCHAR(20),\
     MobileNo BIGINT,\
     BillNo BIGINT,\
@@ -1468,7 +1541,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.subbilldetails\
     Qty INT,\
     Amount INT,\
     PRIMARY KEY (BillNo, PID))")
-curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.balancesheet\
+curr.execute("CREATE TABLE IF NOT EXISTS hariagrodatabase.balancesheet\
     (MobileNo BIGINT,\
     BillDate VARCHAR(20),\
     BillNo BIGINT,\
@@ -1476,7 +1549,7 @@ curr.execute("CREATE TABLE IF NOT EXISTS Database14jan.balancesheet\
     DebitAmount INT,\
     CreditAmount INT,\
     Balance INT)")
-curr.execute("insert ignore into Database14jan.productdata values(0,'CASH', 'Payment', '-', '0000', 0, 0, 0, 0)")
+curr.execute("insert ignore into hariagrodatabase.productdata values(0,'CASH', 'PAYMENT', '-', '0000', 0, 0, 0, 0)")
 
 conn.commit()
 conn.close()
