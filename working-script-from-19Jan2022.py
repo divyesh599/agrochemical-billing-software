@@ -74,7 +74,6 @@ class generateBill:
         self.villagelbl.pack(side=LEFT)
 
 
-
         #--------------Frame4----------------------------------------------------------------------------------
         self.frame4=Frame(self.Fnewbill, bg=colbg)
         self.frame4.pack(fill=X, pady=5, padx=10)
