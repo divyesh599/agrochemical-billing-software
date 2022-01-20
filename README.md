@@ -1,17 +1,24 @@
 # Invoice Management Desktop System (agro-invoice-manager.exe)
-Billing and selling management software for Agricultural chemical products. Python based with SQL database desktop software. Currently working on this project.
+Billing and selling management software for agricultural chemical products. Python based with SQL database desktop software. Currently working on this project.
+
+Features:
+* CRDU operations in the Product and Customer details.
+* Generating and managing invoices.
+* Saving all credit/debit detail of customers.
+* Settling up customers’ balances.
+
+Features on working mode:
+* To print customer's bill.
+
 
 ---------------------------------------------------------------------------------------------
 
-Last Updated version Date: 19 Jan 2022
+Last Updated version Date: 20 Jan 2022
 
-To check my project, Just run agro-invoice-manager.exe, And start your XAMPP server(start module Apache and mysql).
+To check my project, follow the below steps.
 
----------------------------------------------------------------------------------------------
-Revised or Learned Questions: (Rough Note)
+* Download  & Install XAMPP (https://www.apachefriends.org/download.html)
+* Open XAMPP app, Start server module name Apache and MySQL.
+* Download "agro-invoice-manager.exe" (from this repository), and RUN.
 
-* Difference between Primary key and Unique key?
-* SQL Composite Key?
-* Tracing Tkinter textvariable in Python?
-* TRUNCATE TABLE tempsubbill sql query..
-
+Please check given all features. Give feedback. It's helpful.
