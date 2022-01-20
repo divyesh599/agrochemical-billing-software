@@ -22,3 +22,7 @@ To check my project, follow the below steps.
 * Download "agro-invoice-manager.exe" (from this repository), and RUN.
 
 Please check given all features. Give feedback. It's helpful.
+
+---------------------------------------------------------------------------------------------
+
+*CRDU-Create, Read, Delete and Update.
