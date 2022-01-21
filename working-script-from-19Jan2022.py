@@ -1034,7 +1034,7 @@ class balanceSheet:
 
 
 
-class settlementClass(balanceSheet):
+class settlementClass:
     def __init__(self, var1):
         #--------------All Variables----------------------------------------------------------------------
         self.cust_var=var1
