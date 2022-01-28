@@ -1558,7 +1558,7 @@ conn.close()
 
 
 
-# Color Variables ------------------------------------------------------------------------------------------
+# Color Variables ----------------------------------------------------------------------------------------
 colbg="#B8D4BD"
 colbglight="#cfe2d3"
 colbtn="#3C4ACA"
@@ -1567,7 +1567,7 @@ col1="#DE3163"
 
 
 
-#############################################################################################################
+###########################################################################################################
 root=Tk()
 root.title("Local Agro Business Invoice Management System")
 root.state('zoomed')
@@ -1576,7 +1576,7 @@ root.configure(background=colbg)
 tw=root.winfo_screenwidth()
 
 
-# Style Database & Some Extra Variables----------------------------------------------------------------------
+# Style Database & Some Extra Variables--------------------------------------------------------------------
 imgGod1=PhotoImage(file="img/bahuchar.png")
 imgGod2=PhotoImage(file="img/ganesha.png")
 imgheart=PhotoImage(file="img/heart.png")
@@ -1595,7 +1595,7 @@ all_style.map("TNotebook.Tab", padding=[("selected", [80,5,80,5])], background=[
 """
 
 
-# Heading Frame ---------------------------------------------------------------------------------------------
+# Heading Frame -------------------------------------------------------------------------------------------
 Fheading=Frame(root, bg=colbg)
 Fheading.pack(fill=X, padx=10)
 Label(Fheading, text="|| Shree Bahuchar Krupa ||", bg=colbg, fg=col1).pack(side=LEFT)
@@ -1609,7 +1609,7 @@ Label(Ftitle, text="Shri Hari Agro Center", font=("", 30, "bold"), bg=colbg, fg=
 Label(Ftitle, image=imgGod2, bd=0).pack(side=RIGHT)
 
 
-# Body Frame --------- Labels & Buttons ---------------------------------------------------------------------
+# Body Frame --------- Labels & Buttons -------------------------------------------------------------------
 notebook = ttk.Notebook(root)
 notebook.pack(fill=BOTH, expand=TRUE)
 
@@ -1630,7 +1630,7 @@ notebook.add(f2, text="Customer Info")
 notebook.add(f3, text="Product Info")
 
 
-# Footer Frame ----------------------------------------------------------------------------------------------
+# Footer Frame --------------------------------------------------------------------------------------------
 FFoot=Frame(root, bg=colbg, pady=5)
 FFoot.pack(side=BOTTOM, pady=10)
 Label(FFoot, text="Build with ", font=("MV Boli", 9, "bold"), fg="#264653", bg=colbg).pack(side=LEFT)
