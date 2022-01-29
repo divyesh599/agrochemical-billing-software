@@ -362,19 +362,8 @@ class generateBill:
                                 (self.mobilelbl["text"],
                                 self.billdate,
                                 self.billno,
-                                "Paid (Cash)(0)",
-                                self.totalamonut["text"],
-                                0,
-                                -(self.totalamonut["text"]))
-                            )
-                curr.execute("insert into balancesheet values(%s, %s, %s, %s, %s, %s, %s)",
-                                (self.mobilelbl["text"],
-                                self.billdate,
-                                self.billno,
-                                "Paid (Cash)(-0)",
-                                0,
-                                self.totalamonut["text"],
-                                self.totalamonut["text"])
+                                "Paid (Cash >> "+str(self.totalamonut["text"])+" Rs.)",
+                                0, 0, 0)
                             )
             conn.commit()
             conn.close()
@@ -1223,7 +1212,7 @@ class productClass:
         self.tree.heading("#3", text="Technical name")
         self.tree.heading("#4", text="Company name")
         self.tree.heading("#5", text="Batch no.")
-        self.tree.heading("#6", text="Net Content")
+        self.tree.heading("#6", text="Net Content(ml/gm)")
         self.tree.heading("#7", text="Printed price")
         self.tree.heading("#8", text="Selling price")
         #self.tree.heading("#9", text="Buying price")
