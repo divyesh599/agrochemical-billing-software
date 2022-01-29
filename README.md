@@ -10,6 +10,8 @@ Features:
 Features on working mode:
 * To print customer's bill.
 
+Planning to change XAMPP MYSQL to AWS RDS database.
+
 ---------------------------------------------------------------------------------------------
 
 Pros:
