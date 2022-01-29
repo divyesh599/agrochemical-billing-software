@@ -21,11 +21,11 @@ Pros:
 
 ---------------------------------------------------------------------------------------------
 
-Language: Python
+Language: **Python**
 
-Database: MySql
+Database: **MySql**
 
-GUI toolkit: tkinter
+GUI toolkit: **tkinter**
 
 ---------------------------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ To check my project, follow the below steps.
 
 2) Open XAMPP app, Start server module name Apache and MySQL.
 
-3) Download "agro-invoice-manager.exe" (from this repository), and RUN.
+3) Download "**agro-invoice-manager.exe**" (from this repository), and RUN.
 
 Please check given all features. Give feedback. It's helpful.
 
