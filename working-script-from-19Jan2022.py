@@ -7,7 +7,6 @@ import webbrowser
 import socket
 
 
-
 class generateBill:
     def __init__(self):
         #---variables--------------------------------------
