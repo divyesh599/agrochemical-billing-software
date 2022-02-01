@@ -4,7 +4,6 @@ import pymysql
 import datetime
 import webbrowser
 """from fpdf import FPDF"""
-import socket
 
 
 class generateBill:
